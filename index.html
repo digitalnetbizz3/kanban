@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Kanban App</title>
+        <link rel="manifest" href="app.manifest">
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width; initial-scale=1, maximum-scale=1, minimum-scale=1; " />
+        <meta name="theme-color" content="#397850"/>
+        <meta property="og:url"           content="https://oureleven.com/kanban" />
+		<meta property="og:type"          content="website" />
+		<meta property="og:title"         content="Kanban app" />
+		<meta property="og:description"   content="Kanban app that doesn't use the cloud. Can work offline and 100% privacy." />
+		<meta name="description" content="Kanban app that doesn't use the cloud. Can work offline and 100% privacy."/> 
+		<meta name="keywords" content="kanban, agile, sprint planning, scrum, planning, trello, list, progression, offline, privacy"/>
+        <link rel="icon" type="image/svg" sizes="32x32" href="assets/logo.svg">
+        <script>
+            if ('serviceWorker' in navigator) {
+                window.addEventListener('load', async () => {
+                    try {
+                        const registration = await navigator.serviceWorker.register('service-worker.js');
+                        console.log(`Service worker Registered with scope: ${registration.scope}`);
+                    } catch (e) {
+                        console.log('Service worker registration failed');
+                        console.log(e);
+                    }
+                });
+            }
+        </script>
+        <script src="js/vue.global.js"></script>
+        <script src="js/task_handling.js"></script>
+        <style>
+            @font-face {
+                font-family: 'Open Sans';
+                font-style: normal;
+                font-weight: 400;
+                font-stretch: 100%;
+                src: url(https://fonts.gstatic.com/s/opensans/v28/memSYaGs126MiZpBA-UvWbX2vVnXBbObj2OVZyOOSr4dVJWUgsjZ0B4gaVQUwaEQbjA.woff) format('woff');
+                unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+                }
+        </style>
+        <link href='css/dialog.css' rel='stylesheet'> 
+        <link href='css/layout.css' rel='stylesheet'> 
+        <link href='css/settings.css' rel='stylesheet'> 
+        <link href='css/load.css' rel='stylesheet'> 
+    </head>
+    <body>
+        <div id="app">
+            <!-- Masthead -->
+            <header class="masthead">
+                <img src="assets/logo.svg" style="width:55px;height:40px;margin:5px;" alt="Kanban logo"/>
+                <div style="font-size:13pt;color:white;">看板 / kan-ban / org</div>
+                <div class="user-settings">
+                    <button class="mast_button" onclick="showSettings();" aria-label="Settings" title="Settings">
+                        <img src="assets/settings.svg" alt="Settings"/>
+                    </button>
+                    <button class="mast_button" onclick="showLoad();" aria-label="Load data" title="Load data">
+                        <img src="assets/open.svg" alt="Load data"/>
+                    </button>
+                    <button class="mast_button" onclick="downloadData();" aria-label="Download" title="Download">
+                        <img src="assets/download.svg" alt="Download"/>
+                    </button>
+                </div>
+            </header>
+            <!-- End of masthead -->
+        
+            <!-- Lists container -->
+            <section class="lists-container">
+                <!-- main phases layout -->
+                <div v-bind:category="category.name" class="list" v-for="category in categories" 
+                    @dragover.prevent @dragenter.prevent ondrop="onDrop(event)">
+                    <!-- phase header -->
+                    <h3 class="list-title">{{category.name}}<button v-if="category.name == 'New'" 
+                        onclick="taskDialog()" class="category_title" aria-label="Add Task">+</button>
+                    </h3>
+            
+                    <ul class="list-items" v-for="task in filterTasks(category.name)">
+                        <li v-bind:data-id="task.id" draggable="true" ondragstart="startDrag(event);" style="position:relative;">
+                            <div class="task_name">{{task.name}}</div>
+                            <span class="task_priority" v-bind:class="task.priority">{{task.priority}}</span>
+                            <img src="assets/user.svg" class="user_icon" alt="user"/>
+                            <span class="assign_to" >{{task.assign}}</span>
+                            <span v-if="task.due != ''" class="due_date"><b>due</b>: {{task.due}}</span>
+                            <img v-bind:data-id="task.id" class="sidebutton" src="assets/edit.svg" 
+                                alt="edit" style="top:10px;" onclick="editNode(this.parentElement)"/>
+                            <img v-bind:data-id="task.id" class="sidebutton" src="assets/delete.svg" 
+                                alt="remove" style="top:40px;" onclick="removeNode(this)"/>
+                        </li>
+                    </ul>
+                </div>
+                <!-- add new task -->
+                <div class="overlay" id="dialog">
+                    <div class="modal">
+                    <table>
+                        <tr><td>Task</td></tr>
+                        <tr><td><textarea id="newTaskInfo" placeholder="Enter task here" class="dialog_task_info"></textarea></td></tr>          
+                        <tr><td><hr/></td></tr>
+                        <tr><td>Assign to</td></tr>
+                        <tr><td>
+                            <select id="assign" class="dialog_assign">
+                                <option v-for="user in users" v-bind:value="user.name">{{user.name}}</option>
+                            </select>
+                        </td></tr>
+                        <tr><td>Priority</td></tr>
+                        <tr><td>
+                            <select id="priority" class="dialog_priority">
+                                <option value="P1">P1</option>
+                                <option value="P2" selected>P2</option>
+                                <option value="P3">P3</option>
+                                <option value="P4">P4</option>
+                            </select>
+                        </td></tr>
+                        <tr><td><hr/></td></tr>
+                        <tr><td><input id="datecheck" type="checkbox" onclick="openPicker(this);"/>
+                            <input type="date" id="duedate" class="dialog_due_date"/>Due date</td></tr>
+                        </tr>
+                        <tr><td>
+                            <button onclick="updateTask()" class="dialog_button" style="margin-left: 135;" 
+                                aria-label="Update Task" title="Update task">Apply
+                            </button>
+                            <button onclick="resetDialog()" style="margin-left: 5;" class="dialog_button" 
+                                aria-label="Cancel Changes" title="Cancel changes">Cancel
+                            </button></td></tr>
+                        </table>
+                    </div>
+                </div>
+            </section>  <!-- end of Lists container -->
+
+            <!-- load data fragment -->
+            <div class="overlay" id="load">
+                <div class="load_root">
+                    <image src="assets/close.svg" class="close_load_button" onclick="hideLoad()" alt="Close Panel"/>
+                    <h1>Kanban data</h1>
+                    <div class="settings_description">
+                        You can reset your kanban board, you can modify your kanban data here. Or you can paste in a
+                        downloaded version of kanban. To modify, click on 'Update' button. To reset the board, click on
+                        'New' button.
+                    </div>
+                    <hr>
+                    <textarea id="kanban_data" class="data_display"></textarea>
+                    <div>
+                        <button class="command_button" style="margin-left:165px;width:100px;" 
+                            onclick="resetKanbanData()" aria-label="New kanban" title="New kanban">
+                            New
+                        </button>
+                        <button class="command_button" style="margin-left:10px;width:100px;" 
+                            onclick="updateKanbanData()" aria-label="Update kanban" title="Update kanban">
+                            Update
+                        </button>
+                        <button class="command_button" style="margin-left:10px;width:100px;" 
+                            onclick="copyKanbanData()" aria-label="Copy kanban to clipboard" title="Copy kanban to clipboard">
+                            Copy
+                        </button>
+                    </div>
+                </div>
+            </div> <!-- end of load data -->
+
+            <!-- settings fragment -->
+            <div class="overlay" id="settings">
+                <div class="settings_root">
+                    <image src="assets/close.svg" class="close_button" onclick="hideSettings()" alt="Close Panel"/>
+                    <h1>Settings</h1>
+                    <div class="settings_description">
+                        Settings are applied right after changes are made. When all the changes are made, 
+                        click 'x' button on the top right to dismiss Settings.
+                    </div>
+                    <hr>
+                    <h2>User list</h2>
+                    <div class="settings_description">
+                        This is the list of users available when dealing with task. If you want to assign 
+                        task to more users, add it here.
+                    </div>
+                    <select id="user_list" size="5" class="settings_list">
+                        <option v-for="user in users" >{{user.name}}</option>
+                    </select>
+                    <div>
+                        <button class="command_button" style="width:200px;" onclick="removeUser();" 
+                            aria-label="Remove selected user" title="Remove selected user">
+                            Remove selected user
+                        </button>
+                    </div>
+                    <div>
+                        <input id="newUserName" type="text" placeholder="enter new user here" class="settings_input"/>
+                    </div>
+                    <div>
+                        <button class="command_button" style="width:100px;" onclick="addUser(true)" 
+                            aria-label="Add user before" title="Add user before">
+                            Add before
+                        </button>
+                        <button class="command_button" style="margin-left:0px;width:100px;" onclick="addUser(false)" 
+                            aria-label="Add user after" title="Add user after">
+                            Add after
+                        </button>
+                    </div>
+                    <hr>
+                    <h2>Progression list</h2>
+                    <div class="settings_description">
+                        The purpose of Kanban board is to track progression of task from one phase to the next. 
+                        Phases are different for different line of work. You can customize the phases needed.
+                    </div>
+                    
+                    <select id="category_list" size="7"  class="settings_list">
+                        <option v-for="category in categories">
+                            {{category.name}}
+                        </option>
+                    </select>
+                    <div>
+                        <button class="command_button"  style="width:200px;" onclick="removeCategory();" 
+                            aria-label="Remove phase" title="Remove phase">
+                            Remove selected phase
+                        </button>
+                    </div>
+                    <div>
+                        <input id="newCategoryName" type="text" placeholder="enter new phase here" class="settings_input"/>
+                    </div>
+                    <div>
+                        <button class="command_button" style="width:100px;" onclick="addCategory(true)"
+                            aria-label="Add phase before" title="Add phase before">
+                            Add before
+                        </button>
+                        <button class="command_button" style="margin-left:0px;width:100px;" onclick="addCategory(false)" 
+                            aria-label="Add phase after" title="Add phase after">
+                            Add after
+                        </button>
+                    </div>
+                </div>
+            </div> <!-- end of settings fragment -->
+        </div> <!-- end of app div -->
+        <script src="js/kanban_vue_app.js"></script>
+    </body>
+</html>
+
+

@@ -1,0 +1,62 @@
+.settings_root {
+    position:absolute;
+    top:0px;
+    width:350px;
+    height:100%;
+    background-color: #96a49a;
+}
+
+.close_button {
+    width:25px;
+    height:25px;
+    position:absolute;
+    left:315px;
+    top:15px;
+    cursor:hand;
+}
+
+.settings_root > h1{
+    margin:10px;
+    color:black;
+}
+
+.settings_root > h2{
+    margin:10px;
+    color:black;
+}
+
+.settings_root > hr {
+    margin:10px;
+}
+
+.settings_root > .settings_description {
+    margin:10px;
+    font-size:11pt;
+    color:#444444;
+}
+
+.selection_list {
+    font-family:'open sans';
+    width:200px;
+    margin:10px;
+}
+
+.command_button {
+   font-family:'open sans';
+   margin-left:10px;
+   margin-top:0px;
+   font-size:11pt;
+}
+
+.settings_input {
+    font-family:'open sans';
+    margin-left:10px;
+    margin-top:10px;
+    width:200px;
+}
+
+.settings_list {
+    font-family:'open sans';
+    width:200px;
+    margin:10px;
+}

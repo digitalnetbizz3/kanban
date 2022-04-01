@@ -1,0 +1,39 @@
+.load_root {
+    position:absolute;
+    top:0px;
+    width:500px;
+    height:100%;
+    background-color: #96a49a;
+}
+.close_load_button {
+    width:25px;
+    height:25px;
+    position:absolute;
+    left:460px;
+    top:15px;
+    cursor:hand;
+}
+
+.load_root > .settings_description {
+    margin:10px;
+    font-size:11pt;
+    color:#444444;
+}
+
+.load_root > h1{
+    margin:10px;
+    color:black;
+}
+
+.data_display {
+    font-family:'open sans';
+    resize: none;
+    font-size:11pt;
+    max-lines:40;
+    height:500px;
+    min-width:475;
+    background-color: #eeeeee;
+    margin-bottom: 10px;
+    margin-left:10px;
+    margin-top:10px;
+}

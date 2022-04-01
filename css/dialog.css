@@ -1,0 +1,93 @@
+.P1 { background-color: darkred;color:white;height:22px;width:25px;text-align: center;font-weight: bold; border: black solid 1px; border-radius: 3px;}
+.P2 { background-color: darkgreen;color:white;height:22px;width:25px;text-align: center;font-weight: bold; border: black solid 1px; border-radius: 3px;}
+.P3 { background-color: darkblue;color:white;height:22px;width:25px;text-align: center;font-weight: bold; border: black solid 1px; border-radius: 3px;}
+.P4 { background-color: darkorange;color:white;height:22px;width:25px;text-align: center;font-weight: bold; border: black solid 1px; border-radius: 3px;}
+.overlay {
+    position: fixed; /* Positioning and size */
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0,0,0,0.6); /* color */
+    display: none; /* making it hidden by default */
+}
+.modal {
+    position: fixed; /* positioning in center of page */
+    top: 100px;
+    left: 10px;
+    height: 420px; /* size */
+    width: 265px;
+    background-color: #cccccc; /* background color */
+}
+.sidebutton {
+    opacity:0.3;
+    position:absolute;
+    left:235px;
+    width:18px;
+    height:18px;
+}
+.due_date {
+    font-size:8pt;
+    position:absolute;
+    left:170px;
+    top:100px;
+}
+.assign_to {
+    position:absolute;
+    left:62px;
+    top:90px;
+    font-size:8pt;
+}
+.user_icon {
+    width:20px;
+    height:20px;
+    position:absolute;
+    left:40px;
+    top:90px
+}
+.task_priority {
+    position:absolute;
+    left:5px;
+    top:90px;
+}
+.task_name {
+    margin-bottom:10px;
+    padding-right:20px;
+}
+td { font-size:11pt;}
+.dialog_task_info {
+    font-family:'open sans';
+    resize: none;
+    font-size:11pt;
+    max-lines:4;
+    height:120px;
+    padding-bottom:100;
+    min-width:255;
+    background-color: #eeeeee;
+    margin-bottom: 10px;
+}
+.dialog_assign {
+    font-size:11pt;
+    min-width:200;
+    background-color: #eeeeee;
+    height:30px;
+    margin-bottom: 10px;
+}
+.dialog_priority {
+    font-size:11pt;
+    min-width:200;
+    background-color: #eeeeee;
+    height:30px;
+    margin-bottom: 10px;
+}
+.dialog_due_date {
+    font-size:11pt;
+    max-width:0;
+    background-color: #eeeeee;
+    height:0px;
+    margin-bottom: 10px;
+}
+.dialog_button {
+    font-size:11pt;
+    height:30;
+}
