@@ -1,7 +1,7 @@
 {
-  "name": "Kanban App",
-  "short_name": "Kanban App",
-  "background_color": "#2e2e2e",
+  "name": "kan-ban / org",
+  "short_name": "kan-ban / org",
+  "background_color": "#397850",
   "theme_color": "#397850",
   "display": "standalone",
   "icons": [
