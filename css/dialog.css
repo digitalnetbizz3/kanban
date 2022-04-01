@@ -62,20 +62,20 @@ td { font-size:11pt;}
     max-lines:4;
     height:120px;
     padding-bottom:100;
-    min-width:255;
+    min-width:255px;
     background-color: #eeeeee;
     margin-bottom: 10px;
 }
 .dialog_assign {
     font-size:11pt;
-    min-width:200;
+    min-width:200px;
     background-color: #eeeeee;
     height:30px;
     margin-bottom: 10px;
 }
 .dialog_priority {
     font-size:11pt;
-    min-width:200;
+    min-width:200px;
     background-color: #eeeeee;
     height:30px;
     margin-bottom: 10px;
@@ -89,5 +89,5 @@ td { font-size:11pt;}
 }
 .dialog_button {
     font-size:11pt;
-    height:30;
+    height:30px;
 }
