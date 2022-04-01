@@ -105,6 +105,8 @@
 
     let check = document.querySelector("#datecheck");
     check.checked = (task.due != '');
+    
+    taskInfo.focus();
   }
 
   function resetDialog() {
