@@ -43,9 +43,15 @@ const app = Vue.createApp({
         let data = null;
         let persistence = localStorage.getItem(storageName);
         if (persistence != null) {
-            data = JSON.parse(persistence);
-            if (data.tasks.length > 0 && data.users.length > 0 && data.categories.length > 0) {
-                // validation
+            try {
+                data = JSON.parse(persistence);
+                if (data.tasks.length > 0 && data.users.length > 0 && data.categories.length > 0) {
+                    // validation
+                    return data;
+                }
+            } catch {
+                data = defaultData;
+                localStorage.setItem(storageName, data);
                 return data;
             }
         } 
