@@ -3,7 +3,7 @@ var taskToEdit = null;
 const defaultData = {
     running: 1,
     categories: [{name: 'New'}, {name: 'In Progress'}, {name: 'Testing'}, {name: 'Completed'}],
-    users: [{name: 'Me'},{name:'Kenny'}, {name:'Joel'}, {name:'Jayden'}],
+    users: [{name: 'Me'}],
     tasks: [
         {
             category: 'New',
