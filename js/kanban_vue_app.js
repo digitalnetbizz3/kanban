@@ -1,7 +1,7 @@
 var taskToEdit = null;
 
 const defaultData = {
-    running: 1,
+    running: 3,
     categories: [{name: 'New'}, {name: 'In Progress'}, {name: 'Testing'}, {name: 'Completed'}],
     users: [{name: 'Me'}],
     tasks: [
@@ -17,7 +17,7 @@ const defaultData = {
         },
         {
             category: 'New',
-            id: 0,
+            id: 1,
             name: 'How to use: 2. click on delete or edit icon on the right of the task to amend task.',
             priority: 'P2',
             assign: 'Me',
@@ -27,7 +27,7 @@ const defaultData = {
         },
         {
             category: 'New',
-            id: 0,
+            id: 2,
             name: 'How to use: 3. click on settings icon to add user or add phase to your kanban.',
             priority: 'P3',
             assign: 'Me',
