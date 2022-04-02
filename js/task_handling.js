@@ -51,6 +51,9 @@
     modalElement.style.left = '10px';
     let dialog = document.querySelector("#dialog");
     dialog.style.display = 'inline';
+    
+    let taskInfo = document.querySelector("#newTaskInfo");
+    taskInfo.focus();
   }
 
   function getDateString() {
