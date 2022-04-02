@@ -8,8 +8,28 @@ const defaultData = {
         {
             category: 'New',
             id: 0,
-            name: 'How to use: 1. click on + to add new task, drag and move them to different stages if needed.',
+            name: 'How to use: 1. click on + to add new task, drag and move them to different phases if needed.',
+            priority: 'P1',
+            assign: 'Me',
+            added: '2022-03-22',
+            due: '',
+            comments: []
+        },
+        {
+            category: 'New',
+            id: 0,
+            name: 'How to use: 2. click on delete or edit icon on the right of the task to amend task.',
             priority: 'P2',
+            assign: 'Me',
+            added: '2022-03-22',
+            due: '',
+            comments: []
+        },
+        {
+            category: 'New',
+            id: 0,
+            name: 'How to use: 3. click on settings icon to add user or add phase to your kanban.',
+            priority: 'P3',
             assign: 'Me',
             added: '2022-03-22',
             due: '',
