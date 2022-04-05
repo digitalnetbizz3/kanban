@@ -51,12 +51,12 @@ const app = Vue.createApp({
                 }
             } catch {
                 data = defaultData;
-                localStorage.setItem(storageName, data);
+                localStorage.setItem(storageName, JSON.stringify(data));
                 return data;
             }
         } 
         data = defaultData;
-        localStorage.setItem(storageName, data);
+        localStorage.setItem(storageName, JSON.stringify(data));
         return data;
     },
     methods: {
