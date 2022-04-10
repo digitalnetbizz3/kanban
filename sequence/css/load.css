@@ -2,7 +2,7 @@
     position:absolute;
     top:0px;
     width:500px;
-    min-height:1024px;
+    min-height:800px;
     background-color: #96a49a;
 }
 .close_load_button {
@@ -30,7 +30,7 @@
     resize: none;
     font-size:11pt;
     max-lines:40;
-    height:500px;
+    height:350px;
     min-width:475px;
     background-color: #eeeeee;
     margin-bottom: 10px;
