@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>kan-ban / org</title>
+        <link rel="manifest">
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width; initial-scale=1, maximum-scale=5, minimum-scale=1; " />
+        <meta name="theme-color" content="#397850"/>
+        <meta property="og:url"           content="https://kan-ban.org/sequence" />
+		<meta property="og:type"          content="website" />
+		<meta property="og:title"         content="Sequence diagram composer" />
+		<meta property="og:description"   content="Sequence diagram composer app that doesn't use the cloud. Can work offline and 100% privacy." />
+		<meta name="description" content="Sequence diagram composer app that doesn't use the cloud. Can work offline and 100% privacy."/> 
+		<meta name="keywords" content="kanban, agile, sequence diagram, sprint planning, scrum, planning, trello, list, progression, offline, privacy"/>
+        <link rel="icon" type="image/svg" sizes="32x32" href="assets/logo.svg">
+        <script>
+            if ('serviceWorker' in navigator) {
+                window.addEventListener('load', async () => {
+                    try {
+                        const registration = await navigator.serviceWorker.register('service-worker.js');
+                        console.log(`Service worker Registered with scope: ${registration.scope}`);
+                    } catch (e) {
+                        console.log('Service worker registration failed');
+                        console.log(e);
+                    }
+                });
+            }
+        </script>
+        <script src="js/vue.global.js"></script>
+        <script src="js/diagram_handling.js"></script>
+        <style>
+            @font-face {
+                font-family: 'Open Sans';
+                font-style: normal;
+                font-weight: 400;
+                font-stretch: 100%;
+                src: url(https://fonts.gstatic.com/s/opensans/v28/memSYaGs126MiZpBA-UvWbX2vVnXBbObj2OVZyOOSr4dVJWUgsjZ0B4gaVQUwaEQbjA.woff) format('woff');
+                unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+                }
+            body {width:100%;min-height: calc(100vh - 50px);margin:0px;padding:0px; border-spacing: 0px;border-collapse: collapse;}
+            
+            div.mermaid {
+                /* font-family: 'trebuchet ms', verdana, arial; */
+                font-family: 'open sans';
+            }
+	    </style>
+        
+        <link href='css/dialog.css' rel='stylesheet'> 
+        <link href='css/layout.css' rel='stylesheet'> 
+        <link href='css/settings.css' rel='stylesheet'> 
+        <link href='css/load.css' rel='stylesheet'> 
+
+    </head>
+    <body onload="appLoad();">
+        <div id="app">
+            <!-- Masthead -->
+            <header class="masthead">
+                <img src="assets/logo.svg" style="width:55px;height:40px;margin:5px;" alt="Kanban logo"/>
+                <div style="font-size:13pt;color:white;width:200px;">看板 / kan-ban / org</div>
+                <div style="width:100%;">
+                    <button style="float: right;margin-right:10px;" class="mast_button" onclick="showLoad();" aria-label="Settings" title="Settings">
+                        <img src="assets/settings.svg" alt="Settings"/>
+                    </button>
+                    <button style="float: right;margin-right:10px;" class="mast_button" onclick="showChooser();" aria-label="Menu" title="Menu">
+                        <img src="assets/menu.svg" alt="Menu"/>
+                    </button>
+                </div>
+            </header>
+            <div id="restore_panel" style="display:none;width:30px;">
+                <button style="cursor:hand;width:25px;height:25px;margin-left:5px;" onclick="toggleLeftPanel();">&gt;</button>
+            </div>
+            <!-- End of masthead -->
+            <table id="whole_content_area" style="min-height: calc(100vh - 50px);margin:0px;" >
+                <tr style="height:100%;width:100%;margin:0px;padding: 0px;">
+                    <td id='left_panel' style="height:100%;width:440px;background-color:#96a49a;margin:0px;padding: 0px;vertical-align: top;">
+                        <div>
+                            <h3 style="margin-left:10px;margin-bottom: 0px;">Sequence Diagram Composer<button style="cursor:hand;width:25px;height:25px;margin-left:150px;" onclick="toggleLeftPanel();">&lt;</button></h3></h3>
+                            <div class="settings_description">
+                                <ul>
+                                    <li>
+                                        Add entities in the order presented in diagram (participant or actor).
+                                    </li>
+                                    <li>
+                                        Add sequence item by adding interactions (arrow and messages) between entities.
+                                    </li>
+                                </ul>
+                                
+                            </div>
+                            <hr>
+                            <h3 style="margin-left:10px;margin-bottom: 0px;">Entities</h3>
+                            <table style="margin:0px;max-height:200px;background-color:#a6c4aa;">
+                                <tr>
+                                    <td>
+                                        <select id="user_list" size="6" class="settings_list" onchange="prepare_for_edit();">
+                                            <option v-for="user in users" >{{user.name}}</option>
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <button style="height:58px;" id="reorder_up" onclick="reorder(true);">^</button>
+                                        <button style="height:58px;" id="reorder_dn" onclick="reorder(false);">v</button>
+                                    </td>
+                                    <td>
+                                        <div>
+                                            <button id="add_new_button" class="command_button" style="width:65px;" onclick="prepare_for_new();" 
+                                            aria-label="Add New" title="Add new">
+                                            New
+                                        </button>
+                                        <button id="edit_button" class="command_button" style="margin-left:0px;width:65px;background-color: lightgray;" onclick="prepare_for_edit()" 
+                                            aria-label="Update" title="update">
+                                            Edit
+                                        </button>
+                                        <button class="command_button" style="margin-left:0px;width:70px;" onclick="remove_user();" 
+                                                aria-label="Remove selected user" title="Remove selected entity">
+                                                Remove
+                                            </button>
+                                        </div>
+                                        <div>
+                                            <input id="newUserName" type="text" placeholder="enter entity here" class="settings_input"/>
+                                        </div>
+                                        <div style="margin-left:5px;">
+                                            <input type="radio" name="entityType" id="participant" value="participant" checked>
+                                            <label for="participant">Participant</label>
+                                            <input style="margin-left:10px;" type="radio" id="actor" name="entityType" value="actor">
+                                            <label for="actor">Actor</label>
+                                        </div>
+                                        <div>
+                                            <button id="add_or_update" class="command_button" style="width:200px;" onclick="update_user()" 
+                                                aria-label="Update" title="Update">
+                                                Update
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                        <h3 style="margin-left:10px;margin-bottom: 0px;">Sequence Item
+                            <button style="cursor:hand;width:25px;height:25px;margin-left:270px;" onclick="addSequenceDialog();">+</button></h3>
+                            <div style="font-size:8pt;margin-left:8pt;">click '+' to add new item, drag & drop to reorder and edit/delete on each item.</div>
+                            <ul style="list-style:none;padding-left:10px;">
+                                <li v-for="item in sequences" style="margin-left:0px;border-spacing:0;" v-bind:data-id="item.id"
+                                    draggable="true" ondragstart="startDrag(event);" ondrop="onDrop(event)"  @dragover.prevent @dragenter.prevent>
+                                    <div v-if="item.type == 'msg'" v-bind:data-id="item.id">
+                                        <div style="min-width:400px;height:1px;background-color:lightgray;" ></div>
+                                        <table style="background-color:#dddddd;border-collapse: collapse;">
+                                            <tr>
+                                                <td style="min-width:80px;max-width:80px;font-size:9pt;"><b>from</b></td>
+                                                <td style="min-width:80px;max-width:80px;font-size:9pt;"><b>to</b></td>
+                                                <td style="min-width:55px;max-width:55px;font-size:9pt;"><b>arrow</b></td>
+                                                <td style="min-width:180px;max-width:180px;font-size:9pt;"><b>message</b></td>
+                                                <td style="min-width:20px;max-width:20px;cursor:hand;opacity: 0.5;">
+                                                    <img v-bind:data-id="item.id" src="assets/edit.svg" alt="edit sequence" width="12" height="12" onclick="editSequence(this)"/>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td style="min-width:80px;max-width:80px;font-size:9pt;">{{item.from}}</td>
+                                                <td style="min-width:80px;max-width:80px;font-size:9pt;">{{item.to}}</td>
+                                                <td style="min-width:55px;max-width:55px;font-size:9pt;">{{item.arrow}}</td>
+                                                <td style="min-width:180px;max-width:180px;font-size:9pt;">{{item.msg}}</td>
+                                                <td style="min-width:20px;max-width:20px;cursor:hand;opacity: 0.5;">
+                                                    <img v-bind:data-id="item.id" src="assets/delete.svg" alt="remove sequence" width="12" height="12" onclick="removeSequence(this)"/>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                    <div v-if="item.type == 'note'" v-bind:data-id="item.id">
+                                        <table style="background-color:#beb2b2;border-spacing:0;border-collapse: collapse;">
+                                            <tr>
+                                                <td style="min-width:80px;max-width:80px;font-size:9pt;"><b>entity</b></td>
+                                                <td style="min-width:80px;max-width:80px;font-size:9pt;"><b>position</b></td>
+                                                <td style="min-width:235px;max-width:235px;font-size:9pt;"><b>notes</b></td>
+                                                <td style="min-width:20px;max-width:20px;cursor:hand;opacity: 0.5;">
+                                                    <img v-bind:data-id="item.id" src="assets/edit.svg" alt="edit sequence" width="12" height="12" onclick="editSequence(this)"/>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td style="min-width:80px;max-width:80px;font-size:9pt;">{{item.from}}</td>
+                                                <td style="min-width:80px;max-width:80px;font-size:9pt;">{{item.position}}</td>
+                                                <td style="min-width:235px;max-width:235px;font-size:9pt;">{{item.note}}</td>
+                                                <td style="min-width:20px;max-width:20px;cursor:hand;opacity: 0.5;">
+                                                    <img v-bind:data-id="item.id" src="assets/delete.svg" alt="remove sequence" width="12" height="12" onclick="removeSequence(this)"/>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                </li>
+                            </ul>
+                            <!-- Add Sequence Dialog -->
+                            <div class="overlay" id="dialog">
+                                <div class="modal">
+                                    <div id="sequence_add_new_section" style="display:block;margin:0px;margin-top:5px;min-height:140px;;width:100%;background-color:#a6c4aa">
+                                        <div style="margin:10px;">
+                                        Sequence Type
+                                            <input style="margin-left:10px;" type="radio" id="message" name="sequenceType" value="message" checked>
+                                            <label for="message">Message</label>
+                                            <input type="radio" name="sequenceType" id="note" value="note">
+                                            <label for="note">Notes</label>
+                                        </div>
+                                        <!-- message type ui -->
+                                        <div style="background-color:#a6d4aa" id="add_message_ui">
+                                            <div style="margin-left:10px;margin-top:5px;">
+                                                <span>From</span>
+                                                <select id="from_user_list" class="settings_list" style="position:absolute;left:80px;width:140px;">
+                                                    <option v-for="user in users" >{{user.name}}</option>
+                                                </select>
+                                                <span style="position:absolute;left:240px;">To</span>
+                                                <select id="to_user_list" class="settings_list" style="position:absolute;left:270px;width:140px;">
+                                                    <option v-for="user in users" >{{user.name}}</option>
+                                                </select>
+                                            </div>
+                        
+                                            <div style="margin-left:10px;margin-top:5px;">
+                                                Arrow
+                                                <select id="arrow_list" class="settings_list" style="position:absolute;left:80px;width:330px;">
+                                                    <option v-for="arrow in arrows">{{arrow.name}}</option>
+                                                </select>
+                                            </div>
+                                            <div style="margin-left:10px;margin-top:5px;">
+                                                Message
+                                                <input id="message_text" type="text" placeholder="enter message here" style="margin:0px;position:absolute;left:90px;width:330px;" class="settings_input"/>
+                                            </div>
+                                            <div style="margin-top:10px;">
+                                                <button class="command_button" style="margin-left:257px;width:80px;"
+                                                            aria-label="Cancel Add" title="Cancel Add" onclick="endSequenceDialog()">
+                                                            Cancel
+                                                </button>
+                                                <button id="add_edit_msg_button" class="command_button" style="margin-left:0px;width:80px;" onclick="addEditMessage(this)" 
+                                                            aria-label="Add New" title="Add New">
+                                                            Add New
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <!-- end message ui-->
+                                        <!-- note type ui -->
+                                        <div style="background-color:#a6d4aa;display:none;" id="add_note_ui">
+                                            <div style="margin-left:10px;margin-top:5px;">
+                                                <span>Note over</span>
+                                                <select id="over_user_list" class="settings_list" style="position:absolute;left:80px;width:200px;">
+                                                    <option v-for="user in users" >{{user.name}}</option>
+                                                </select>
+                                            </div>
+                                            <div style="margin-left:10px;margin-top:5px;">
+                                                Position
+                                                <select id="position_list" class="settings_list" style="position:absolute;left:80px;width:330px;">
+                                                    <option>over</option>
+                                                    <option>left of</option>
+                                                    <option>right of</option>
+                                                </select>
+                                            </div>
+                                            <div style="margin-left:10px;margin-top:5px;">
+                                                Note
+                                                <input id="note_text" type="text" placeholder="enter note here" style="margin:0px;position:absolute;left:90px;width:330px;" class="settings_input"/>
+                                            </div>
+                                            <div style="margin-top:10px;">
+                                                <button class="command_button" style="margin-left:257px;width:80px;"
+                                                            aria-label="Cancel Add" title="Cancel Add" onclick="endSequenceDialog()">
+                                                            Cancel
+                                                </button>
+                                                <button id="add_edit_note_button" class="command_button" style="margin-left:0px;width:80px;" onclick="addEditNote(this)" 
+                                                            aria-label="Add New" title="Add New">
+                                                            Add New
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <!-- end note ui-->
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- end Sequence Add Dialog -->
+                            <div class="overlay" id="chooser">
+                                <div>
+                                    <table style="background-color: lightgray;margin-top:200px;margin-left:auto;margin-right:auto; border-spacing: 30px;">
+                                        <tr>
+                                            <td colspan="2">
+                                                <image src="assets/close.svg" style="width:30px;height:30px;margin-left:600px;margin-right:10px;" onclick="endChooser()"/>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td style="width:300px;margin:20px;">
+                                                <img src="assets/kanban.png" alt="Kanban Board" style="cursor:hand;width:200px; height:200px;margin-left:50px;"/>
+                                                <h2 style="text-align:center;">Kan-ban board</h2>
+                                            </td>
+                                            <td  style="width:300px;;margin:20px;">
+                                                <img src="assets/sequence.png" alt="Sequence Diagram" style="cursor:hand;width:200px; height:200px;margin-left:50px;"/>
+                                                <h2 style="text-align:center;">Sequence Diagram</h2>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                            <!-- settings fragment -->
+                            <div class="overlay" id="load">
+                                <div class="load_root">
+                                    <image src="assets/close.svg" class="close_load_button" onclick="hideLoad()" alt="Close Panel"/>
+                                    <h2 style="margin-left:10px;">Maniputate data</h2>
+                                    <div class="settings_description" style="font-size:10.5pt;">
+                                        You can reset your sequence diagram, you can modify your sequence JSON here. Or you can paste in a
+                                        downloaded version of sequence diagram. To modify, click on 'Update' button. To reset the diagram, click on
+                                        'New' button.
+                                    </div>
+                                    <hr>
+                                    <textarea id="sequence_data" class="data_display"></textarea>
+                                    <div>
+                                        <button class="command_button" style="margin-left:165px;width:100px;" 
+                                            onclick="resetSequenceData()" aria-label="New Sequence Diagram" title="New Sequence Diagram">
+                                            New
+                                        </button>
+                                        <button class="command_button" style="margin-left:10px;width:100px;" 
+                                            onclick="updateSequenceData()" aria-label="Update Sequence Diagram" title="Update Sequence Diagram">
+                                            Update
+                                        </button>
+                                        <button class="command_button" style="margin-left:10px;width:100px;" 
+                                            onclick="copySequenceData()" aria-label="Copy diagram data to clipboard" title="Copy diagram data to clipboard">
+                                            Copy
+                                        </button>
+                                    </div>
+                                    <hr>
+                                    <h2 style="margin-left:10px;">Download data</h2>
+                                    <div>
+                                        <input style="margin-left:10px;" type="radio" id="download_json" name="downloadType" value="download_json" checked>
+                                        <label for="download_json">JSON</label>
+                                        <input type="radio" name="downloadType" id="download_mermaid" value="download_mermaid">
+                                        <label for="download_mermaid">Mermaid Markdown</label>
+                                        <input type="radio" name="downloadType" id="download_png" value="download_png">
+                                        <label for="download_png">PNG</label>
+                                    </div>
+                                    <div>
+                                        <button class="command_button" style="margin-top:10px;margin-left:10px;width:200px;" onclick="downloadData()">Download</button> 
+                                    </div>
+                                    <h2 style="margin-left:10px;">Theme</h2>
+                                    <div>
+                                        <input style="margin-left:10px;" type="radio" id="theme_dark" name="theme" value="theme_dark" checked>
+                                        <label for="theme_dark">Dark</label>
+                                        <input type="radio" name="theme" id="theme_white" value="theme_white">
+                                        <label for="theme_white">Normal</label>
+                                        <input type="radio" name="theme" id="theme_green" value="theme_green">
+                                        <label for="theme_green">Forest</label>
+                                    </div>
+                                    <div>
+                                        <button class="command_button" style="margin-top:10px;margin-left:10px;width:200px;" onclick="updateTheme()">Update Theme</button> 
+                                    </div>
+                                </div>
+                            </div> <!-- end of settings -->
+                    </td>
+                    <td id="diagram" style="height:100%;width:100%;margin:0px;padding:0px;">
+
+                    </td>
+                </tr>
+            </table>
+            
+            </div>
+        </div> <!-- end of app div -->
+
+        <script src="js/sequence_vue_app.js"></script>
+        <script src="js/mermaid.js"></script>
+        <script src="js/dom-to-image.min.js"></script>
+
+        <script>
+            var theme = localStorage.getItem('theme');
+            if (theme == null) {
+                localStorage.setItem('theme', 'dark');
+                theme = 'dark';
+            }
+            
+            var mermaidAPI = mermaid.mermaidAPI;
+            mermaidAPI.initialize({
+              startOnLoad:false, securityLevel: 'loose', theme: theme
+            });
+            
+        </script>
+    </body>
+</html>
+
+
