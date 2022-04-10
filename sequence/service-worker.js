@@ -4,7 +4,7 @@ const urlsToCache = [
     'index.html',
     'js/sequence_vue_app.js',
     'js/diagram_handling.js',
-    'https://cdnjs.cloudflare.com/ajax/libs/mermaid/8.7.0/mermaid.min.js',
+    'js/mermaid.js',
     'js/dom-to-image.min.js',
     '../js/vue.global.js',
     'css/dialog.css',
