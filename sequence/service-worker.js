@@ -1,23 +1,24 @@
-const CACHE_NAME = 'KANBAN_APP_CONTENT_V1';
+const CACHE_NAME = 'SEQUENCE_APP_CONTENT_V1';
 
 const urlsToCache = [
     'index.html',
-    'js/kanban_vue_app.js',
-    'js/task_handling.js',
-    'js/vue.global.js',
+    'js/sequence_vue_app.js',
+    'js/diagram_handling.js',
+    'js/mermaid.js',
+    'js/dom-to-image.min.js',
+    '../js/vue.global.js',
     'css/dialog.css',
     'css/layout.css',
     'css/load.css',
-    'css/settings.css',
-    'assets/close.svg',
-    'assets/delete.svg',
-    'assets/download.svg',
-    'assets/edit.svg',
-    'assets/logo.svg',
-    'assets/open.svg',
-    'assets/settings.svg',
-    'assets/user.svg',
-    'assets/logo.png',
+    '../assets/menu.svg',
+    '../assets/close.svg',
+    '../assets/delete.svg',
+    '../assets/edit.svg',
+    '../assets/logo.svg',
+    '../assets/settings.svg',
+    '../assets/logo.png',
+    '../assets/kanban.png',
+    '../assets/sequence.png',
     'https://fonts.gstatic.com/s/opensans/v28/memSYaGs126MiZpBA-UvWbX2vVnXBbObj2OVZyOOSr4dVJWUgsjZ0B4gaVQUwaEQbjA.woff'
 ];
 
