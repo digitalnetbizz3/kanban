@@ -12,7 +12,7 @@
 		<meta property="og:description"   content="Sequence diagram composer app that doesn't use the cloud. Can work offline and 100% privacy." />
 		<meta name="description" content="Sequence diagram composer app that doesn't use the cloud. Can work offline and 100% privacy."/> 
 		<meta name="keywords" content="kanban, agile, sequence diagram, sprint planning, scrum, planning, trello, list, progression, offline, privacy"/>
-        <link rel="icon" type="image/svg" sizes="32x32" href="assets/logo.svg">
+        <link rel="icon" type="image/svg" sizes="32x32" href="../assets/logo.svg">
         <script>
             if ('serviceWorker' in navigator) {
                 window.addEventListener('load', async () => {
@@ -26,7 +26,7 @@
                 });
             }
         </script>
-        <script src="js/vue.global.js"></script>
+        <script src="../js/vue.global.js"></script>
         <script src="js/diagram_handling.js"></script>
         <style>
             @font-face {
@@ -55,14 +55,14 @@
         <div id="app">
             <!-- Masthead -->
             <header class="masthead">
-                <img src="assets/logo.svg" style="width:55px;height:40px;margin:5px;" alt="Kanban logo"/>
+                <img src="../assets/logo.svg" style="width:55px;height:40px;margin:5px;" alt="Kanban logo"/>
                 <div style="font-size:13pt;color:white;width:200px;">看板 / kan-ban / org</div>
                 <div style="width:100%;">
                     <button style="float: right;margin-right:10px;" class="mast_button" onclick="showLoad();" aria-label="Settings" title="Settings">
-                        <img src="assets/settings.svg" alt="Settings"/>
+                        <img src="../assets/settings.svg" alt="Settings"/>
                     </button>
                     <button style="float: right;margin-right:10px;" class="mast_button" onclick="showChooser();" aria-label="Menu" title="Menu">
-                        <img src="assets/menu.svg" alt="Menu"/>
+                        <img src="../assets/menu.svg" alt="Menu"/>
                     </button>
                 </div>
             </header>
@@ -148,7 +148,7 @@
                                                 <td style="min-width:55px;max-width:55px;font-size:9pt;"><b>arrow</b></td>
                                                 <td style="min-width:180px;max-width:180px;font-size:9pt;"><b>message</b></td>
                                                 <td style="min-width:20px;max-width:20px;cursor:hand;opacity: 0.5;">
-                                                    <img v-bind:data-id="item.id" src="assets/edit.svg" alt="edit sequence" width="12" height="12" onclick="editSequence(this)"/>
+                                                    <img v-bind:data-id="item.id" src="../assets/edit.svg" alt="edit sequence" width="12" height="12" onclick="editSequence(this)"/>
                                                 </td>
                                             </tr>
                                             <tr>
@@ -157,7 +157,7 @@
                                                 <td style="min-width:55px;max-width:55px;font-size:9pt;">{{item.arrow}}</td>
                                                 <td style="min-width:180px;max-width:180px;font-size:9pt;">{{item.msg}}</td>
                                                 <td style="min-width:20px;max-width:20px;cursor:hand;opacity: 0.5;">
-                                                    <img v-bind:data-id="item.id" src="assets/delete.svg" alt="remove sequence" width="12" height="12" onclick="removeSequence(this)"/>
+                                                    <img v-bind:data-id="item.id" src="../assets/delete.svg" alt="remove sequence" width="12" height="12" onclick="removeSequence(this)"/>
                                                 </td>
                                             </tr>
                                         </table>
@@ -169,7 +169,7 @@
                                                 <td style="min-width:80px;max-width:80px;font-size:9pt;"><b>position</b></td>
                                                 <td style="min-width:235px;max-width:235px;font-size:9pt;"><b>notes</b></td>
                                                 <td style="min-width:20px;max-width:20px;cursor:hand;opacity: 0.5;">
-                                                    <img v-bind:data-id="item.id" src="assets/edit.svg" alt="edit sequence" width="12" height="12" onclick="editSequence(this)"/>
+                                                    <img v-bind:data-id="item.id" src="../assets/edit.svg" alt="edit sequence" width="12" height="12" onclick="editSequence(this)"/>
                                                 </td>
                                             </tr>
                                             <tr>
@@ -177,7 +177,7 @@
                                                 <td style="min-width:80px;max-width:80px;font-size:9pt;">{{item.position}}</td>
                                                 <td style="min-width:235px;max-width:235px;font-size:9pt;">{{item.note}}</td>
                                                 <td style="min-width:20px;max-width:20px;cursor:hand;opacity: 0.5;">
-                                                    <img v-bind:data-id="item.id" src="assets/delete.svg" alt="remove sequence" width="12" height="12" onclick="removeSequence(this)"/>
+                                                    <img v-bind:data-id="item.id" src="../assets/delete.svg" alt="remove sequence" width="12" height="12" onclick="removeSequence(this)"/>
                                                 </td>
                                             </tr>
                                         </table>
@@ -271,16 +271,16 @@
                                     <table style="background-color: lightgray;margin-top:200px;margin-left:auto;margin-right:auto; border-spacing: 30px;">
                                         <tr>
                                             <td colspan="2">
-                                                <image src="assets/close.svg" style="width:30px;height:30px;margin-left:600px;margin-right:10px;" onclick="endChooser()"/>
+                                                <image src="../assets/close.svg" style="width:30px;height:30px;margin-left:600px;margin-right:10px;" onclick="endChooser()"/>
                                             </td>
                                         </tr>
                                         <tr>
                                             <td style="width:300px;margin:20px;">
-                                                <img src="assets/kanban.png" alt="Kanban Board" style="cursor:hand;width:200px; height:200px;margin-left:50px;"/>
+                                                <img src="../assets/kanban.png" alt="Kanban Board" style="cursor:hand;width:200px; height:200px;margin-left:50px;"/>
                                                 <h2 style="text-align:center;">Kan-ban board</h2>
                                             </td>
                                             <td  style="width:300px;;margin:20px;">
-                                                <img src="assets/sequence.png" alt="Sequence Diagram" style="cursor:hand;width:200px; height:200px;margin-left:50px;"/>
+                                                <img src="../assets/sequence.png" alt="Sequence Diagram" style="cursor:hand;width:200px; height:200px;margin-left:50px;"/>
                                                 <h2 style="text-align:center;">Sequence Diagram</h2>
                                             </td>
                                         </tr>
@@ -290,7 +290,7 @@
                             <!-- settings fragment -->
                             <div class="overlay" id="load">
                                 <div class="load_root">
-                                    <image src="assets/close.svg" class="close_load_button" onclick="hideLoad()" alt="Close Panel"/>
+                                    <image src="../assets/close.svg" class="close_load_button" onclick="hideLoad()" alt="Close Panel"/>
                                     <h2 style="margin-left:10px;">Maniputate data</h2>
                                     <div class="settings_description" style="font-size:10.5pt;">
                                         You can reset your sequence diagram, you can modify your sequence JSON here. Or you can paste in a
