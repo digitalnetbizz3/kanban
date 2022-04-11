@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <title>kan-ban / org</title>
+        <title>kan-ban / org Sequence Diagram</title>
         <link rel="manifest" href="app.manifest">
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width; initial-scale=1, maximum-scale=5, minimum-scale=1; " />
@@ -54,7 +54,7 @@
             <!-- Masthead -->
             <header class="masthead">
                 <img src="../assets/logo.svg" style="width:55px;height:40px;margin:5px;" alt="Kanban logo"/>
-                <div style="font-size:13pt;color:white;width:200px;">看板 / kan-ban / org</div>
+                <div style="font-size:13pt;color:white;width:230px;">看板 / kan-ban / org</div>
                 <div style="width:100%;">
                     <button style="float: right;margin-right:10px;" class="mast_button" onclick="showLoad();" aria-label="Settings" title="Settings">
                         <img src="../assets/settings.svg" alt="Settings"/>
@@ -141,10 +141,10 @@
                                         <div style="min-width:400px;height:1px;background-color:lightgray;" ></div>
                                         <table style="background-color:#dddddd;border-collapse: collapse;">
                                             <tr>
-                                                <td style="min-width:80px;max-width:80px;font-size:8pt;color:navy;"><b>from</b></td>
-                                                <td style="min-width:80px;max-width:80px;font-size:8pt;color:navy;"><b>to</b></td>
-                                                <td style="min-width:55px;max-width:55px;font-size:8pt;color:navy;"><b>arrow</b></td>
-                                                <td style="min-width:180px;max-width:180px;font-size:8pt;color:navy;"><b>message</b></td>
+                                                <td style="min-width:80px;max-width:80px;font-size:8pt;color:rgb(6, 53, 24);"><b>from</b></td>
+                                                <td style="min-width:80px;max-width:80px;font-size:8pt;color:rgb(6, 53, 24);"><b>to</b></td>
+                                                <td style="min-width:55px;max-width:55px;font-size:8pt;color:rgb(6, 53, 24);"><b>arrow</b></td>
+                                                <td style="min-width:180px;max-width:180px;font-size:8pt;color:rgb(6, 53, 24);"><b>message</b></td>
                                                 <td style="min-width:20px;max-width:20px;cursor:hand;opacity: 0.5;">
                                                     <img v-bind:data-id="item.id" src="../assets/edit.svg" alt="edit sequence" width="12" height="12" onclick="editSequence(this)"/>
                                                 </td>
@@ -163,9 +163,9 @@
                                     <div v-if="item.type == 'note'" v-bind:data-id="item.id">
                                         <table style="background-color:#beb2b2;border-spacing:0;border-collapse: collapse;">
                                             <tr>
-                                                <td style="min-width:80px;max-width:80px;font-size:8pt;color:navy;"><b>entity</b></td>
-                                                <td style="min-width:80px;max-width:80px;font-size:8pt;color:navy;"><b>position</b></td>
-                                                <td style="min-width:235px;max-width:235px;font-size:8pt;color:navy;"><b>notes</b></td>
+                                                <td style="min-width:80px;max-width:80px;font-size:8pt;color:rgb(6, 53, 24);"><b>entity</b></td>
+                                                <td style="min-width:80px;max-width:80px;font-size:8pt;color:rgb(6, 53, 24);"><b>position</b></td>
+                                                <td style="min-width:235px;max-width:235px;font-size:8pt;color:rgb(6, 53, 24);"><b>notes</b></td>
                                                 <td style="min-width:20px;max-width:20px;cursor:hand;opacity: 0.5;">
                                                     <img v-bind:data-id="item.id" src="../assets/edit.svg" alt="edit sequence" width="12" height="12" onclick="editSequence(this)"/>
                                                 </td>
@@ -273,12 +273,12 @@
                                             </td>
                                         </tr>
                                         <tr>
-                                            <td style="width:300px;margin:20px;">
-                                                <img src="../assets/kanban.png" alt="Kanban Board" style="cursor:hand;width:200px; height:200px;margin-left:50px;"/>
+                                            <td style="width:300px;margin:20px;border-style:dotted;border-width: 1px;border-color:black; border-radius: 5px;">
+                                                <img src="../assets/kanban.png" alt="Kanban Board" style="margin-top:15px;cursor:hand;width:200px; height:200px;margin-left:50px;" onclick="handleChooser('kanban');"/>
                                                 <h2 style="text-align:center;">Kan-ban board</h2>
                                             </td>
-                                            <td  style="width:300px;;margin:20px;">
-                                                <img src="../assets/sequence.png" alt="Sequence Diagram" style="cursor:hand;width:200px; height:200px;margin-left:50px;"/>
+                                            <td  style="width:300px;;margin:20px;border-style:dotted;border-width: 1px;border-color:black; border-radius: 5px;">
+                                                <img src="../assets/sequence.png" alt="Sequence Diagram" style="margin-top:15px;cursor:hand;width:200px; height:200px;margin-left:50px;"  onclick="handleChooser('sequence');"/>
                                                 <h2 style="text-align:center;">Sequence Diagram</h2>
                                             </td>
                                         </tr>

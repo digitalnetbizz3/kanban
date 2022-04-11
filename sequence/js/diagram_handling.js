@@ -31,6 +31,21 @@
     prepare_for_edit();
   }
 
+  function handleChooser(chosen) {
+    if (storageName == 'data-sequence') { // sequence diagram app
+      if (chosen != 'sequence') {
+        location.href = '../index.html';
+        return;
+      }
+    } else { // kan-ban app
+      if (chosen == 'sequence') {
+        location.href = 'sequence/index.html';
+        return;
+      }
+    }
+    endChooser();
+  }
+
   function startDrag (evt) {
     let data_id = evt.target.getAttribute('data-id')
     evt.dataTransfer.dropEffect = 'move'

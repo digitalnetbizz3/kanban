@@ -50,6 +50,9 @@
                 <img src="assets/logo.svg" style="width:55px;height:40px;margin:5px;" alt="Kanban logo"/>
                 <div style="font-size:13pt;color:white;">看板 / kan-ban / org</div>
                 <div class="user-settings">
+                    <button class="mast_button" onclick="showChooser();" aria-label="Menu" title="Menu">
+                        <img src="assets/menu.svg" alt="Menu"/>
+                    </button>
                     <button class="mast_button" onclick="showSettings();" aria-label="Settings" title="Settings">
                         <img src="assets/settings.svg" alt="Settings"/>
                     </button>
@@ -155,6 +158,29 @@
                 </div>
             </div> <!-- end of load data -->
 
+            <!-- end Sequence Add Dialog -->
+            <div class="overlay" id="chooser">
+                <div>
+                    <table style="background-color: lightgray;margin-top:200px;margin-left:auto;margin-right:auto; border-spacing: 30px;">
+                        <tr>
+                            <td colspan="2">
+                                <image src="assets/close.svg" style="width:30px;height:30px;margin-left:600px;margin-right:10px;" onclick="endChooser()"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="width:300px;margin:20px;border-style:dotted;border-width: 1px;border-color:black; border-radius: 5px;">
+                                <img src="assets/kanban.png" alt="Kanban Board" style="margin-top:15px;cursor:hand;width:200px; height:200px;margin-left:50px;" onclick="handleChooser('kanban');"/>
+                                <h2 style="text-align:center;">Kan-ban board</h2>
+                            </td>
+                            <td  style="width:300px;;margin:20px;border-style:dotted;border-width: 1px;border-color:black; border-radius: 5px;">
+                                <img src="assets/sequence.png" alt="Sequence Diagram" style="margin-top:15px;cursor:hand;width:200px; height:200px;margin-left:50px;"  onclick="handleChooser('sequence');"/>
+                                <h2 style="text-align:center;">Sequence Diagram</h2>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            
             <!-- settings fragment -->
             <div class="overlay" id="settings">
                 <div class="settings_root">

@@ -228,3 +228,28 @@
     link.href = dataUrl;
     link.click();
   }
+
+  function handleChooser(chosen) {
+    if (storageName == 'data-sequence') { // sequence diagram app
+      if (chosen != 'sequence') {
+        location.href = '../index.html';
+        return;
+      }
+    } else { // kan-ban app
+      if (chosen == 'sequence') {
+        location.href = 'sequence/index.html';
+        return;
+      }
+    }
+    endChooser();
+  }
+
+  function showChooser() {
+    let chooser_dialog = document.querySelector("#chooser");
+    chooser_dialog.style.display = 'block';
+  }
+
+  function endChooser() {
+    let chooser_dialog = document.querySelector("#chooser");
+    chooser_dialog.style.display = 'none';
+  }  
