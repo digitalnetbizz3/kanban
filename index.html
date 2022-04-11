@@ -78,7 +78,7 @@
             
                     <ul class="list-items" v-for="task in filterTasks(category.name)">
                         <li v-bind:data-id="task.id" draggable="true" ondragstart="startDrag(event);" 
-			    style="position:relative;" ondrop="onDrop(event)" v-bind:category="category.name">
+			                style="position:relative;" ondrop="onDrop(event)" v-bind:category="category.name">
                             <div class="task_name">{{task.name}}</div>
                             <span class="task_priority" v-bind:class="task.priority">{{task.priority}}</span>
                             <img src="assets/user.svg" class="user_icon" alt="user"/>
