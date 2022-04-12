@@ -1,7 +1,7 @@
 var taskToEdit = null;
 
 const defaultData = {
-    running: 2,
+    running: 3,
     users: [{name: 'User', type: 'actor'}, {name: 'My Website', type: 'participant'}],
     arrows: [
         {name: 'Solid line with arrow', notation: '->>'},
@@ -39,7 +39,7 @@ const defaultData = {
         },
     ],
 };
-const storageName = 'data-sequence';
+var storageName = 'data-sequence';
 const app = Vue.createApp({
     data() {
         let data = null;
@@ -151,5 +151,20 @@ const app = Vue.createApp({
             Object.assign(this.$data, updatedData);
             this.persist();
         },
+        changeStorage() {
+            let persistence = localStorage.getItem(storageName);
+            if (persistence != null) {
+                try {
+                    let updatedData = JSON.parse(persistence);
+                    if (updatedData.users.length > 0) {
+                        Object.assign(this.$data, updatedData);
+                        return;
+                    }
+                } catch(e) {}
+            }
+            let updatedData = defaultData;
+            localStorage.setItem(storageName, JSON.stringify(updatedData));
+            Object.assign(this.$data, updatedData);
+        }
     },
 }).mount('#app');

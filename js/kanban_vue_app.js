@@ -37,7 +37,9 @@ const defaultData = {
         },
     ],
 };
-const storageName = 'data-kanban';
+
+var storageName = 'data-kanban';
+
 const app = Vue.createApp({
     data() {
         let data = null;
@@ -127,5 +129,22 @@ const app = Vue.createApp({
             Object.assign(this.$data, updatedData);
             this.persist();
         },
+        changeStorage() {
+            
+            let persistence = localStorage.getItem(storageName);
+            if (persistence != null) {
+                try {
+                    
+                    let updatedData = JSON.parse(persistence);
+                    if (updatedData.tasks.length > 0 && updatedData.users.length > 0 && updatedData.categories.length > 0) {
+                        Object.assign(this.$data, updatedData);
+                        return;
+                    }
+                } catch(e) {}
+            }
+            let updatedData = defaultData;
+            localStorage.setItem(storageName, JSON.stringify(updatedData));
+            Object.assign(this.$data, updatedData);
+        }
     },
 }).mount('#app');

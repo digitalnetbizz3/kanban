@@ -1,6 +1,9 @@
   var nodeToEdit = null;
   
   function appLoad() {
+    let storageLocation = document.querySelector("#storageOptions");
+    storageLocation.value = storageName;
+
     let radios = document.getElementsByName('sequenceType');
     radios.forEach(radio => {
       radio.addEventListener('change', function() {
@@ -280,8 +283,8 @@
         let update_json = JSON.parse(sequence_data.value);
         app.update(update_json);
         updateDiagram();
-    } catch {
-        alert('Invalid JSON data.');
+    } catch(e) {
+        alert('Invalid JSON data.' + e);
     }
   }
 
@@ -500,4 +503,11 @@
       restorePanel.style.display = 'none';
       leftPanel.style.display = 'table-cell';
     } 
+  }
+
+  function changeDataStorage() {
+    let storageLocation = document.querySelector("#storageOptions");
+    storageName = storageLocation.value;
+    app.changeStorage();
+    updateDiagram();
   }

@@ -1,17 +1,17 @@
-const CACHE_NAME = 'KANBAN_APP_CONTENT_V1.11';
+const CACHE_NAME = 'KANBAN_APP_CONTENT_V1.13';
 
 const urlsToCache = [
     'index.html',
     'js/kanban_vue_app.js',
     'js/task_handling.js',
     'js/vue.global.js',
+    'js/dom-to-image.min.js',
     'css/dialog.css',
     'css/layout.css',
     'css/load.css',
     'css/settings.css',
     'assets/close.svg',
     'assets/delete.svg',
-    'assets/download.svg',
     'assets/edit.svg',
     'assets/logo.svg',
     'assets/open.svg',

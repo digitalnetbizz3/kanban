@@ -43,7 +43,7 @@
         <link href='css/settings.css' rel='stylesheet'> 
         <link href='css/load.css' rel='stylesheet'> 
     </head>
-    <body>
+    <body onload="appLoad()">
         <div id="app">
             <!-- Masthead -->
             <header class="masthead">
@@ -59,15 +59,12 @@
                     <button class="mast_button" onclick="showLoad();" aria-label="Load data" title="Load data">
                         <img src="assets/open.svg" alt="Load data"/>
                     </button>
-                    <button class="mast_button" onclick="downloadData();" aria-label="Download" title="Download">
-                        <img src="assets/download.svg" alt="Download"/>
-                    </button>
                 </div>
             </header>
             <!-- End of masthead -->
         
             <!-- Lists container -->
-            <section class="lists-container">
+            <section id="kanban_board" class="lists-container">
                 <!-- main phases layout -->
                 <div v-bind:category="category.name" class="list" v-for="category in categories" 
                     @dragover.prevent @dragenter.prevent ondrop="onDrop(event)">
@@ -139,21 +136,41 @@
                         downloaded version of kanban. To modify, click on 'Update' button. To reset the board, click on
                         'New' button.
                     </div>
+                    <h2 style="margin-left:10px;">Active storage</h2>
+                    <div class="settings_description">
+                        There are 3 storages which means you can work on 3 different kanban and switching between them.
+                    </div>
+                    <select id="storageOptions" onchange="changeDataStorage()" size="3" class="settings_list">
+                        <option value="data-kanban">data-kanban</option>
+                        <option value="data-kanban-2">data-kanban-2</option>
+                        <option value="data-kanban-3">data-kanban-3</option>
+                    </select>
                     <hr>
                     <textarea id="kanban_data" class="data_display"></textarea>
                     <div>
-                        <button class="command_button" style="margin-left:165px;width:100px;" 
+                        <button class="button-4" style="margin-left:165px;width:100px;" 
                             onclick="resetKanbanData()" aria-label="New kanban" title="New kanban">
                             New
                         </button>
-                        <button class="command_button" style="margin-left:10px;width:100px;" 
+                        <button class="button-4" style="margin-left:10px;width:100px;" 
                             onclick="updateKanbanData()" aria-label="Update kanban" title="Update kanban">
                             Update
                         </button>
-                        <button class="command_button" style="margin-left:10px;width:100px;" 
+                        <button class="button-4" style="margin-left:10px;width:100px;" 
                             onclick="copyKanbanData()" aria-label="Copy kanban to clipboard" title="Copy kanban to clipboard">
                             Copy
                         </button>
+                    </div>
+                    <hr>
+                    <h2 style="margin-left:10px;">Download data</h2>
+                    <div>
+                        <input style="margin-left:10px;" type="radio" id="download_json" name="downloadType" value="download_json" checked>
+                        <label for="download_json">JSON</label>
+                        <input type="radio" name="downloadType" id="download_png" value="download_png">
+                        <label for="download_png">JPEG</label>
+                    </div>
+                    <div>
+                        <button class="button-4" style="margin-top:10px;margin-left:10px;width:200px;" onclick="downloadData()">Download</button> 
                     </div>
                 </div>
             </div> <!-- end of load data -->
@@ -253,6 +270,7 @@
             </div> <!-- end of settings fragment -->
         </div> <!-- end of app div -->
         <script src="js/kanban_vue_app.js"></script>
+        <script src="js/dom-to-image.min.js"></script>
     </body>
 </html>
 

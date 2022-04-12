@@ -2,8 +2,10 @@
     position:absolute;
     top:0px;
     width:500px;
-    min-height:800px;
+    height:100%;
     background-color: #96a49a;
+    overflow-y:auto;
+
 }
 .close_load_button {
     width:25px;

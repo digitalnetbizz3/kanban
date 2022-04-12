@@ -296,17 +296,27 @@
                                         'New' button.
                                     </div>
                                     <hr>
+                                    <h2 style="margin-left:10px;">Active storage</h2>
+                                    <div class="settings_description">
+                                        There are 3 storages which means you can work on 3 different sequence diagrams and switching between them.
+                                    </div>
+                                    <select id="storageOptions" onchange="changeDataStorage()" size="3" class="settings_list">
+                                        <option value="data-sequence">data-sequence</option>
+                                        <option value="data-sequence-2">data-sequence-2</option>
+                                        <option value="data-sequence-3">data-sequence-3</option>
+                                    </select>
+                                    <hr>
                                     <textarea id="sequence_data" class="data_display"></textarea>
                                     <div>
-                                        <button class="command_button" style="margin-left:165px;width:100px;" 
+                                        <button class="button-4" style="margin-left:165px;width:100px;" 
                                             onclick="resetSequenceData()" aria-label="New Sequence Diagram" title="New Sequence Diagram">
                                             New
                                         </button>
-                                        <button class="command_button" style="margin-left:10px;width:100px;" 
+                                        <button class="button-4" style="margin-left:10px;width:100px;" 
                                             onclick="updateSequenceData()" aria-label="Update Sequence Diagram" title="Update Sequence Diagram">
                                             Update
                                         </button>
-                                        <button class="command_button" style="margin-left:10px;width:100px;" 
+                                        <button class="button-4" style="margin-left:10px;width:100px;" 
                                             onclick="copySequenceData()" aria-label="Copy diagram data to clipboard" title="Copy diagram data to clipboard">
                                             Copy
                                         </button>
@@ -319,10 +329,10 @@
                                         <input type="radio" name="downloadType" id="download_mermaid" value="download_mermaid">
                                         <label for="download_mermaid">Mermaid Markdown</label>
                                         <input type="radio" name="downloadType" id="download_png" value="download_png">
-                                        <label for="download_png">PNG</label>
+                                        <label for="download_png">JPEG</label>
                                     </div>
                                     <div>
-                                        <button class="command_button" style="margin-top:10px;margin-left:10px;width:200px;" onclick="downloadData()">Download</button> 
+                                        <button class="button-4" style="margin-top:10px;margin-left:10px;width:200px;" onclick="downloadData()">Download</button> 
                                     </div>
                                     <h2 style="margin-left:10px;">Theme</h2>
                                     <div>
@@ -334,7 +344,7 @@
                                         <label for="theme_green">Forest</label>
                                     </div>
                                     <div>
-                                        <button class="command_button" style="margin-top:10px;margin-left:10px;width:200px;" onclick="updateTheme()">Update Theme</button> 
+                                        <button class="button-4" style="margin-top:10px;margin-left:10px;width:200px;" onclick="updateTheme()">Update Theme</button> 
                                     </div>
                                 </div>
                             </div> <!-- end of settings -->
@@ -350,7 +360,7 @@
 
         <script src="js/sequence_vue_app.js"></script>
         <script src="js/mermaid.js"></script>
-        <script src="js/dom-to-image.min.js"></script>
+        <script src="../js/dom-to-image.min.js"></script>
 
         <script>
             var theme = localStorage.getItem('theme');

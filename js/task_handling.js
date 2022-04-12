@@ -221,12 +221,33 @@
   }
 
   function downloadData() {
-    let localData = localStorage.getItem('data');
-    var dataUrl = "data:text/json;charset=utf-8," + encodeURIComponent(localData);
-    var link = document.createElement("a");
-    link.download = "my-kanban.json";
-    link.href = dataUrl;
-    link.click();
+    let jsonOption = document.querySelector('#download_json');
+    var dataUrl = null;
+    var fileName = null;
+
+    if(jsonOption.checked) {
+      fileName = 'my-kanban.json';
+      let localData = localStorage.getItem(storageName);
+      dataUrl = "data:text/json;charset=utf-8," + encodeURIComponent(localData);
+    }
+    else {
+      domtoimage
+        .toJpeg(document.getElementById('kanban_board'), { quality: 1 })
+        .then(function (url) {
+          var link = document.createElement("a");
+          link.download = "my-kanban.jpeg";
+          link.href = url;
+          link.click();
+        });
+      return;
+    }
+
+    if (dataUrl != null) {
+      var link = document.createElement("a");
+      link.download = fileName;
+      link.href = dataUrl;
+      link.click();  
+    }
   }
 
   function handleChooser(chosen) {
@@ -253,3 +274,15 @@
     let chooser_dialog = document.querySelector("#chooser");
     chooser_dialog.style.display = 'none';
   }  
+
+  function changeDataStorage() {
+    
+    let storageLocation = document.querySelector("#storageOptions");
+    storageName = storageLocation.value;
+    app.changeStorage();
+  }
+
+  function appLoad() {
+    let storageLocation = document.querySelector("#storageOptions");
+    storageLocation.value = storageName;
+  }
