@@ -1,4 +1,4 @@
-const CACHE_NAME = 'KANBAN_APP_CONTENT_V1.13';
+const CACHE_NAME = 'KANBAN_APP_CONTENT_V1.14';
 
 const urlsToCache = [
     'index.html',
@@ -18,6 +18,9 @@ const urlsToCache = [
     'assets/settings.svg',
     'assets/user.svg',
     'assets/logo.png',
+    'assets/kanban.png',
+    'assets/flowchart.png',
+    'assets/sequence.png',
     'https://fonts.gstatic.com/s/opensans/v28/memSYaGs126MiZpBA-UvWbX2vVnXBbObj2OVZyOOSr4dVJWUgsjZ0B4gaVQUwaEQbjA.woff'
 ];
 

@@ -1,0 +1,15 @@
+{
+  "name": "kan-ban / org Flowchart",
+  "short_name": "kan-ban / org Flowchart",
+  "background_color": "#397850",
+  "theme_color": "#397850",
+  "display": "standalone",
+  "icons": [
+    {
+      "src": "../assets/logo.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+  "start_url": "index.html"
+}

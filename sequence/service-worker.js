@@ -1,4 +1,4 @@
-const CACHE_NAME = 'SEQUENCE_APP_CONTENT_V1.11';
+const CACHE_NAME = 'SEQUENCE_APP_CONTENT_V1.12';
 
 const urlsToCache = [
     'index.html',
@@ -19,6 +19,7 @@ const urlsToCache = [
     '../assets/logo.png',
     '../assets/kanban.png',
     '../assets/sequence.png',
+    '../assets/flowchart.png',
     'https://fonts.gstatic.com/s/opensans/v28/memSYaGs126MiZpBA-UvWbX2vVnXBbObj2OVZyOOSr4dVJWUgsjZ0B4gaVQUwaEQbjA.woff'
 ];
 

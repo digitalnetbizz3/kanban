@@ -35,15 +35,38 @@
   }
 
   function handleChooser(chosen) {
-    if (storageName == 'data-sequence') { // sequence diagram app
-      if (chosen != 'sequence') {
-        location.href = '../index.html';
-        return;
+    if (storageName.startsWith('data-sequence')) { // sequence diagram app
+      switch(chosen) {
+        case 'kanban':
+          location.href = 'https://kan-ban.org/index.html';
+          return;
+        case 'flowchart':
+          location.href = 'https://kan-ban.org/flow/index.html';
+          return;
+        default:
+          break;
       }
-    } else { // kan-ban app
-      if (chosen == 'sequence') {
-        location.href = 'sequence/index.html';
-        return;
+    } else if (storageName.startsWith('data-kanban')) { // kan-ban app
+      switch(chosen) {
+        case 'sequence':
+          location.href = 'https://kan-ban.org/sequence/index.html';
+          return;
+        case 'flowchart':
+          location.href = 'https://kan-ban.org/flow/index.html';
+          return;
+        default:
+          break;
+      }
+    } else if (storageName.startsWith('data-flow')) { // flowchart app
+      switch(chosen) {
+        case 'sequence':
+          location.href = 'https://kan-ban.org/sequence/index.html';
+          return;
+        case 'kanban':
+          location.href = 'https://kan-ban.org/index.html';
+          return;
+        default:
+          break;
       }
     }
     endChooser();
