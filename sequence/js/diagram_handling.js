@@ -34,44 +34,6 @@
     prepare_for_edit();
   }
 
-  function handleChooser(chosen) {
-    if (storageName.startsWith('data-sequence')) { // sequence diagram app
-      switch(chosen) {
-        case 'kanban':
-          location.href = 'https://kan-ban.org/index.html';
-          return;
-        case 'flowchart':
-          location.href = 'https://kan-ban.org/flow/index.html';
-          return;
-        default:
-          break;
-      }
-    } else if (storageName.startsWith('data-kanban')) { // kan-ban app
-      switch(chosen) {
-        case 'sequence':
-          location.href = 'https://kan-ban.org/sequence/index.html';
-          return;
-        case 'flowchart':
-          location.href = 'https://kan-ban.org/flow/index.html';
-          return;
-        default:
-          break;
-      }
-    } else if (storageName.startsWith('data-flow')) { // flowchart app
-      switch(chosen) {
-        case 'sequence':
-          location.href = 'https://kan-ban.org/sequence/index.html';
-          return;
-        case 'kanban':
-          location.href = 'https://kan-ban.org/index.html';
-          return;
-        default:
-          break;
-      }
-    }
-    endChooser();
-  }
-
   function startDrag (evt) {
     let data_id = evt.target.getAttribute('data-id')
     evt.dataTransfer.dropEffect = 'move'
@@ -270,16 +232,6 @@
     radios.forEach(el => {
       el.disabled = isFreeze;
     });
-  }
-
-  function showChooser() {
-    let chooser_dialog = document.querySelector("#chooser");
-    chooser_dialog.style.display = 'block';
-  }
-
-  function endChooser() {
-    let chooser_dialog = document.querySelector("#chooser");
-    chooser_dialog.style.display = 'none';
   }
 
   function showLoad() {

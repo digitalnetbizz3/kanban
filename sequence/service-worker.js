@@ -1,4 +1,4 @@
-const CACHE_NAME = 'SEQUENCE_APP_CONTENT_V1.12';
+const CACHE_NAME = 'SEQUENCE_APP_CONTENT_V1.13';
 
 const urlsToCache = [
     'index.html',
@@ -7,6 +7,7 @@ const urlsToCache = [
     'js/mermaid.js',
     '../js/dom-to-image.min.js',
     '../js/vue.global.js',
+    '../js/chooser.js',
     'css/dialog.css',
     'css/layout.css',
     'css/load.css',

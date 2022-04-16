@@ -1,4 +1,4 @@
-const CACHE_NAME = 'KANBAN_APP_CONTENT_V1.15';
+const CACHE_NAME = 'KANBAN_APP_CONTENT_V1.16';
 
 const urlsToCache = [
     'index.html',
@@ -6,6 +6,7 @@ const urlsToCache = [
     'js/task_handling.js',
     'js/vue.global.js',
     'js/dom-to-image.min.js',
+    'js/chooser.js',
     'css/dialog.css',
     'css/layout.css',
     'css/load.css',

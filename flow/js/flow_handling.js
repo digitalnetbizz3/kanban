@@ -191,17 +191,6 @@
     return id;
   }
 
-  function showChooser() {
-    let chooser_dialog = document.querySelector("#chooser");
-    chooser_dialog.style.display = 'block';
-    resetAdorner();
-  }
-
-  function endChooser() {
-    let chooser_dialog = document.querySelector("#chooser");
-    chooser_dialog.style.display = 'none';
-  }
-
   function showLoad() {
     let load_dialog = document.querySelector("#load");
     let kanban_data = document.querySelector("#flow_data");
