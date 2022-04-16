@@ -310,4 +310,5 @@
   function appLoad() {
     let storageLocation = document.querySelector("#storageOptions");
     storageLocation.value = storageName;
+    showChooser();
   }
