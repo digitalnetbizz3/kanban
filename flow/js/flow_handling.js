@@ -124,7 +124,7 @@
 
     let newShapeSelection = null;
     let newShapeTitle = titleElement.value;
-    if (newShapeTitle.length.trim() == 0) {
+    if (newShapeTitle.length == 0) {
       alert('Shape must have title');
       return;
     }
@@ -139,45 +139,6 @@
     shape.title = newShapeTitle;
     updateDiagram();
   }
-
-  function handleChooser(chosen) {
-    if (storageName.startsWith('data-sequence')) { // sequence diagram app
-      switch(chosen) {
-        case 'kanban':
-          location.href = 'https://kan-ban.org/index.html';
-          return;
-        case 'flowchart':
-          location.href = 'https://kan-ban.org/flow/index.html';
-          return;
-        default:
-          break;
-      }
-    } else if (storageName.startsWith('data-kanban')) { // kan-ban app
-      switch(chosen) {
-        case 'sequence':
-          location.href = 'https://kan-ban.org/sequence/index.html';
-          return;
-        case 'flowchart':
-          location.href = 'https://kan-ban.org/flow/index.html';
-          return;
-        default:
-          break;
-      }
-    } else if (storageName.startsWith('data-flow')) { // flowchart app
-      switch(chosen) {
-        case 'sequence':
-          location.href = 'https://kan-ban.org/sequence/index.html';
-          return;
-        case 'kanban':
-          location.href = 'https://kan-ban.org/index.html';
-          return;
-        default:
-          break;
-      }
-    }
-    endChooser();
-  }
-
 
   function findAttributeFromParent(el, attributeName) {
     var id = el.getAttribute(attributeName);
@@ -444,12 +405,12 @@
     var fileName = null;
 
     if(jsonOption.checked) {
-      fileName = 'my-sequence.json';
-      let localData = localStorage.getItem('data-sequence');
+      fileName = 'my-flowchart.json';
+      let localData = localStorage.getItem(storageName);
       dataUrl = "data:text/json;charset=utf-8," + encodeURIComponent(localData);
     }
     else if (mermaidOption.checked) {
-      fileName = 'my-sequence.md';
+      fileName = 'my-flowchart.md';
       let localData = app.getMarkDown();
       dataUrl = "data:text/json;charset=utf-8," + encodeURIComponent(localData);
     } else {
@@ -457,7 +418,7 @@
         .toJpeg(document.getElementById('diagram'), { quality: 1 })
         .then(function (url) {
           var link = document.createElement("a");
-          link.download = "my-sequence.jpeg";
+          link.download = "my-flowchart.jpeg";
           link.href = url;
           link.click();
         });

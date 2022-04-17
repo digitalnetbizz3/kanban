@@ -439,7 +439,7 @@
 
     if(jsonOption.checked) {
       fileName = 'my-sequence.json';
-      let localData = localStorage.getItem('data-sequence');
+      let localData = localStorage.getItem(storageName);
       dataUrl = "data:text/json;charset=utf-8," + encodeURIComponent(localData);
     }
     else if (mermaidOption.checked) {

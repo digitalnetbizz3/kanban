@@ -260,7 +260,7 @@
   function appLoad() {
     let storageLocation = document.querySelector("#storageOptions");
     storageLocation.value = storageName;
-    if (window.location.href.indexOf('switch') > 0) {
+    if (window.location.href.indexOf('switch') < 0) {
       showChooser();  
     }
   }

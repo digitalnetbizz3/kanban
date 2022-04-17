@@ -20,6 +20,7 @@ const urlsToCache = [
     '../assets/kanban.png',
     '../assets/sequence.png',
     '../assets/flowchart.png',
+    '../assets/statetransition.png',
     'https://cdnjs.cloudflare.com/ajax/libs/mermaid/8.13.10/mermaid.min.js',
     'https://fonts.gstatic.com/s/opensans/v28/memSYaGs126MiZpBA-UvWbX2vVnXBbObj2OVZyOOSr4dVJWUgsjZ0B4gaVQUwaEQbjA.woff'
 ];

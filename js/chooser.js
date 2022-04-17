@@ -7,6 +7,9 @@ function handleChooser(chosen) {
         case 'flowchart':
           location.href = 'https://kan-ban.org/flow/index.html?switch=1';
           return;
+        case 'state':
+          location.href = 'https://kan-ban.org/state/index.html?switch=1';
+          return;            
         default:
           break;
       }
@@ -18,6 +21,9 @@ function handleChooser(chosen) {
         case 'flowchart':
           location.href = 'https://kan-ban.org/flow/index.html?switch=1';
           return;
+        case 'state':
+          location.href = 'https://kan-ban.org/state/index.html?switch=1';
+          return;            
         default:
           break;
       }
@@ -29,10 +35,27 @@ function handleChooser(chosen) {
         case 'kanban':
           location.href = 'https://kan-ban.org/index.html?switch=1';
           return;
+        case 'state':
+            location.href = 'https://kan-ban.org/state/index.html?switch=1';
+            return;          
         default:
           break;
       }
+    } else if (storageName.startsWith('data-state')) { // state transition app
+    switch(chosen) {
+      case 'sequence':
+        location.href = 'https://kan-ban.org/sequence/index.html?switch=1';
+        return;
+      case 'kanban':
+        location.href = 'https://kan-ban.org/index.html?switch=1';
+        return;
+      case 'flowchart':
+        location.href = 'https://kan-ban.org/flow/index.html?switch=1';
+        return;
+      default:
+        break;
     }
+  }
     endChooser();
   }
 

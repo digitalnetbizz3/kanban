@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>kan-ban / org State Diagram</title>
+        <link rel="manifest" href="app.manifest">
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width; initial-scale=1, maximum-scale=5, minimum-scale=1; " />
+        <meta name="theme-color" content="#397850"/>
+        <meta property="og:url"           content="https://kan-ban.org/state" />
+		<meta property="og:type"          content="website" />
+		<meta property="og:title"         content="kan-ban.org state transition" />
+		<meta property="og:description"   content="state transition app that doesn't use the cloud. Can work offline and 100% privacy." />
+		<meta name="description" content="state transition app that doesn't use the cloud. Can work offline and 100% privacy."/> 
+		<meta name="keywords" content="kanban, agile, state transition, flowchart, sequence diagram, sprint planning, scrum, planning, trello, list, progression, offline, privacy"/>
+        <link rel="icon" type="image/svg" sizes="32x32" href="../assets/logo.svg">
+        <script>
+            if ('serviceWorker' in navigator) {
+                window.addEventListener('load', async () => {
+                    try {
+                        const registration = await navigator.serviceWorker.register('service-worker.js');
+                        console.log(`Service worker Registered with scope: ${registration.scope}`);
+                    } catch (e) {
+                        console.log('Service worker registration failed');
+                        console.log(e);
+                    }
+                });
+            }
+        </script>
+        <script src="../js/chooser.js"></script>
+        <script src="../js/vue.global.js"></script>
+        <script src="js/state_handling.js"></script>
+        <style>
+            @font-face {
+                font-family: 'Open Sans';
+                font-style: normal;
+                font-weight: 400;
+                font-stretch: 100%;
+                src: url(https://fonts.gstatic.com/s/opensans/v28/memSYaGs126MiZpBA-UvWbX2vVnXBbObj2OVZyOOSr4dVJWUgsjZ0B4gaVQUwaEQbjA.woff) format('woff');
+                unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+                }
+            body {width:100%;min-height: calc(100vh - 50px);margin:0px;padding:0px; border-spacing: 0px;border-collapse: collapse;}
+            
+            div.mermaid {
+                font-family: 'open sans';
+            }
+	    </style>
+        
+        <link href='css/dialog.css' rel='stylesheet'> 
+        <link href='css/layout.css' rel='stylesheet'> 
+        <link href='css/load.css' rel='stylesheet'> 
+    </head>
+    <body onload="appLoad();">
+        <div id="app">
+            <!-- Masthead -->
+            <header class="masthead">
+                <img src="../assets/logo.svg" style="width:55px;height:40px;margin:5px;" alt="Kanban logo"/>
+                <div style="font-size:13pt;color:white;width:230px;">看板 / kan-ban / org</div>
+                <div style="width:100%;">
+                    <button style="float: right;margin-right:10px;" class="mast_button" onclick="showLoad();" aria-label="Settings" title="Settings">
+                        <img src="../assets/settings.svg" alt="Settings"/>
+                    </button>
+                    <button style="float: right;margin-right:10px;" class="mast_button" onclick="showChooser();" aria-label="Menu" title="Menu">
+                        <img src="../assets/menu.svg" alt="Menu"/>
+                    </button>
+                </div>
+            </header>
+            <div id="restore_panel" style="display:none;width:30px;">
+                <button style="cursor:hand;width:25px;height:25px;margin-left:5px;" onclick="toggleLeftPanel();">&gt;</button>
+            </div>
+            <!-- End of masthead -->
+            <table id="whole_content_area" style="min-height: calc(100vh - 50px);margin:0px;" >
+                <tr style="height:100%;width:100%;margin:0px;padding: 0px;">
+                    <td style="height:100%;width:440px;background-color:#96a49a;margin:0px;padding: 0px;vertical-align: top;"  onclick="resetAdorner()">
+                        <div id='left_panel' onclick="resetAdorner()">
+                            <h2 style="margin-left:10px;margin-bottom: 0px;width:380px;">State Transition<button style="cursor:hand;width:25px;height:25px;margin-left:185px;" onclick="toggleLeftPanel();">&lt;</button></h2>
+                            <div class="settings_description"  onclick="resetAdorner()">
+                                <ul>
+                                    <li style="color:black;">
+                                        Create shape/state for your state diagram below.
+                                    </li>
+                                    <li style="color:black;">
+                                        Click on the diagram shape to link state/shape together to form state transition diagram.
+                                    </li>
+                                </ul>
+                            </div>
+                            <h3 style="margin-left:10px;margin-bottom: 0px;">States / Shapes</h3>
+                            <table style="margin:0px;max-height:200px;background-color:#a6c4aa;"  onclick="resetAdorner()">
+                                <tr>
+                                    <td>
+                                        <select id="shape_list" size="9" class="settings_list" onchange="prepareForEdit()">
+                                            <option v-for="shape in shapes" v-bind:value="shape.id">{{shape.title}}</option>
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <div>
+                                            <button id="add_new_button" class="command_button" style="width:50px;" onclick="prepareForNew();" 
+                                            aria-label="Add New" title="Add new">
+                                            New
+                                        </button>
+                                        <button id="edit_button" class="command_button" style="margin-left:0px;width:50px;background-color: lightgray;" onclick="prepareForEdit()" 
+                                            aria-label="Update" title="update">
+                                            Edit
+                                        </button>
+                                        <button class="command_button" style="margin-left:0px;width:70px;" onclick="removeShape();" 
+                                                aria-label="Remove selected shape" title="Remove selected shape">
+                                                Remove
+                                            </button>
+                                        </div>
+                                        <div>
+                                            <input id="shape_title" type="text" placeholder="enter title here" class="settings_input" style="width:170px;"/>
+                                        </div>
+                                        <div style="margin-left:5px;">
+                                            <input type="radio" id="state" name="entityType" value="state">
+                                            <label for="state" style="font-size:10pt;">State</label>
+                                        </div>
+                                        <div>
+                                            <button id="add_or_update" class="command_button" style="width:170px;" onclick="updateShape()" 
+                                                aria-label="Update" title="Update">
+                                                Update
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </table>
+                            <hr>
+                        </div>
+                        
+                        <div class="overlay" id="chooser">
+                            <div>
+                                <table style="background-color: lightgray;margin-top:200px;margin-left:auto;margin-right:auto; border-spacing: 30px;">
+                                    <tr>
+                                        <td colspan="2">
+                                            <image src="../assets/close.svg" style="width:30px;height:30px;margin-left:600px;margin-right:10px;" onclick="endChooser()"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="width:300px;margin:20px;border-style:dotted;border-width: 1px;border-color:black; border-radius: 10px;background-color: white;">
+                                            <img src="../assets/kanban.png" alt="Kanban Board" style="margin-top:15px;cursor:hand;width:200px; height:200px;margin-left:50px;" onclick="handleChooser('kanban');"/>
+                                            <h2 style="text-align:center;">Kan-ban board</h2>
+                                        </td>
+                                        <td  style="width:300px;;margin:20px;border-style:dotted;border-width: 1px;border-color:black; border-radius: 10px;background-color: white;">
+                                            <img src="../assets/sequence.png" alt="Sequence Diagram" style="margin-top:15px;cursor:hand;width:200px; height:200px;margin-left:50px;"  onclick="handleChooser('sequence');"/>
+                                            <h2 style="text-align:center;">Sequence Diagram</h2>
+                                        </td>
+                                    <tr>
+                                        <td  style="width:300px;;margin:20px;border-style:dotted;border-width: 1px;border-color:black; border-radius: 10px;background-color: white;">
+                                            <img src="../assets/flowchart.png" alt="Sequence Diagram" style="margin-top:15px;cursor:hand;width:200px; height:200px;margin-left:50px;"  onclick="handleChooser('flowchart');"/>
+                                            <h2 style="text-align:center;">Flowchart Diagram</h2>
+                                        </td>
+                                        <td  style="width:300px;;margin:20px;border-style:dotted;border-width: 1px;border-color:black; border-radius: 10px;background-color: white;">
+                                            <img src="../assets/statetransition.png" alt="State Transition" style="margin-top:15px;cursor:hand;width:200px; height:200px;margin-left:50px;"  onclick="handleChooser('state');"/>
+                                            <h2 style="text-align:center;">State Transition</h2>
+                                        </td>
+
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                        <!-- settings fragment -->
+                        <div class="overlay" id="load">
+                            <div class="load_root">
+                                <image src="../assets/close.svg" class="close_load_button" onclick="hideLoad()" alt="Close Panel"/>
+                                <h2 style="margin-left:10px;">Manipulate data</h2>
+                                <div class="settings_description" style="font-size:10.5pt;">
+                                    You can reset your state diagram, you can modify your state transition JSON here. Or you can paste in a
+                                    downloaded version of state transition diagram. To modify, click on 'Update' button. To reset the diagram, click on
+                                    'New' button.
+                                </div>
+                                <hr>
+                                <h2 style="margin-left:10px;">Active storage</h2>
+                                <div class="settings_description">
+                                    There are 3 storages which means you can work on 3 different flowcharts and switching between them.
+                                </div>
+                                <select id="storageOptions" onchange="changeDataStorage()" size="3" class="settings_list">
+                                    <option value="data-state">data-state</option>
+                                    <option value="data-state-2">data-state-2</option>
+                                    <option value="data-state-3">data-state-3</option>
+                                </select>
+                                <hr>
+                                <textarea id="state_data" class="data_display"></textarea>
+                                <div>
+                                    <button class="button-4" style="margin-left:165px;width:100px;" 
+                                        onclick="resetStateData()" aria-label="New State Transition Diagram" title="New State Transition Diagram">
+                                        New
+                                    </button>
+                                    <button class="button-4" style="margin-left:10px;width:100px;" 
+                                        onclick="updateStateData()" aria-label="Update State Transition Diagram" title="Update State Transition Diagram">
+                                        Update
+                                    </button>
+                                    <button class="button-4" style="margin-left:10px;width:100px;" 
+                                        onclick="copyStateData()" aria-label="Copy diagram data to clipboard" title="Copy diagram data to clipboard">
+                                        Copy
+                                    </button>
+                                </div>
+                                <hr>
+                                <h2 style="margin-left:10px;">Download data</h2>
+                                <div>
+                                    <input style="margin-left:10px;" type="radio" id="download_json" name="downloadType" value="download_json" checked>
+                                    <label for="download_json">JSON</label>
+                                    <input type="radio" name="downloadType" id="download_mermaid" value="download_mermaid">
+                                    <label for="download_mermaid">Mermaid Markdown</label>
+                                    <input type="radio" name="downloadType" id="download_png" value="download_png">
+                                    <label for="download_png">JPEG</label>
+                                </div>
+                                <div>
+                                    <button class="button-4" style="margin-top:10px;margin-left:10px;width:200px;" onclick="downloadData()">Download</button> 
+                                </div>
+                                <h2 style="margin-left:10px;">Theme</h2>
+                                <div>
+                                    <input style="margin-left:10px;" type="radio" id="theme_dark" name="theme" value="theme_dark" checked>
+                                    <label for="theme_dark">Dark</label>
+                                    <input type="radio" name="theme" id="theme_white" value="theme_white">
+                                    <label for="theme_white">Normal</label>
+                                    <input type="radio" name="theme" id="theme_green" value="theme_green">
+                                    <label for="theme_green">Forest</label>
+                                </div>
+                                <div>
+                                    <button class="button-4" style="margin-top:10px;margin-left:10px;width:200px;" onclick="updateTheme()">Update Theme</button> 
+                                </div>
+                            </div>
+                        </div> <!-- end of settings -->
+                    </td>
+                    <td onclick="resetAdorner()" style="height:100%;width:100%;margin:0px;padding:0px;">
+                        <div style="text-align: center;" id="diagram"></div>
+                    </td>
+                </tr>
+            </table>
+            <div id="selection_adorner" style="border-width:2px;border-style:dashed;border-color:#96a49a;">
+            </div>
+            <div id="selection_editor" style="position:absolute;display:none;width:200px;height:300px;border-width:1px;border-style:solid;border-color:lightgray;background-color: #96a49a;">
+                <table>
+                    <tr>
+                        <td><b style="font-size:10pt;">Shape</b></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td style="font-size:10pt;">Title</td>
+                        <td><input id="adorner_title" type="text" class="settings_input" style="width:130px;"/></td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <div style="margin-left:73px;">
+                                <button onclick="updateShapeFromAdorner()">Update</button><button onclick="removeShapeFromAdorner()">Delete</button>
+                            </div>
+                            <hr>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2"><b style="font-size:10pt;">Current Connection</b></td>
+                    </tr>
+                    <tr id="existing_links">
+                        <td colspan="2" style="font-size:10pt;">
+                            <select id="existing_links_list" style="width:130px;margin:0px;" class="settings_list">
+                            </select>
+                            <button onclick="removeLink()"><img src="../assets/delete.svg" width="14" height="14"/></button>
+                        </td>
+                    </tr>
+                    <tr id="no_links">
+                        <td colspan="2">
+                            <label style="font-size:10pt;">No connection from this shape.</label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2"><hr><b style="font-size:10pt;">New Connection</b></td>
+                    </tr>
+                    <tr id="link_to_container">
+                        <td style="font-size:10pt;">Link to</td>
+                        <td>
+                            <select id="candidate_list" style="width:130px;" class="settings_list" onchange="candidateChanged()">
+                            </select>
+                        </td>
+                    </tr>
+                    <tr id="link_text_row" style="display:none;">
+                        <td colspan="2">
+                            <input id="link_title" type="text" placeholder="enter link text here" style="width:190px;"/>
+                        </td>
+                    </tr>
+                    <tr id="apply_button_row" style="display:none;">
+                        <td>&nbsp;</td>
+                        <td>
+                            <button style="margin-left:75px;" onclick="addLink()">Add Link</button>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            </div>
+        </div> <!-- end of app div -->
+
+        <script src="js/state_vue_app.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/mermaid/8.13.10/mermaid.min.js"></script>
+        <script src="../js/dom-to-image.min.js"></script>
+
+        <script>
+            var theme = localStorage.getItem('theme');
+            if (theme == null) {
+                localStorage.setItem('theme', 'dark');
+                theme = 'dark';
+            }
+            
+            var mermaidAPI = mermaid.mermaidAPI;
+            mermaidAPI.initialize({
+              startOnLoad:false, securityLevel: 'loose', theme: theme
+            });
+            
+        </script>
+    </body>
+</html>
+
+
