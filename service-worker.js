@@ -1,4 +1,4 @@
-const CACHE_NAME = 'KANBAN_APP_CONTENT_V1.16';
+const CACHE_NAME = 'KANBAN_APP_CONTENT_V1.17';
 
 const urlsToCache = [
     'index.html',
@@ -27,6 +27,8 @@ const urlsToCache = [
 
 self.addEventListener('install', installer  => {
     console.log('Installing');
+
+    self.skipWaiting();
 
     const done = async () => {
         const cache = await caches.open(CACHE_NAME);

@@ -1,4 +1,4 @@
-const CACHE_NAME = 'Flowchart_V1.1';
+const CACHE_NAME = 'Flowchart_V1.11';
 
 const urlsToCache = [
     'index.html',
@@ -27,6 +27,7 @@ const urlsToCache = [
 self.addEventListener('install', installer  => {
     console.log('Installing');
 
+    self.skipWaiting();
     const done = async () => {
         const cache = await caches.open(CACHE_NAME);
         return cache.addAll(urlsToCache);
