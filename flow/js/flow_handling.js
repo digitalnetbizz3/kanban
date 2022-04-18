@@ -415,10 +415,10 @@
       dataUrl = "data:text/json;charset=utf-8," + encodeURIComponent(localData);
     } else {
       domtoimage
-        .toJpeg(document.getElementById('diagram'), { quality: 1 })
+        .toPng(document.getElementById('diagram'), { quality: 1 })
         .then(function (url) {
           var link = document.createElement("a");
-          link.download = "my-flowchart.jpeg";
+          link.download = "my-flowchart.png";
           link.href = url;
           link.click();
         });

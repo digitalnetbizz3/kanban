@@ -448,10 +448,10 @@
       dataUrl = "data:text/json;charset=utf-8," + encodeURIComponent(localData);
     } else {
       domtoimage
-        .toJpeg(document.getElementById('diagram'), { quality: 1 })
+        .toPng(document.getElementById('diagram'), { quality: 1 })
         .then(function (url) {
           var link = document.createElement("a");
-          link.download = "my-sequence.jpeg";
+          link.download = "my-sequence.png";
           link.href = url;
           link.click();
         });

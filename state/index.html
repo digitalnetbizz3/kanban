@@ -127,7 +127,7 @@
                         
                         <div class="overlay" id="chooser">
                             <div>
-                                <table style="background-color: lightgray;margin-top:200px;margin-left:auto;margin-right:auto; border-spacing: 30px;">
+                                <table style="background-color: lightgray;margin-top:100px;margin-left:auto;margin-right:auto; border-spacing: 30px;">
                                     <tr>
                                         <td colspan="2">
                                             <image src="../assets/close.svg" style="width:30px;height:30px;margin-left:600px;margin-right:10px;" onclick="endChooser()"/>
@@ -200,7 +200,7 @@
                                     <input type="radio" name="downloadType" id="download_mermaid" value="download_mermaid">
                                     <label for="download_mermaid">Mermaid Markdown</label>
                                     <input type="radio" name="downloadType" id="download_png" value="download_png">
-                                    <label for="download_png">JPEG</label>
+                                    <label for="download_png">PNG</label>
                                 </div>
                                 <div>
                                     <button class="button-4" style="margin-top:10px;margin-left:10px;width:200px;" onclick="downloadData()">Download</button> 
@@ -301,8 +301,16 @@
             mermaidAPI.initialize({
               startOnLoad:false, securityLevel: 'loose', theme: theme
             });
-            
         </script>
+
+        <!-- Global site tag (gtag.js) - Google Analytics --> 
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-685JGY3J01"></script>
+        <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-685JGY3J01');
+        </script>        
     </body>
 </html>
 

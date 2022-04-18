@@ -259,7 +259,9 @@
   function populateSelection() {
     let shape = app.findShape(selectedShape);
     let titleElement = document.querySelector('#adorner_title');
+    let linkTitle = document.querySelector('#link_title');
     titleElement.value = shape.title;
+    linkTitle.value = '';
     let candidates = app.getConnectionCandidates(selectedShape);
     let candidateList = document.querySelector('#candidate_list');
     let linkToContainer = document.querySelector('#link_to_container');
@@ -380,12 +382,16 @@
     var curr_theme = localStorage.getItem('theme');
     let darkTheme = document.querySelector('#theme_dark');
     let whiteTheme = document.querySelector('#theme_white');
+    let diagramArea = document.querySelector('#diagram');
     var theme_data = 'neutral';
     if(darkTheme.checked) {
+      diagramArea.style.background = '#2e2e2e';
       theme_data = 'dark';
     } else if (whiteTheme.checked) {
+      diagramArea.style.background = 'white';
       theme_data = 'neutral';
     } else {
+      diagramArea.style.background = 'white';
       theme_data = 'forest';
     }
 
@@ -413,10 +419,10 @@
       dataUrl = "data:text/json;charset=utf-8," + encodeURIComponent(localData);
     } else {
       domtoimage
-        .toJpeg(document.getElementById('diagram'), { quality: 1 })
+        .toPng(document.getElementById('diagram'), { quality: 1 })
         .then(function (url) {
           var link = document.createElement("a");
-          link.download = "my-state.jpeg";
+          link.download = "my-state.png";
           link.href = url;
           link.click();
         });

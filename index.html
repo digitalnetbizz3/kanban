@@ -180,31 +180,30 @@
                         
             <div class="overlay" id="chooser">
                 <div>
-                    <table style="background-color: lightgray;margin-top:200px;margin-left:auto;margin-right:auto; border-spacing: 30px;">
+                    <table style="background-color: lightgray;margin-top:100px;margin-left:auto;margin-right:auto; border-spacing: 30px;">
                         <tr>
                             <td colspan="2">
-                                <image src="../assets/close.svg" style="width:30px;height:30px;margin-left:600px;margin-right:10px;" onclick="endChooser()"/>
+                                <image src="assets/close.svg" style="width:30px;height:30px;margin-left:600px;margin-right:10px;" onclick="endChooser()"/>
                             </td>
                         </tr>
                         <tr>
                             <td style="width:300px;margin:20px;border-style:dotted;border-width: 1px;border-color:black; border-radius: 10px;background-color: white;">
-                                <img src="../assets/kanban.png" alt="Kanban Board" style="margin-top:15px;cursor:hand;width:200px; height:200px;margin-left:50px;" onclick="handleChooser('kanban');"/>
+                                <img src="assets/kanban.png" alt="Kanban Board" style="margin-top:15px;cursor:hand;width:200px; height:200px;margin-left:50px;" onclick="handleChooser('kanban');"/>
                                 <h2 style="text-align:center;">Kan-ban board</h2>
                             </td>
                             <td  style="width:300px;;margin:20px;border-style:dotted;border-width: 1px;border-color:black; border-radius: 10px;background-color: white;">
-                                <img src="../assets/sequence.png" alt="Sequence Diagram" style="margin-top:15px;cursor:hand;width:200px; height:200px;margin-left:50px;"  onclick="handleChooser('sequence');"/>
+                                <img src="assets/sequence.png" alt="Sequence Diagram" style="margin-top:15px;cursor:hand;width:200px; height:200px;margin-left:50px;"  onclick="handleChooser('sequence');"/>
                                 <h2 style="text-align:center;">Sequence Diagram</h2>
                             </td>
                         <tr>
                             <td  style="width:300px;;margin:20px;border-style:dotted;border-width: 1px;border-color:black; border-radius: 10px;background-color: white;">
-                                <img src="../assets/flowchart.png" alt="Sequence Diagram" style="margin-top:15px;cursor:hand;width:200px; height:200px;margin-left:50px;"  onclick="handleChooser('flowchart');"/>
+                                <img src="assets/flowchart.png" alt="Sequence Diagram" style="margin-top:15px;cursor:hand;width:200px; height:200px;margin-left:50px;"  onclick="handleChooser('flowchart');"/>
                                 <h2 style="text-align:center;">Flowchart Diagram</h2>
                             </td>
                             <td  style="width:300px;;margin:20px;border-style:dotted;border-width: 1px;border-color:black; border-radius: 10px;background-color: white;">
-                                <img src="../assets/statetransition.png" alt="State Transition" style="margin-top:15px;cursor:hand;width:200px; height:200px;margin-left:50px;"  onclick="handleChooser('state');"/>
+                                <img src="assets/statetransition.png" alt="State Transition" style="margin-top:15px;cursor:hand;width:200px; height:200px;margin-left:50px;"  onclick="handleChooser('state');"/>
                                 <h2 style="text-align:center;">State Transition</h2>
                             </td>
-
                         </tr>
                     </table>
                 </div>
@@ -283,6 +282,15 @@
         </div> <!-- end of app div -->
         <script src="js/kanban_vue_app.js"></script>
         <script src="js/dom-to-image.min.js"></script>
+        <!-- Global site tag (gtag.js) - Google Analytics --> 
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-685JGY3J01"></script>
+        <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-685JGY3J01');
+        </script>
+
     </body>
 </html>
 
