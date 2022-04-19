@@ -182,7 +182,7 @@
     }
   }
 
-  function copyFlowData() {
+  function copyStateData() {
     let state_data = document.querySelector("#state_data");
     navigator.clipboard.writeText(state_data.value).then(
         function () {
