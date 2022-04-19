@@ -139,17 +139,19 @@
                     </div>
                     <h2 style="margin-left:10px;">Active storage</h2>
                     <div class="settings_description">
-                        There are 3 storages which means you can work on 3 different kanban and switching between them.
+                        There are 5 slots which means you can work on 4 different kanban boards, 1 shareable from URL and switching between them.
                     </div>
-                    <select id="storageOptions" onchange="changeDataStorage()" size="3" class="settings_list">
+                    <select id="storageOptions" onchange="changeDataStorage()" size="5" class="settings_list">
                         <option value="data-kanban">data-kanban</option>
                         <option value="data-kanban-2">data-kanban-2</option>
                         <option value="data-kanban-3">data-kanban-3</option>
+                        <option value="data-kanban-4">data-kanban-4</option>
+                        <option value="data-kanban-shared">data-kanban-shared</option>
                     </select>
                     <hr>
                     <textarea id="kanban_data" class="data_display"></textarea>
                     <div>
-                        <button class="button-4" style="margin-left:165px;width:100px;" 
+                        <button class="button-4" style="margin-left:155px;width:100px;" 
                             onclick="resetKanbanData()" aria-label="New kanban" title="New kanban">
                             New
                         </button>
@@ -158,8 +160,8 @@
                             Update
                         </button>
                         <button class="button-4" style="margin-left:10px;width:100px;" 
-                            onclick="copyKanbanData()" aria-label="Copy kanban to clipboard" title="Copy kanban to clipboard">
-                            Copy
+                            onclick="copyKanbanData()" aria-label="Share kanban to shareable URL" title="Share kanban to shareable URL">
+                            Share URL
                         </button>
                     </div>
                     <hr>

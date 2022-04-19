@@ -99,6 +99,9 @@ const app = Vue.createApp({
             let data = JSON.stringify(this.$data);
             localStorage.setItem(storageName, data);
         },
+        getLeanJSON() {
+            return JSON.stringify(this.$data);
+        },        
         getJSON() {
             return JSON.stringify(this.$data, undefined, 4);
         },

@@ -2,6 +2,19 @@
   var selectedShape = null;
 
   function appLoad() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const shareData = urlParams.get('share');
+    if (shareData != null) {
+      let decodedData = decodeURIComponent(shareData);
+      try {
+        JSON.parse(decodedData);
+        storageName = 'data-state-shared';
+        localStorage.setItem(storageName, decodedData)
+        app.changeStorage();
+      } catch {
+        alert('shared JSON is invalid')
+      }
+    }
     let storageLocation = document.querySelector("#storageOptions");
     storageLocation.value = storageName;
 
@@ -183,8 +196,9 @@
   }
 
   function copyStateData() {
-    let state_data = document.querySelector("#state_data");
-    navigator.clipboard.writeText(state_data.value).then(
+    let jsonText = app.getLeanJSON();
+    let urlToShare = "https://kan-ban.org/state/?share=" + encodeURIComponent(jsonText);
+    navigator.clipboard.writeText(urlToShare).then(
         function () {
           alert("data copied to the clipboard");
         }
@@ -439,4 +453,7 @@
     storageName = storageLocation.value;
     app.changeStorage();
     updateDiagram();
+
+    let state_data = document.querySelector("#state_data");
+    state_data.value = app.getJSON();
   }

@@ -1,6 +1,19 @@
   var nodeToEdit = null;
   
   function appLoad() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const shareData = urlParams.get('share');
+    if (shareData != null) {
+      let decodedData = decodeURIComponent(shareData);
+      try {
+        JSON.parse(decodedData);
+        storageName = 'data-sequence-shared';
+        localStorage.setItem(storageName, decodedData)
+        app.changeStorage();
+      } catch {
+        alert('shared JSON is invalid')
+      }
+    }     
     let storageLocation = document.querySelector("#storageOptions");
     storageLocation.value = storageName;
 
@@ -264,8 +277,9 @@
   }
 
   function copySequenceData() {
-    let sequence_data = document.querySelector("#sequence_data");
-    navigator.clipboard.writeText(sequence_data.value).then(
+    let jsonText = app.getLeanJSON();
+    let urlToShare = "https://kan-ban.org/sequence/?share=" + encodeURIComponent(jsonText);
+    navigator.clipboard.writeText(urlToShare).then(
         function () {
           alert("data copied to the clipboard");
         }
@@ -485,4 +499,7 @@
     storageName = storageLocation.value;
     app.changeStorage();
     updateDiagram();
+
+    let sequence_data = document.querySelector("#sequence_data");
+    sequence_data.value = app.getJSON();
   }

@@ -62,7 +62,6 @@ const app = Vue.createApp({
                 }
                 markdown += linkItem;
             });
-            //alert(markdown)
             return markdown;
         },
         filterRules(name) {
@@ -73,6 +72,9 @@ const app = Vue.createApp({
         persist() {
             let data = JSON.stringify(this.$data);
             localStorage.setItem(storageName, data);
+        },
+        getLeanJSON() {
+            return JSON.stringify(this.$data);
         },
         getJSON() {
             return JSON.stringify(this.$data, undefined, 4);

@@ -310,17 +310,19 @@
                                     <hr>
                                     <h2 style="margin-left:10px;">Active storage</h2>
                                     <div class="settings_description">
-                                        There are 3 storages which means you can work on 3 different sequence diagrams and switching between them.
+                                        There are 5 slots which means you can work on 4 different sequence diagrams, 1 shared from URL and switching between them.
                                     </div>
-                                    <select id="storageOptions" onchange="changeDataStorage()" size="3" class="settings_list">
+                                    <select id="storageOptions" onchange="changeDataStorage()" size="5" class="settings_list">
                                         <option value="data-sequence">data-sequence</option>
                                         <option value="data-sequence-2">data-sequence-2</option>
                                         <option value="data-sequence-3">data-sequence-3</option>
+                                        <option value="data-sequence-4">data-sequence-4</option>
+                                        <option value="data-sequence-shared">data-sequence-shared</option>                                        
                                     </select>
                                     <hr>
                                     <textarea id="sequence_data" class="data_display"></textarea>
                                     <div>
-                                        <button class="button-4" style="margin-left:165px;width:100px;" 
+                                        <button class="button-4" style="margin-left:155px;width:100px;" 
                                             onclick="resetSequenceData()" aria-label="New Sequence Diagram" title="New Sequence Diagram">
                                             New
                                         </button>
@@ -329,8 +331,8 @@
                                             Update
                                         </button>
                                         <button class="button-4" style="margin-left:10px;width:100px;" 
-                                            onclick="copySequenceData()" aria-label="Copy diagram data to clipboard" title="Copy diagram data to clipboard">
-                                            Copy
+                                            onclick="copySequenceData()" aria-label="Share diagram data in a URL" title="Share diagram data in a URL">
+                                            Share URL
                                         </button>
                                     </div>
                                     <hr>

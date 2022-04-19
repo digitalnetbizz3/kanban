@@ -160,8 +160,9 @@
   }
 
   function copyKanbanData() {
-    let kanban_data = document.querySelector("#kanban_data");
-    navigator.clipboard.writeText(kanban_data.value).then(
+    let jsonText = app.getLeanJSON();
+    let urlToShare = "https://kan-ban.org/?share=" + encodeURIComponent(jsonText);
+    navigator.clipboard.writeText(urlToShare).then(
         function () {
           alert("data copied to the clipboard");
         }
@@ -255,12 +256,30 @@
     let storageLocation = document.querySelector("#storageOptions");
     storageName = storageLocation.value;
     app.changeStorage();
+    
+    let kanban_data = document.querySelector("#kanban_data");
+    kanban_data.value = app.getJSON();
   }
 
   function appLoad() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const shareData = urlParams.get('share');
+    if (shareData != null) {
+      let decodedData = decodeURIComponent(shareData);
+      try {
+        JSON.parse(decodedData);
+        storageName = 'data-kanban-shared';
+        localStorage.setItem(storageName, decodedData)
+        app.changeStorage();
+      } catch {
+        alert('shared JSON is invalid')
+      }
+    } else {
+      if (window.location.href.indexOf('switch') < 0) {
+        showChooser();  
+      }  
+    }
+
     let storageLocation = document.querySelector("#storageOptions");
     storageLocation.value = storageName;
-    if (window.location.href.indexOf('switch') < 0) {
-      showChooser();  
-    }
   }

@@ -186,17 +186,19 @@
                                 <hr>
                                 <h2 style="margin-left:10px;">Active storage</h2>
                                 <div class="settings_description">
-                                    There are 3 storages which means you can work on 3 different flowcharts and switching between them.
+                                    There are 5 slots which means you can work on 4 different flowcharts, 1 from shared URL and switching between them.
                                 </div>
-                                <select id="storageOptions" onchange="changeDataStorage()" size="3" class="settings_list">
+                                <select id="storageOptions" onchange="changeDataStorage()" size="5" class="settings_list">
                                     <option value="data-flow">data-flow</option>
                                     <option value="data-flow-2">data-flow-2</option>
                                     <option value="data-flow-3">data-flow-3</option>
+                                    <option value="data-flow-4">data-flow-4</option>
+                                    <option value="data-flow-shared">data-flow-shared</option>
                                 </select>
                                 <hr>
                                 <textarea id="flow_data" class="data_display"></textarea>
                                 <div>
-                                    <button class="button-4" style="margin-left:165px;width:100px;" 
+                                    <button class="button-4" style="margin-left:155px;width:100px;" 
                                         onclick="resetFlowData()" aria-label="New Sequence Diagram" title="New Sequence Diagram">
                                         New
                                     </button>
@@ -205,8 +207,8 @@
                                         Update
                                     </button>
                                     <button class="button-4" style="margin-left:10px;width:100px;" 
-                                        onclick="copyFlowData()" aria-label="Copy diagram data to clipboard" title="Copy diagram data to clipboard">
-                                        Copy
+                                        onclick="copyFlowData()" aria-label="Share diagram data in a URL" title="Share diagram data in a URL">
+                                        Share URL
                                     </button>
                                 </div>
                                 <hr>
