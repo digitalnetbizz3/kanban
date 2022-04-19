@@ -172,9 +172,9 @@
   }
   
   function updateStateData() {
-    let sequence_data = document.querySelector("#sequence_data");
+    let state_data = document.querySelector("#state_data");
     try {
-        let update_json = JSON.parse(sequence_data.value);
+        let update_json = JSON.parse(state_data.value);
         app.update(update_json);
         updateDiagram();
     } catch(e) {
@@ -183,8 +183,8 @@
   }
 
   function copyFlowData() {
-    let sequence_data = document.querySelector("#sequence_data");
-    navigator.clipboard.writeText(sequence_data.value).then(
+    let state_data = document.querySelector("#state_data");
+    navigator.clipboard.writeText(state_data.value).then(
         function () {
           alert("data copied to the clipboard");
         }
@@ -357,25 +357,8 @@
     updateDiagram();
   }
 
-
   function getIdFromSvgId(svgId) {
     return parseInt(svgId.split('-')[1]);
-  }
-
-  function positionAdorner(rect) {
-    const padding = 5;
-    let adorner = document.getElementById("selection_adorner");
-    adorner.style.position = 'absolute';
-    adorner.style.display = 'block';
-    adorner.style.width = (rect.width + 2 * padding) + 'px';
-    adorner.style.height = (rect.height + 2 * padding) + 'px';
-    adorner.style.top = rect.y - padding + 'px';
-    adorner.style.left = (rect.x - padding) + 'px';
-
-    let editor = document.getElementById("selection_editor");
-    editor.style.display = 'block';
-    editor.style.top = rect.y - padding + 'px';
-    editor.style.left = (rect.x + rect.width + 2 * padding) + 'px';
   }
 
   function updateTheme() {
