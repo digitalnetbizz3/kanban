@@ -1,4 +1,4 @@
-const CACHE_NAME = 'KANBAN_APP_CONTENT_V1.19';
+const CACHE_NAME = 'KANBAN_APP_CONTENT_V1.20';
 
 const urlsToCache = [
     'index.html',
