@@ -4,7 +4,7 @@
     if (id != null) {
         let rect = el.getBoundingClientRect();
         let x = rect.left + window.scrollX;
-        let modalElement = document.querySelector(".modal");
+        let modalElement = document.querySelector(".inputmodal");
         modalElement.style.left = x + 'px';
 
         let dialog = document.querySelector("#dialog");
@@ -32,6 +32,7 @@
       evt.preventDefault();
       let data = evt.dataTransfer.getData('id');
       let category = evt.target.getAttribute('category');
+
       if (category != null && data != null) {
         app.moveTask(data, category);
       }
@@ -47,8 +48,12 @@
   }
 
   function taskDialog() {
-    let modalElement = document.querySelector(".modal");
-    modalElement.style.left = '10px';
+    let newCategory = document.querySelector("#category_section");
+    let rect = newCategory.getBoundingClientRect();
+    let x = rect.left + window.scrollX + 5;
+
+    let modalElement = document.querySelector(".inputmodal");
+    modalElement.style.left = x + 'px';
     let dialog = document.querySelector("#dialog");
     dialog.style.display = 'inline';
     
@@ -69,20 +74,27 @@
   function updateTask() {
     let taskInfo = document.querySelector("#newTaskInfo");
     let assign = document.querySelector("#assign");   
-    let priority = document.querySelector("#priority");
+    assign.selectedIndex = 0;
+    var priority = 'P2';
+    let radios = document.getElementsByName('priority');
+    radios.forEach(el => {
+      if(el.checked) {
+        priority = el.id;
+      }
+    });
+
     let cal = document.querySelector('#duedate');
-    
     if (taskToEdit != null) {
         taskToEdit.name = taskInfo.value;
         taskToEdit.assign = assign.value;
-        taskToEdit.priority = priority.value;
+        taskToEdit.priority = priority;
         taskToEdit.due = cal.value;
         taskToEdit = null;
     } else {
         let node = {
             category: 'New',
             name: taskInfo.value,
-            priority: priority.value,
+            priority: priority,
             assign: assign.value,
             added: getDateString(),
             due: cal.value,
@@ -100,8 +112,8 @@
     let assign = document.querySelector("#assign");
     assign.value = task.assign;
     
-    let priority = document.querySelector("#priority");
-    priority.value = task.priority;
+    let priority = document.querySelector('#' + task.priority);
+    priority.checked = true;
     
     let cal = document.querySelector("#duedate");
     cal.value = task.due;
@@ -122,8 +134,8 @@
     let assign = document.querySelector("#assign");
     assign.value = "";
     
-    let priority = document.querySelector("#priority");
-    priority.value = "P2";
+    let priority = document.querySelector("#P2");
+    priority.check = true;
     
     let cal = document.querySelector("#duedate");
     cal.value = "";
@@ -132,17 +144,34 @@
     check.checked = false;
   }
 
-  function showLoad() {
-    let load_dialog = document.querySelector("#load");
+  function showLoad(isConfig) {
     let kanban_data = document.querySelector("#kanban_data");
-
-    load_dialog.style.display = 'block';
     kanban_data.value = app.getJSON();
+    
+    let leftNav = bootstrap.Collapse.getOrCreateInstance(document.getElementById('left-nav'))
+    let col1 = bootstrap.Collapse.getOrCreateInstance(document.getElementById('collapseOne'))
+    let col2 = bootstrap.Collapse.getOrCreateInstance(document.getElementById('collapseTwo'))
+
+    if (isConfig) {
+      col1.show();
+      col2.hide();
+    } else {
+      col2.show();
+      col1.hide();
+    }
+    leftNav.show();
+  }
+
+  function showToast(msg) {
+    document.getElementById('toast_msg').innerText = msg;
+    toast = bootstrap.Toast.getOrCreateInstance(document.getElementById('toast'))
+    toast.show();
   }
 
   function hideLoad() {
-    let load_dialog = document.querySelector("#load");
-    load_dialog.style.display = 'none';
+    var collapse = document.getElementById('left-nav')
+    let nav = new bootstrap.Collapse(collapse, {});
+    nav.hide();
   }
 
   function resetKanbanData() {
@@ -155,7 +184,7 @@
         let update_json = JSON.parse(kanban_data.value);
         app.update(update_json);
     } catch {
-        alert('Invalid JSON data.');
+        showToast('Invalid JSON data.');
     }
   }
 
@@ -164,7 +193,7 @@
     let urlToShare = "https://kan-ban.org/?share=" + encodeURIComponent(jsonText);
     navigator.clipboard.writeText(urlToShare).then(
         function () {
-          alert("data copied to the clipboard");
+          showToast("Sharable URL copy into clipboard, you can share URL with someone else and they will see your Kanban board.");
         }
     );
   }
@@ -183,7 +212,7 @@
     let user_list = document.querySelector("#user_list");
     let userToDelete = user_list.value;
     if(user_list.options.length == 1) {
-        alert('You need at least one user for this app.');
+        showToast('You need at least one user for this app.');
         return;
     }
     app.removeUser(userToDelete);
@@ -203,8 +232,8 @@
   function removeCategory() {
     let category_list = document.querySelector("#category_list");
     let categoryToDelete = category_list.value;
-    if(category_list.options.length == 1) {
-        alert('You need at least one phase for this app.');
+    if(categoryToDelete == 'New') {
+        showToast('Cannot remove New category');
         return;
     }
     app.removeCategory(categoryToDelete);
@@ -233,10 +262,10 @@
     }
     else {
       domtoimage
-        .toJpeg(document.getElementById('kanban_board'), { quality: 1 })
+        .toPng(document.getElementById('kanban_board'), { quality: 1 })
         .then(function (url) {
           var link = document.createElement("a");
-          link.download = "my-kanban.jpeg";
+          link.download = "my-kanban.png";
           link.href = url;
           link.click();
         });
@@ -272,14 +301,13 @@
         localStorage.setItem(storageName, decodedData)
         app.changeStorage();
       } catch {
-        alert('shared JSON is invalid')
+        showToast('shared JSON is invalid')
       }
     } else {
       if (window.location.href.indexOf('switch') < 0) {
         showChooser();  
       }  
     }
-
     let storageLocation = document.querySelector("#storageOptions");
     storageLocation.value = storageName;
   }
