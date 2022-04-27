@@ -12,7 +12,7 @@
 		<meta property="og:description"   content="Sequence diagram composer app that doesn't use the cloud. Can work offline and 100% privacy." />
 		<meta name="description" content="Sequence diagram composer app that doesn't use the cloud. Can work offline and 100% privacy."/> 
 		<meta name="keywords" content="kanban, agile, sequence diagram, sprint planning, scrum, planning, trello, list, progression, offline, privacy"/>
-        <link rel="icon" type="image/svg" sizes="32x32" href="../assets/logo.svg">
+        <link rel="icon" type="image/svg" sizes="32x32" href="../assets/logo.png">
         <script>
             if ('serviceWorker' in navigator) {
                 window.addEventListener('load', async () => {
@@ -26,8 +26,11 @@
                 });
             }
         </script>
-        <script src="../js/chooser.js"></script>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
         <script src="../js/vue.global.js"></script>
+        <script src="../js/common.js"></script>       
         <script src="js/diagram_handling.js"></script>
         <style>
             @font-face {
@@ -44,332 +47,370 @@
                 /* font-family: 'trebuchet ms', verdana, arial; */
                 font-family: 'open sans';
             }
+
+            .overlay {
+                position: fixed; /* Positioning and size */
+                top: 0;
+                left: 0;
+                width: 100vw;
+                height: 100vh;
+                background-color: rgba(0,0,0,0.6); /* color */
+                display: none; /* making it hidden by default */
+            }
+            .sequencemodal {
+                position: fixed; /* positioning in center of page */
+                top: 620px;
+                left: 5px;
+                width: 380px;
+                
+            }
+
+            .load_root {
+                position:absolute;
+                top:60px;
+                left:10px;
+                width:400px;
+                height:100%;
+                overflow-y:auto;
+                z-index:9999;
+            }            
 	    </style>
-        
-        <link href='css/dialog.css' rel='stylesheet'> 
-        <link href='css/layout.css' rel='stylesheet'> 
-        <link href='css/load.css' rel='stylesheet'> 
     </head>
     <body onload="appLoad();">
         <div id="app">
-            <!-- Masthead -->
-            <header class="masthead">
-                <img src="../assets/logo.svg" style="width:55px;height:40px;margin:5px;" alt="Kanban logo"/>
-                <div style="font-size:13pt;color:white;width:230px;">看板 / kan-ban / org</div>
-                <div style="width:100%;">
-                    <button style="float: right;margin-right:10px;" class="mast_button" onclick="showLoad();" aria-label="Settings" title="Settings">
-                        <img src="../assets/settings.svg" alt="Settings"/>
-                    </button>
-                    <button style="float: right;margin-right:10px;" class="mast_button" onclick="showChooser();" aria-label="Menu" title="Menu">
-                        <img src="../assets/menu.svg" alt="Menu"/>
-                    </button>
+            <nav class="navbar navbar-expand-lg navbar-light bg-primary mb-2">
+                <div class="container-fluid">
+                    <span class="navbar-brand text-light">看板 / kan-ban / org</span>
+                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    </div>
+                    <div class="d-flex">
+                                  
+                    <li class="nav-item dropdown pe-5 ps-5" style="list-style-type: none;">
+                        <a class="nav-link dropdown-toggle text-light" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        Options
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-primary" aria-labelledby="navbarDropdown">
+                            <li><a class="dropdown-item" data-bs-toggle="modal" href="#chooseModal">Choose App</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="#" onclick="showLoad()">Data Options</a></li>
+                        </ul>
+                    </li>
+                    </div>
                 </div>
-            </header>
+            </nav>
             <div id="restore_panel" style="display:none;width:30px;">
-                <button style="cursor:hand;width:25px;height:25px;margin-left:5px;" onclick="toggleLeftPanel();">&gt;</button>
+                <button class="btn bg-light" onclick="toggleLeftPanel();"><i class="bi bi-arrows-angle-expand"></i></button>
             </div>
-            <!-- End of masthead -->
-            <table id="whole_content_area" style="min-height: calc(100vh - 50px);margin:0px;" >
-                <tr style="height:100%;width:100%;margin:0px;padding: 0px;">
-                    <td id='left_panel' style="height:100%;width:440px;background-color:#96a49a;margin:0px;padding: 0px;vertical-align: top;">
-                        <div>
-                            <h3 style="margin-left:10px;margin-bottom: 0px;">Sequence Diagram Composer<button style="cursor:hand;width:25px;height:25px;margin-left:150px;" onclick="toggleLeftPanel();">&lt;</button></h3></h3>
-                            <div class="settings_description">
-                                <ul>
-                                    <li style="color:black;">
-                                        Add entities in the order presented in diagram (participant or actor).
-                                    </li>
-                                    <li style="color:black;">
-                                        Add sequence item by adding interactions (arrow and messages) between entities.
-                                    </li>
-                                </ul>
-                                
-                            </div>
-                            <hr>
-                            <h3 style="margin-left:10px;margin-bottom: 0px;">Entities</h3>
-                            <table style="margin:0px;max-height:200px;background-color:#a6c4aa;">
-                                <tr>
-                                    <td>
-                                        <select id="user_list" size="6" class="settings_list" onchange="prepare_for_edit();">
-                                            <option v-for="user in users" >{{user.name}}</option>
-                                        </select>
-                                    </td>
-                                    <td>
-                                        <button style="height:58px;" id="reorder_up" onclick="reorder(true);">^</button>
-                                        <button style="height:58px;" id="reorder_dn" onclick="reorder(false);">v</button>
-                                    </td>
-                                    <td>
-                                        <div>
-                                            <button id="add_new_button" class="command_button" style="width:65px;" onclick="prepare_for_new();" 
-                                            aria-label="Add New" title="Add new">
-                                            New
-                                        </button>
-                                        <button id="edit_button" class="command_button" style="margin-left:0px;width:65px;background-color: lightgray;" onclick="prepare_for_edit()" 
-                                            aria-label="Update" title="update">
-                                            Edit
-                                        </button>
-                                        <button class="command_button" style="margin-left:0px;width:70px;" onclick="remove_user();" 
-                                                aria-label="Remove selected user" title="Remove selected entity">
-                                                Remove
-                                            </button>
-                                        </div>
-                                        <div>
-                                            <input id="newUserName" type="text" placeholder="enter entity here" class="settings_input"/>
-                                        </div>
-                                        <div style="margin-left:5px;">
-                                            <input type="radio" name="entityType" id="participant" value="participant" checked>
-                                            <label for="participant">Participant</label>
-                                            <input style="margin-left:10px;" type="radio" id="actor" name="entityType" value="actor">
-                                            <label for="actor">Actor</label>
-                                        </div>
-                                        <div>
-                                            <button id="add_or_update" class="command_button" style="width:200px;" onclick="update_user()" 
-                                                aria-label="Update" title="Update">
-                                                Update
-                                            </button>
-                                        </div>
-                                    </td>
-                                </tr>
-                            </table>
-                        </div>
-                        <h3 style="margin-left:10px;margin-bottom: 0px;">Sequence Item
-                            <button style="cursor:hand;width:25px;height:25px;margin-left:270px;" onclick="addSequenceDialog();">+</button></h3>
-                            <div style="font-size:8pt;margin-left:8pt;">click '+' to add new item, drag & drop to reorder and edit/delete on each item.</div>
-                            <ul style="list-style:none;padding-left:10px;">
-                                <li v-for="item in sequences" style="margin-left:0px;border-spacing:0;" v-bind:data-id="item.id"
-                                    draggable="true" ondragstart="startDrag(event);" ondrop="onDrop(event)"  @dragover.prevent @dragenter.prevent>
-                                    <div v-if="item.type == 'msg'" v-bind:data-id="item.id">
-                                        <div style="min-width:400px;height:1px;background-color:lightgray;" ></div>
-                                        <table style="background-color:#dddddd;border-collapse: collapse;">
-                                            <tr>
-                                                <td style="min-width:80px;max-width:80px;font-size:8pt;color:rgb(6, 53, 24);"><b>from</b></td>
-                                                <td style="min-width:80px;max-width:80px;font-size:8pt;color:rgb(6, 53, 24);"><b>to</b></td>
-                                                <td style="min-width:55px;max-width:55px;font-size:8pt;color:rgb(6, 53, 24);"><b>arrow</b></td>
-                                                <td style="min-width:180px;max-width:180px;font-size:8pt;color:rgb(6, 53, 24);"><b>message</b></td>
-                                                <td style="min-width:20px;max-width:20px;cursor:hand;opacity: 0.5;">
-                                                    <img v-bind:data-id="item.id" src="../assets/edit.svg" alt="edit sequence" width="12" height="12" onclick="editSequence(this)"/>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td style="min-width:80px;max-width:80px;font-size:9.5pt;">{{item.from}}</td>
-                                                <td style="min-width:80px;max-width:80px;font-size:9.5pt;">{{item.to}}</td>
-                                                <td style="min-width:55px;max-width:55px;font-size:9.5pt;">{{item.arrow}}</td>
-                                                <td style="min-width:180px;max-width:180px;font-size:9.5pt;">{{item.msg}}</td>
-                                                <td style="min-width:20px;max-width:20px;cursor:hand;opacity: 0.5;">
-                                                    <img v-bind:data-id="item.id" src="../assets/delete.svg" alt="remove sequence" width="12" height="12" onclick="removeSequence(this)"/>
-                                                </td>
-                                            </tr>
-                                        </table>
-                                    </div>
-                                    <div v-if="item.type == 'note'" v-bind:data-id="item.id">
-                                        <table style="background-color:#beb2b2;border-spacing:0;border-collapse: collapse;">
-                                            <tr>
-                                                <td style="min-width:80px;max-width:80px;font-size:8pt;color:rgb(6, 53, 24);"><b>entity</b></td>
-                                                <td style="min-width:80px;max-width:80px;font-size:8pt;color:rgb(6, 53, 24);"><b>position</b></td>
-                                                <td style="min-width:235px;max-width:235px;font-size:8pt;color:rgb(6, 53, 24);"><b>notes</b></td>
-                                                <td style="min-width:20px;max-width:20px;cursor:hand;opacity: 0.5;">
-                                                    <img v-bind:data-id="item.id" src="../assets/edit.svg" alt="edit sequence" width="12" height="12" onclick="editSequence(this)"/>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td style="min-width:80px;max-width:80px;font-size:9.5pt;">{{item.from}}</td>
-                                                <td style="min-width:80px;max-width:80px;font-size:9.5pt;">{{item.position}}</td>
-                                                <td style="min-width:235px;max-width:235px;font-size:9.5pt;">{{item.note}}</td>
-                                                <td style="min-width:20px;max-width:20px;cursor:hand;opacity: 0.5;">
-                                                    <img v-bind:data-id="item.id" src="../assets/delete.svg" alt="remove sequence" width="12" height="12" onclick="removeSequence(this)"/>
-                                                </td>
-                                            </tr>
-                                        </table>
-                                    </div>
-                                </li>
-                            </ul>
-                            <!-- Add Sequence Dialog -->
-                            <div class="overlay" id="dialog">
-                                <div class="modal">
-                                    <div id="sequence_add_new_section" style="display:block;margin:0px;margin-top:5px;min-height:140px;;width:100%;background-color:#a6c4aa">
-                                        <div style="margin:10px;">
-                                        Sequence Type
-                                            <input style="margin-left:10px;" type="radio" id="message" name="sequenceType" value="message" checked>
-                                            <label for="message">Message</label>
-                                            <input type="radio" name="sequenceType" id="note" value="note">
-                                            <label for="note">Notes</label>
-                                        </div>
-                                        <!-- message type ui -->
-                                        <div style="background-color:#a6d4aa" id="add_message_ui">
-                                            <div style="margin-left:10px;margin-top:5px;">
-                                                <span>From</span>
-                                                <select id="from_user_list" class="settings_list" style="position:absolute;left:80px;width:140px;">
-                                                    <option v-for="user in users" >{{user.name}}</option>
-                                                </select>
-                                                <span style="position:absolute;left:240px;">To</span>
-                                                <select id="to_user_list" class="settings_list" style="position:absolute;left:270px;width:140px;">
-                                                    <option v-for="user in users" >{{user.name}}</option>
-                                                </select>
-                                            </div>
-                        
-                                            <div style="margin-left:10px;margin-top:5px;">
-                                                Arrow
-                                                <select id="arrow_list" class="settings_list" style="position:absolute;left:80px;width:330px;">
-                                                    <option v-for="arrow in arrows">{{arrow.name}}</option>
-                                                </select>
-                                            </div>
-                                            <div style="margin-left:10px;margin-top:5px;">
-                                                Message
-                                                <input id="message_text" type="text" placeholder="enter message here" style="margin:0px;position:absolute;left:90px;width:330px;" class="settings_input"/>
-                                            </div>
-                                            <div style="margin-top:10px;">
-                                                <button class="command_button" style="margin-left:257px;width:80px;"
-                                                            aria-label="Cancel Add" title="Cancel Add" onclick="endSequenceDialog()">
-                                                            Cancel
-                                                </button>
-                                                <button id="add_edit_msg_button" class="command_button" style="margin-left:0px;width:80px;" onclick="addEditMessage(this)" 
-                                                            aria-label="Add New" title="Add New">
-                                                            Add New
-                                                </button>
-                                            </div>
-                                        </div>
-                                        <!-- end message ui-->
-                                        <!-- note type ui -->
-                                        <div style="background-color:#a6d4aa;display:none;" id="add_note_ui">
-                                            <div style="margin-left:10px;margin-top:5px;">
-                                                <span>Note over</span>
-                                                <select id="over_user_list" class="settings_list" style="position:absolute;left:80px;width:200px;">
-                                                    <option v-for="user in users" >{{user.name}}</option>
-                                                </select>
-                                            </div>
-                                            <div style="margin-left:10px;margin-top:5px;">
-                                                Position
-                                                <select id="position_list" class="settings_list" style="position:absolute;left:80px;width:330px;">
-                                                    <option>over</option>
-                                                    <option>left of</option>
-                                                    <option>right of</option>
-                                                </select>
-                                            </div>
-                                            <div style="margin-left:10px;margin-top:5px;">
-                                                Note
-                                                <input id="note_text" type="text" placeholder="enter note here" style="margin:0px;position:absolute;left:90px;width:330px;" class="settings_input"/>
-                                            </div>
-                                            <div style="margin-top:10px;">
-                                                <button class="command_button" style="margin-left:257px;width:80px;"
-                                                            aria-label="Cancel Add" title="Cancel Add" onclick="endSequenceDialog()">
-                                                            Cancel
-                                                </button>
-                                                <button id="add_edit_note_button" class="command_button" style="margin-left:0px;width:80px;" onclick="addEditNote(this)" 
-                                                            aria-label="Add New" title="Add New">
-                                                            Add New
-                                                </button>
-                                            </div>
-                                        </div>
-                                        <!-- end note ui-->
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- end Sequence Add Dialog -->
-                        
-                            <div class="overlay" id="chooser">
-                                <div>
-                                    <table style="background-color: lightgray;margin-top:100px;margin-left:auto;margin-right:auto; border-spacing: 30px;">
-                                        <tr>
-                                            <td colspan="2">
-                                                <image src="../assets/close.svg" style="width:30px;height:30px;margin-left:600px;margin-right:10px;" onclick="endChooser()"/>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td style="width:300px;margin:20px;border-style:dotted;border-width: 1px;border-color:black; border-radius: 10px;background-color: white;">
-                                                <img src="../assets/kanban.png" alt="Kanban Board" style="margin-top:15px;cursor:hand;width:200px; height:200px;margin-left:50px;" onclick="handleChooser('kanban');"/>
-                                                <h2 style="text-align:center;">Kan-ban board</h2>
-                                            </td>
-                                            <td  style="width:300px;;margin:20px;border-style:dotted;border-width: 1px;border-color:black; border-radius: 10px;background-color: white;">
-                                                <img src="../assets/sequence.png" alt="Sequence Diagram" style="margin-top:15px;cursor:hand;width:200px; height:200px;margin-left:50px;"  onclick="handleChooser('sequence');"/>
-                                                <h2 style="text-align:center;">Sequence Diagram</h2>
-                                            </td>
-                                        <tr>
-                                            <td  style="width:300px;;margin:20px;border-style:dotted;border-width: 1px;border-color:black; border-radius: 10px;background-color: white;">
-                                                <img src="../assets/flowchart.png" alt="Sequence Diagram" style="margin-top:15px;cursor:hand;width:200px; height:200px;margin-left:50px;"  onclick="handleChooser('flowchart');"/>
-                                                <h2 style="text-align:center;">Flowchart Diagram</h2>
-                                            </td>
-                                            <td  style="width:300px;;margin:20px;border-style:dotted;border-width: 1px;border-color:black; border-radius: 10px;background-color: white;">
-                                                <img src="../assets/statetransition.png" alt="State Transition" style="margin-top:15px;cursor:hand;width:200px; height:200px;margin-left:50px;"  onclick="handleChooser('state');"/>
-                                                <h2 style="text-align:center;">State Transition</h2>
-                                            </td>
-    
-                                        </tr>
-                                    </table>
-                                </div>
-                            </div>
-                            <!-- settings fragment -->
-                            <div class="overlay" id="load">
-                                <div class="load_root">
-                                    <image src="../assets/close.svg" class="close_load_button" onclick="hideLoad()" alt="Close Panel"/>
-                                    <h2 style="margin-left:10px;">Manipulate data</h2>
-                                    <div class="settings_description" style="font-size:10.5pt;">
-                                        You can reset your sequence diagram, you can modify your sequence JSON here. Or you can paste in a
-                                        downloaded version of sequence diagram. To modify, click on 'Update' button. To reset the diagram, click on
-                                        'New' button.
-                                    </div>
-                                    <hr>
-                                    <h2 style="margin-left:10px;">Active storage</h2>
-                                    <div class="settings_description">
-                                        There are 5 slots which means you can work on 4 different sequence diagrams, 1 shared from URL and switching between them.
-                                    </div>
-                                    <select id="storageOptions" onchange="changeDataStorage()" size="5" class="settings_list">
-                                        <option value="data-sequence">data-sequence</option>
-                                        <option value="data-sequence-2">data-sequence-2</option>
-                                        <option value="data-sequence-3">data-sequence-3</option>
-                                        <option value="data-sequence-4">data-sequence-4</option>
-                                        <option value="data-sequence-shared">data-sequence-shared</option>                                        
-                                    </select>
-                                    <hr>
-                                    <textarea id="sequence_data" class="data_display"></textarea>
-                                    <div>
-                                        <button class="button-4" style="margin-left:155px;width:100px;" 
-                                            onclick="resetSequenceData()" aria-label="New Sequence Diagram" title="New Sequence Diagram">
-                                            New
-                                        </button>
-                                        <button class="button-4" style="margin-left:10px;width:100px;" 
-                                            onclick="updateSequenceData()" aria-label="Update Sequence Diagram" title="Update Sequence Diagram">
-                                            Update
-                                        </button>
-                                        <button class="button-4" style="margin-left:10px;width:100px;" 
-                                            onclick="copySequenceData()" aria-label="Share diagram data in a URL" title="Share diagram data in a URL">
-                                            Share URL
-                                        </button>
-                                    </div>
-                                    <hr>
-                                    <h2 style="margin-left:10px;">Download data</h2>
-                                    <div>
-                                        <input style="margin-left:10px;" type="radio" id="download_json" name="downloadType" value="download_json" checked>
-                                        <label for="download_json">JSON</label>
-                                        <input type="radio" name="downloadType" id="download_mermaid" value="download_mermaid">
-                                        <label for="download_mermaid">Mermaid Markdown</label>
-                                        <input type="radio" name="downloadType" id="download_png" value="download_png">
-                                        <label for="download_png">PNG}</label>
-                                    </div>
-                                    <div>
-                                        <button class="button-4" style="margin-top:10px;margin-left:10px;width:200px;" onclick="downloadData()">Download</button> 
-                                    </div>
-                                    <h2 style="margin-left:10px;">Theme</h2>
-                                    <div>
-                                        <input style="margin-left:10px;" type="radio" id="theme_dark" name="theme" value="theme_dark" checked>
-                                        <label for="theme_dark">Dark</label>
-                                        <input type="radio" name="theme" id="theme_white" value="theme_white">
-                                        <label for="theme_white">Normal</label>
-                                        <input type="radio" name="theme" id="theme_green" value="theme_green">
-                                        <label for="theme_green">Forest</label>
-                                    </div>
-                                    <div>
-                                        <button class="button-4" style="margin-top:10px;margin-left:10px;width:200px;" onclick="updateTheme()">Update Theme</button> 
-                                    </div>
-                                </div>
-                            </div> <!-- end of settings -->
-                    </td>
-                    <td id="diagram" style="height:100%;width:100%;margin:0px;padding:0px;">
 
-                    </td>
-                </tr>
-            </table>
+            <div id="whole_content_area" style="min-height:calc(100vh - 50px);margin:0px;" class="container-fluid">
+                <div class="row">
+                    <div id="left_panel" class="col" style="min-width:400px;max-width:400px;">
+                        <div class="card">
+                            <div class="card-header">
+                                Sequence Diagram Composer<button class="btn-close float-end " onclick="toggleLeftPanel();"/>
+                            </div>
+                            <div class="card-body h6 m-1">
+                                <small>
+                                    Add entities in the order presented in diagram (participant or actor).
+                                </small>
+                                <hr>
+                                <div class="row">
+                                    <div class="col w-100">
+                                        <select id="user_list" size="6" class="form-select" onchange="prepare_for_edit();">
+                                            <option v-for="user in users" >{{user.name}}</option>
+                                        </select>         
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-footer">
+                                <button class="btn btn-primary" id="reorder_up" onclick="reorder(true);"><i class="bi bi-arrow-up"></i></button>
+                                <button class="btn btn-primary ms-1  me-1" id="reorder_dn" onclick="reorder(false);"><i class="bi bi-arrow-down"></i></button>
+                                
+                                <button id="add_new_button" class="btn btn-primary ms-5" onclick="prepare_for_new();" 
+                                    aria-label="Add New" title="Add new">
+                                New
+                                </button>
+                                <button id="edit_button" class="btn btn-primary ms-1" onclick="prepare_for_edit()" 
+                                    aria-label="Update" title="update">
+                                    Edit
+                                </button>
+                                <button class="btn btn-primary ms-1" onclick="remove_user();" 
+                                    aria-label="Remove selected user" title="Remove selected entity">
+                                    Remove
+                                </button>
+                            </div>
+                            <div class="card-body h6 m-1">
+                                <div class="form-floating">
+                                    <input id="newUserName" type="text" class="form-control"/>
+                                    <label for="newUserName">Entity</label>
+                                </div>  
+                                <div class="btn-group w-100" role="group" aria-label="entity option">
+                                    <input type="radio" name="entityType" id="participant" value="participant" class="btn-check" checked>
+                                    <label class="btn btn-outline-secondary" for="participant">Participant</label>
+                                    <input style="margin-left:10px;" type="radio" id="actor" name="entityType" class="btn-check" value="actor">
+                                    <label class="btn btn-outline-secondary" for="actor">Actor</label>
+                                </div>                        
+                            </div>
+                            <div class="card-footer">
+                                <button id="add_or_update" class="btn btn-primary w-100" onclick="update_user()" 
+                                aria-label="Update" title="Update">
+                                Update
+                            </button>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-header">
+                                Sequence Item
+                                    <i class="bi bi-plus-square float-end" onclick="addSequenceDialog();"></i>
+                                </button>
+                            </div>
+                            <div class="card-body h6 m-1">
+                                <small>click '+' to add new item, drag & drop to reorder and edit/delete on each item.</small>
+                                <hr>
+                                <div class="row">
+                                    <div class="col w-100">
+                                        <ul style="list-style:none;padding-left:0px;">
+                                            <li v-for="item in sequences" style="margin-left:0px;border-spacing:0;" v-bind:data-id="item.id"
+                                                draggable="true" ondragstart="startDrag(event);" ondrop="onDrop(event)"  @dragover.prevent @dragenter.prevent>
+                                                <div v-if="item.type == 'msg'" v-bind:data-id="item.id">
+                                                    <table style="background-color:#dddddd;border-collapse: collapse;">
+                                                        <tr>
+                                                            <td style="min-width:70px;max-width:80px;font-size:8pt;color:rgb(6, 53, 24);"><b>from</b></td>
+                                                            <td style="min-width:70px;max-width:80px;font-size:8pt;color:rgb(6, 53, 24);"><b>to</b></td>
+                                                            <td style="min-width:45px;max-width:55px;font-size:8pt;color:rgb(6, 53, 24);"><b>arrow</b></td>
+                                                            <td style="min-width:150px;max-width:130px;font-size:8pt;color:rgb(6, 53, 24);"><b>message</b></td>
+                                                            <td style="min-width:20px;max-width:20px;cursor:hand;opacity: 0.5;">
+                                                                <i class="bi bi-pencil"  v-bind:data-id="item.id" src="../assets/edit.svg" alt="edit sequence" width="12" height="12" onclick="editSequence(this)"/>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="min-width:70px;max-width:80px;font-size:9.5pt;">{{item.from}}</td>
+                                                            <td style="min-width:70px;max-width:80px;font-size:9.5pt;">{{item.to}}</td>
+                                                            <td style="min-width:45px;max-width:55px;font-size:9.5pt;">{{item.arrow}}</td>
+                                                            <td style="min-width:150px;max-width:130px;font-size:9.5pt;">{{item.msg}}</td>
+                                                            <td style="min-width:20px;max-width:20px;cursor:hand;opacity: 0.5;">
+                                                                <i class="bi bi-trash" v-bind:data-id="item.id" src="../assets/delete.svg" alt="remove sequence" width="12" height="12" onclick="removeSequence(this)"/>
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                                </div>
+                                                <div v-if="item.type == 'note'" v-bind:data-id="item.id">
+                                                    <table style="background-color:#eeeeee;border-spacing:0;border-collapse: collapse;">
+                                                        <tr>
+                                                            <td style="min-width:70px;max-width:70px;font-size:8pt;color:rgb(6, 53, 24);"><b>entity</b></td>
+                                                            <td style="min-width:70px;max-width:70px;font-size:8pt;color:rgb(6, 53, 24);"><b>position</b></td>
+                                                            <td style="min-width:195px;max-width:205px;font-size:8pt;color:rgb(6, 53, 24);"><b>notes</b></td>
+                                                            <td style="min-width:20px;max-width:20px;cursor:hand;opacity: 0.5;">
+                                                                <i class="bi bi-pencil" v-bind:data-id="item.id" src="../assets/edit.svg" alt="edit sequence" width="12" height="12" onclick="editSequence(this)"/>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="min-width:70px;max-width:70px;font-size:9.5pt;">{{item.from}}</td>
+                                                            <td style="min-width:70px;max-width:70px;font-size:9.5pt;">{{item.position}}</td>
+                                                            <td style="min-width:195px;max-width:205px;font-size:9.5pt;">{{item.note}}</td>
+                                                            <td style="min-width:20px;max-width:20px;cursor:hand;opacity: 0.5;">
+                                                                <i class="bi bi-trash" v-bind:data-id="item.id" src="../assets/delete.svg" alt="remove sequence" width="12" height="12" onclick="removeSequence(this)"/>
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-footer">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col" id="diagram">
+
+                    </div>
+                </div>
             
+                <!-- Add Sequence Dialog -->
+                <div class="overlay" id="dialog">
+                    <div class="sequencemodal" style="min-width:380px;max-width:380px;">
+                        <div id="sequence_add_new_section">
+                            <div class="card">
+                                <div class="card-header">
+                                    Add Sequence<button class="btn-close float-end " onclick="endSequenceDialog();"/>
+                                </div>
+                                <div class="card-body h6 m-1">
+                                    <div class="btn-group w-100" role="group" aria-label="entity option">
+                                        <input class="btn-check" type="radio" id="message" name="sequenceType" value="message" checked>
+                                        <label class="btn btn-outline-secondary" for="message">Message</label>
+                                        <input class="btn-check" type="radio" name="sequenceType" id="note" value="note">
+                                        <label class="btn btn-outline-secondary" for="note">Notes</label>
+                                    </div>
+                                    <div  id="add_message_ui">
+                                        <div class="form-floating">
+                                            <select id="from_user_list" class="form-select" aria-label="From">
+                                                <option v-for="user in users" >{{user.name}}</option>
+                                            </select>                                                     
+                                            <label for="from_user_list">From entity</label>
+                                        </div>
+                                        <div class="form-floating">
+                                            <select id="to_user_list" class="form-select"  aria-label="To">
+                                                <option v-for="user in users" >{{user.name}}</option>
+                                            </select>                                                     
+                                            <label for="to_user_list">To entity</label>
+                                        </div>
+                                        <div class="form-floating">
+                                            <select id="arrow_list" class="form-select" aria-label="To">
+                                                <option v-for="arrow in arrows">{{arrow.name}}</option>
+                                            </select>
+                                            <label for="arrow_list">Arrow</label>
+                                        </div>
+                                        <div class="form-floating">
+                                            <input id="message_text" type="text" class="form-control"/>
+                                            <label for="message_text">Message text</label>
+                                        </div>            
+                                    </div>
+                                    <div  id="add_note_ui">
+                                        <div class="form-floating">
+                                            <select id="over_user_list" class="form-select" aria-label="Over">
+                                                <option v-for="user in users" >{{user.name}}</option>
+                                            </select>                                                     
+                                            <label for="over_user_list">Note over</label>
+                                        </div>
+                                        <div class="form-floating">
+                                            <select id="position_list" class="form-select" aria-label="Position">
+                                                <option>over</option>
+                                                <option>left of</option>
+                                                <option>right of</option>
+                                            </select>                                                     
+                                            <label for="position_list">Position</label>
+                                        </div>
+                                        <div class="form-floating">
+                                            <input id="note_text" type="text" class="form-control"/>
+                                            <label for="note_text">Note</label>
+                                        </div>     
+                                    </div>
+                                </div>
+                                <div class="card-footer">
+                                    <button class="form-control w-49" aria-label="Cancel Add" title="Cancel Add" onclick="endSequenceDialog()">
+                                        Cancel
+                                    </button>
+                                    <button id="add_edit_msg_button" class="form-control w-49" onclick="addEditMessage(this)" 
+                                        aria-label="Add New" title="Add New">
+                                        Add New
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- end Sequence Add Dialog -->
+                        
+                <!-- modal -->
+                <div id="chooseModal" class="modal fade">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content" style="width:800px;">
+                            <div class="modal-header bg-primary">
+                                <div class="h4 modal-title text-light">Applications</div>
+                                <button type="button" class="btn-close text-light" data-bs-dismiss="modal"></button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="row">
+                                    <div class="col border rounded p-2 me-2">
+                                        <img src="../assets/kanban.png" alt="Kanban Board" style="margin-left:35px;cursor:hand;width:150px; height:150px;" onclick="handleChooser('kanban');"/>
+                                        <div class="h6" style="text-align:center;">Kan-ban board</div>
+                                    </div>
+                                    <div class="col border rounded p-2">
+                                        <img src="../assets/sequence.png" alt="Sequence Diagram" style="margin-left:35px;cursor:hand;width:150px; height:150px;"  onclick="handleChooser('sequence');"/>
+                                        <div class="h6" style="text-align:center;">Sequence Diagram</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-body">
+                                <div class="row">
+                                    <div class="col border rounded p-2 me-2">
+                                        <img src="../assets/flowchart.png" alt="Kanban Board" style="margin-left:35px;cursor:hand;width:150px; height:150px;" onclick="handleChooser('flowchart');"/>
+                                        <div class="h6" style="text-align:center;">Flowchart Diagram</div>
+                                    </div>
+                                    <div class="col border rounded p-2">
+                                        <img src="../assets/statetransition.png" alt="Sequence Diagram" style="margin-left:35px;cursor:hand;width:150px; height:150px;"  onclick="handleChooser('state');"/>
+                                        <div class="h6" style="text-align:center;">State Transition</div>
+                                    </div>
+                                </div>
+                            </div>                
+                            <div class="modal-footer h6">
+                                Choose an application from options above or click anywhere else to dismiss
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="overlay" id="load">
+                    <div class="load_root">
+                        <div class="card">
+                            <div class="card-header">
+                                Data Option
+                                <button type="button" class="btn-close  float-end  text-light" onclick="hideLoad()"></button>
+                            </div>
+                            
+                            <div class="card-body h6 m-1">
+                             There are 5 slots which means you can work on 4 different kanban boards, 1 shareable from URL and switching between them.
+                             <hr>
+                             <select id="storageOptions" onchange="changeDataStorage()" size="5" class="form-select">
+                                <option value="data-sequence">data-kanban</option>
+                                <option value="data-sequence-2">data-kanban-2</option>
+                                <option value="data-sequence-3">data-kanban-3</option>
+                                <option value="data-sequence-4">data-kanban-4</option>
+                                <option value="data-sequence-shared">data-kanban-shared</option>
+                            </select>
+                            <hr>
+                            Kanban data for selected slot
+                            <textarea id="sequence_data" class="form-select" style="font-size:8pt;height:200px;resize: none;"></textarea>
+                            </div>
+                            <div class="card-footer">
+                                <button class="btn btn-primary mw-30" onclick="resetSequenceData()" 
+                                    aria-label="Reset Diagram" title="Reset Diagram">
+                                Reset
+                                </button>   
+                                <button class="btn btn-primary mw-30 ms-1" onclick="updateSequenceData()" 
+                                    aria-label="Update Diagram" title="Update Diagram">
+                                Update
+                                </button>   
+                                <button class="btn btn-primary mw-30 ms-1" onclick="copySequenceData()" 
+                                    aria-label="Share Diagram as URL" title="Share Diagram as URL">
+                                Share
+                                </button>                                           
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-body h6 m-1">
+                                Pick a format to download and click 'Download' button.
+                                <hr>
+                                <div class="btn-group w-100" role="group" aria-label="download option">
+                                    <input class="btn-check" type="radio" id="download_json" name="downloadType" value="download_json">
+                                    <label class="btn btn-outline-secondary" for="download_json">JSON</label>
+                                    <input class="btn-check" type="radio" id="download_mermaid" name="downloadType" value="download_json">
+                                    <label class="btn btn-outline-secondary" for="download_mermaid">Mermaid Markdown</label>                                    
+                                    <input class="btn-check" type="radio" name="downloadType" id="download_png" value="download_png" checked>
+                                    <label class="btn btn-outline-secondary" for="download_png">PNG</label>
+                                </div>
+                            </div>
+                            <div class="card-footer">
+                                <button class="btn btn-primary w-100" onclick="downloadData()" 
+                                    aria-label="Download" title="Download">
+                                Download
+                                </button>  
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
+            <!-- toast -->
+            <div id='toast' class="toast bottom-0 end-0" data-bs-delay="5000" style="position:absolute;z-index:99;" role="alert" aria-live="assertive" aria-atomic="true">
+                <div class="toast-header">
+                    <strong class="me-auto">Kanban</strong>
+                    <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                </div>
+                <div id="toast_msg" class="toast-body">
+                </div>
+            </div>
+
         </div> <!-- end of app div -->
 
         <script src="js/sequence_vue_app.js"></script>

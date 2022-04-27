@@ -69,6 +69,12 @@ function handleChooser(chosen) {
     modal.hide();
   }  
 
+  function showToast(msg) {
+    document.getElementById('toast_msg').innerText = msg;
+    toast = bootstrap.Toast.getOrCreateInstance(document.getElementById('toast'))
+    toast.show();
+  }
+  
   function positionAdorner(rect) {
     const padding = 5;
     let adorner = document.getElementById("selection_adorner");

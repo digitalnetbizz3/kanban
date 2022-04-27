@@ -162,12 +162,6 @@
     leftNav.show();
   }
 
-  function showToast(msg) {
-    document.getElementById('toast_msg').innerText = msg;
-    toast = bootstrap.Toast.getOrCreateInstance(document.getElementById('toast'))
-    toast.show();
-  }
-
   function hideLoad() {
     var collapse = document.getElementById('left-nav')
     let nav = new bootstrap.Collapse(collapse, {});

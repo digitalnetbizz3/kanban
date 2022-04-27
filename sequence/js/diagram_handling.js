@@ -11,7 +11,7 @@
         localStorage.setItem(storageName, decodedData)
         app.changeStorage();
       } catch {
-        alert('shared JSON is invalid')
+        showToast('shared JSON is invalid')
       }
     }     
     let storageLocation = document.querySelector("#storageOptions");
@@ -24,26 +24,7 @@
         toggleAddEditUI(currentSelection == 'note');
       });
     });
-
-    let area = document.querySelector('#whole_content_area');
-    let darkTheme = document.querySelector('#theme_dark');
-    let whiteTheme = document.querySelector('#theme_white');
-    let greenTheme = document.querySelector('#theme_green');
-    
-    var curr_theme = localStorage.getItem('theme');
-    if (curr_theme == 'dark') {
-      document.body.style.backgroundColor = '#2e2e2e';
-      area.style.backgroundColor = '#2e2e2e'
-      darkTheme.checked = true;
-    } else {
-      area.style.backgroundColor = 'white'; 
-      document.body.style.backgroundColor = 'white';
-      if (curr_theme == 'forest') 
-        greenTheme.checked = true;
-      else
-        whiteTheme.checked = true;
-    }
-
+    localStorage.setItem('theme', 'neutral');
     prepare_for_edit();
   }
 
@@ -101,7 +82,7 @@
     let noteText = document.querySelector("#note_text");
 
     if (noteText.value.length == 0) {
-      alert("note field is mandatory.");
+      showToast("note field is mandatory.");
       return;
     }
     if (isAdd) { // add
@@ -122,6 +103,13 @@
   }
 
   function addEditMessage(el) {
+    let noteUI = document.querySelector('#add_note_ui');
+
+    if(noteUI.style.display != 'none') {
+      addEditNote(el);
+      return;
+    }
+    
     let isAdd = el.innerText == 'Add New';
 
     let fromUserList = document.querySelector("#from_user_list");
@@ -130,7 +118,7 @@
     let messageText = document.querySelector("#message_text");
 
     if (messageText.value.length == 0) {
-      alert("message field is mandatory.");
+      showToast("message field is mandatory.");
       return;
     }
     let arrow = app.filterArrows(arrowList.value)[0];
@@ -194,7 +182,7 @@
       let fromUserList = document.querySelector("#over_user_list");
       let positionList = document.querySelector("#position_list");
       let noteText = document.querySelector("#note_text");
-      let buttonNoteAddText = document.querySelector("#add_edit_note_button");
+      let buttonNoteAddText = document.querySelector("#add_edit_msg_button");
 
       buttonNoteAddText.innerText = 'Update';
       fromUserList.value = node.from;
@@ -204,9 +192,10 @@
   }
 
   function addSequenceDialog() {
+    
     toggleAddEditUI(false);
     freezeRadioOptions(false);
-    let modalElement = document.querySelector(".modal");
+    let modalElement = document.querySelector(".sequencemodal");
     modalElement.style.left = '10px';
     let dialog = document.querySelector("#dialog");
     dialog.style.display = 'inline';
@@ -216,7 +205,7 @@
     let arrowList = document.querySelector("#arrow_list");
     let messageText = document.querySelector("#message_text");
     let buttonMsgAddText = document.querySelector("#add_edit_msg_button");
-    let buttonNoteAddText = document.querySelector("#add_edit_note_button");
+    let buttonNoteAddText = document.querySelector("#add_edit_msg_button");
     let fromNoteList = document.querySelector("#over_user_list");
     let positionList = document.querySelector("#position_list");
     let noteText = document.querySelector("#note_text");
@@ -250,7 +239,7 @@
   function showLoad() {
     let load_dialog = document.querySelector("#load");
     let kanban_data = document.querySelector("#sequence_data");
-
+    closeLeftPanel();
     load_dialog.style.display = 'block';
     kanban_data.value = app.getJSON();
   }
@@ -258,6 +247,7 @@
   function hideLoad() {
     let load_dialog = document.querySelector("#load");
     load_dialog.style.display = 'none';
+    openLeftPanel();
   }
 
   function resetSequenceData() {
@@ -272,7 +262,7 @@
         app.update(update_json);
         updateDiagram();
     } catch(e) {
-        alert('Invalid JSON data.' + e);
+      showToast('Invalid JSON data.' + e);
     }
   }
 
@@ -281,7 +271,7 @@
     let urlToShare = "https://kan-ban.org/sequence/?share=" + encodeURIComponent(jsonText);
     navigator.clipboard.writeText(urlToShare).then(
         function () {
-          alert("data copied to the clipboard");
+          showToast("Shareable URL copied to the clipboard");
         }
     );
   }
@@ -299,16 +289,13 @@
   function prepare_for_new() {
     let new_user_name = document.querySelector("#newUserName");
     let add_or_update = document.querySelector("#add_or_update");
-    let add_new_button = document.querySelector("#add_new_button");
-    let edit_button = document.querySelector("#edit_button");
     let participant_radio = document.querySelector("#participant");
     
     add_or_update.onclick = add_user;
     participant_radio.checked = true;
     new_user_name.value = '';
+    new_user_name.focus()
     add_or_update.innerText = 'Add';
-    edit_button.style.backgroundColor = '#96a49a';
-    add_new_button.style.backgroundColor = 'lightgray';
   }
 
   function prepare_for_edit() {
@@ -318,8 +305,6 @@
     let user_list = document.querySelector("#user_list");
     let new_user_name = document.querySelector("#newUserName");
     let add_or_update = document.querySelector("#add_or_update");
-    let add_new_button = document.querySelector("#add_new_button");
-    let edit_button = document.querySelector("#edit_button");
     let actor = document.querySelector('#actor');
     let participant = document.querySelector('#participant');
     let idx = user_list.selectedIndex;
@@ -335,8 +320,6 @@
     add_or_update.onclick = update_user;
     new_user_name.value = user_context.name;
     add_or_update.innerText = 'Update';
-    edit_button.style.backgroundColor = 'lightgray';
-    add_new_button.style.backgroundColor = '#96a49a';
 
     reorder_dn.disabled = false;
     reorder_up.disabled = false;
@@ -386,7 +369,7 @@
     let user_list = document.querySelector("#user_list");
     let userToDelete = user_list.value;
     if(user_list.options.length == 1) {
-        alert('You need at least one participant/actor for this app.');
+        showToast('You need at least one participant/actor for this app.');
         return;
     }
     app.removeUser(userToDelete);
@@ -404,7 +387,7 @@
     
     if (new_user_name.value == user_context.name && 
         new_user_type_value == user_context.type) {
-          alert("nothing changed.")
+          showToast("nothing changed.")
         }
     else {
       user_context.name = new_user_name.value;
@@ -478,6 +461,20 @@
       link.href = dataUrl;
       link.click();  
     }
+  }
+
+  function openLeftPanel() {
+    let leftPanel = document.querySelector("#left_panel");
+    let restorePanel = document.querySelector("#restore_panel");
+    restorePanel.style.display = 'none';
+    leftPanel.style.display = 'table-cell';
+  }
+
+  function closeLeftPanel() {
+    let leftPanel = document.querySelector("#left_panel");
+    let restorePanel = document.querySelector("#restore_panel");
+    leftPanel.style.display = 'none';
+    restorePanel.style.display = 'block';
   }
 
   function toggleLeftPanel() {
