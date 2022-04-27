@@ -418,15 +418,9 @@
         <script src="../js/dom-to-image.min.js"></script>
 
         <script>
-            var theme = localStorage.getItem('theme');
-            if (theme == null) {
-                localStorage.setItem('theme', 'dark');
-                theme = 'dark';
-            }
-            
             var mermaidAPI = mermaid.mermaidAPI;
             mermaidAPI.initialize({
-              startOnLoad:false, securityLevel: 'loose', theme: theme
+              startOnLoad:false, securityLevel: 'loose', theme: 'neutral'
             });
             
         </script>

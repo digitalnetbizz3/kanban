@@ -24,7 +24,6 @@
         toggleAddEditUI(currentSelection == 'note');
       });
     });
-    localStorage.setItem('theme', 'neutral');
     prepare_for_edit();
   }
 
@@ -408,26 +407,7 @@
     new_user.value = '';
   }
 
-  function updateTheme() {
-    var curr_theme = localStorage.getItem('theme');
-    let darkTheme = document.querySelector('#theme_dark');
-    let whiteTheme = document.querySelector('#theme_white');
-    var theme_data = 'neutral';
-    if(darkTheme.checked) {
-      theme_data = 'dark';
-    } else if (whiteTheme.checked) {
-      theme_data = 'neutral';
-    } else {
-      theme_data = 'forest';
-    }
-
-    if (theme_data != curr_theme) {
-      localStorage.setItem('theme', theme_data);
-      location.reload();
-      return false;
-    }
-  }
-
+  
   function downloadData() {
     let jsonOption = document.querySelector('#download_json');
     let mermaidOption = document.querySelector('#download_mermaid');
