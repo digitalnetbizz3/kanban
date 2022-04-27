@@ -298,6 +298,7 @@
         showToast('shared JSON is invalid')
       }
     } else {
+      
       if (window.location.href.indexOf('switch') < 0) {
         showChooser();  
       }  

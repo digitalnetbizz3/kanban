@@ -13,7 +13,11 @@
       } catch {
         showToast('shared JSON is invalid')
       }
-    }     
+    } else {
+      if (window.location.href.indexOf('switch') < 0) {
+        showChooser();  
+      }  
+    }
     let storageLocation = document.querySelector("#storageOptions");
     storageLocation.value = storageName;
 
