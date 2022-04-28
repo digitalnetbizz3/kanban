@@ -1,8 +1,8 @@
 {
   "name": "kan-ban / org",
   "short_name": "kan-ban / org",
-  "background_color": "blue",
-  "theme_color": "blue",
+  "background_color": "#3333ff",
+  "theme_color": "#3333ff",
   "display": "standalone",
   "icons": [
     {

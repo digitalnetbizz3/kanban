@@ -1,4 +1,4 @@
-const CACHE_NAME = 'SEQUENCE_APP_CONTENT_V1.21';
+const CACHE_NAME = 'SEQUENCE_APP_CONTENT_V1.22';
 
 const urlsToCache = [
     'index.html',
