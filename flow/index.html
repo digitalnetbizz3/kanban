@@ -42,8 +42,7 @@
                 src: url(https://fonts.gstatic.com/s/opensans/v28/memSYaGs126MiZpBA-UvWbX2vVnXBbObj2OVZyOOSr4dVJWUgsjZ0B4gaVQUwaEQbjA.woff) format('woff');
                 unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
                 }
-            body {width:100%;min-height: calc(100vh - 50px);margin:0px;padding:0px; border-spacing: 0px;border-collapse: collapse;}
-            
+            body {font-family: 'Open Sans';width:100%;min-height: calc(100vh - 50px);margin:0px;padding:0px; border-spacing: 0px;border-collapse: collapse;}
             div.mermaid {
                 font-family: 'open sans';
             }
@@ -63,7 +62,6 @@
                 width: 380px;
                 
             }
-
             .load_root {
                 position:absolute;
                 top:60px;
@@ -75,7 +73,6 @@
             }              
 	    </style>
     </head>
-<!-- onclick="resetAdorner()" -->
 
     <body onload="vueLoad()">
         <div id="app">
@@ -104,7 +101,7 @@
             </div>
             <div id="whole_content_area" style="min-height:calc(100vh - 50px);margin:0px;" class="container-fluid">
                 <div class="row">
-                    <div id="left_panel" class="col" style="min-width:400px;max-width:400px;">
+                    <div id="left_panel" class="col" style="min-width:410px;max-width:400px;">
                         <div class="card" onclick="resetAdorner()">
                             <div class="card-header">
                                 Flowchart<button class="btn-close float-end " onclick="toggleLeftPanel();"/>
@@ -125,15 +122,15 @@
                                 </div>
                             </div>
                             <div class="card-footer">
-                                <button id="add_new_button" class="btn btn-primary ms-3" onclick="prepareForNew();" 
+                                <button id="add_new_button" class="btn btn-primary ms-3 w-33" onclick="prepareForNew();" 
                                     aria-label="Add New" title="Add new">
                                     New
                                 </button>
-                                <button id="edit_button" class="btn btn-primary ms-1" onclick="prepareForEdit()" 
+                                <button id="edit_button" class="btn btn-primary ms-1 w-33" onclick="prepareForEdit()" 
                                     aria-label="Update" title="update">
                                     Edit
                                 </button>
-                                <button class="btn btn-primary ms-1" onclick="removeShape();" 
+                                <button class="btn btn-primary ms-1 w-33" onclick="removeShape();" 
                                     aria-label="Remove selected shape" title="Remove selected shape">
                                     Remove
                                 </button>

@@ -12,7 +12,7 @@
         localStorage.setItem(storageName, decodedData)
         app.changeStorage();
       } catch {
-        alert('shared JSON is invalid')
+        showToast('shared JSON is invalid')
       }
     }
     let storageLocation = document.querySelector("#storageOptions");
@@ -20,27 +20,8 @@
 
     // set radio option to current selection
     let initialShape = app.shapes[0];
-    document.getElementById(initialShape.type).checked = true;
+    //document.getElementById(initialShape.type).checked = true;
     document.getElementById('shape_title').value = initialShape.title;
-
-    let area = document.querySelector('#whole_content_area');
-    let darkTheme = document.querySelector('#theme_dark');
-    let whiteTheme = document.querySelector('#theme_white');
-    let greenTheme = document.querySelector('#theme_green');
-    
-    var curr_theme = localStorage.getItem('theme');
-    if (curr_theme == 'dark') {
-      document.body.style.backgroundColor = '#2e2e2e';
-      area.style.backgroundColor = '#2e2e2e'
-      darkTheme.checked = true;
-    } else {
-      area.style.backgroundColor = 'white'; 
-      document.body.style.backgroundColor = 'white';
-      if (curr_theme == 'forest') 
-        greenTheme.checked = true;
-      else
-        whiteTheme.checked = true;
-    }
 
     var ro = new ResizeObserver(entries => {
       for (let entry of entries) {
@@ -63,17 +44,11 @@
     let title = titleElement.value;
     
     if (title.trim() == 0) {
-      alert('Shape must have title');
+      showToast('Shape must have title');
       return;
     }
 
-    let radios = document.getElementsByName('entityType');
-    radios.forEach(radio => {
-      if (radio.checked) {
-          newShapeSelection = radio.id;
-      }
-    });
-    app.addShape(newShapeSelection, title);
+    app.addShape('state', title);
     updateDiagram();
     prepareForNew();
   }
@@ -83,7 +58,7 @@
     let currSelectionId = shapeList.value;
 
     if (shapeList.options.length == 1) {
-      alert('You need at least one shape in the diagram');
+      showToast('You need at least one shape in the diagram');
       return;
     }
     app.removeShape(currSelectionId);
@@ -96,14 +71,10 @@
     let add_or_update = document.querySelector("#add_or_update");
     let add_new_button = document.querySelector("#add_new_button");
     let edit_button = document.querySelector("#edit_button");
-    let process_radio = document.querySelector("#state");
     
     add_or_update.onclick = addShape;
-    process_radio.checked = true;
     new_user_name.value = '';
     add_or_update.innerText = 'Add';
-    edit_button.style.backgroundColor = '#96a49a';
-    add_new_button.style.backgroundColor = 'lightgray';
   }
   
   function prepareForEdit() {
@@ -125,8 +96,6 @@
     add_or_update.onclick = updateShape;
     new_user_name.value = userContext.title;
     add_or_update.innerText = 'Update';
-    edit_button.style.backgroundColor = 'lightgray';
-    add_new_button.style.backgroundColor = '#96a49a';
   }
 
   function updateShape() {
@@ -138,7 +107,7 @@
     let newShapeSelection = null;
     let newShapeTitle = titleElement.value;
     if (newShapeTitle.length == 0) {
-      alert('Shape must have title');
+      showToast('Shape must have title');
       return;
     }
     let radios = document.getElementsByName('entityType');
@@ -168,7 +137,7 @@
   function showLoad() {
     let load_dialog = document.querySelector("#load");
     let kanban_data = document.querySelector("#state_data");
-
+    closeLeftPanel();
     load_dialog.style.display = 'block';
     kanban_data.value = app.getJSON();
     resetAdorner();
@@ -177,7 +146,22 @@
   function hideLoad() {
     let load_dialog = document.querySelector("#load");
     load_dialog.style.display = 'none';
+    openLeftPanel();
   }
+  
+  function openLeftPanel() {
+    let leftPanel = document.querySelector("#left_panel");
+    let restorePanel = document.querySelector("#restore_panel");
+    restorePanel.style.display = 'none';
+    leftPanel.style.display = 'table-cell';
+  }
+
+  function closeLeftPanel() {
+    let leftPanel = document.querySelector("#left_panel");
+    let restorePanel = document.querySelector("#restore_panel");
+    leftPanel.style.display = 'none';
+    restorePanel.style.display = 'block';
+  }  
 
   function resetStateData() {
     app.reset();
@@ -191,7 +175,7 @@
         app.update(update_json);
         updateDiagram();
     } catch(e) {
-        alert('Invalid JSON data.' + e);
+        showToast('Invalid JSON data.' + e);
     }
   }
 
@@ -200,7 +184,7 @@
     let urlToShare = "https://kan-ban.org/state/?share=" + encodeURIComponent(jsonText);
     navigator.clipboard.writeText(urlToShare).then(
         function () {
-          alert("data copied to the clipboard");
+          showToast("Shareable URL copied to the clipboard");
         }
     );
   }
@@ -361,7 +345,7 @@
       shape.title = titleElement.value;
       updateDiagram();
     } else {
-      alert('Title must not be blank.');
+      showToast('Title must not be blank.');
     }
   }
 
@@ -373,30 +357,6 @@
 
   function getIdFromSvgId(svgId) {
     return parseInt(svgId.split('-')[1]);
-  }
-
-  function updateTheme() {
-    var curr_theme = localStorage.getItem('theme');
-    let darkTheme = document.querySelector('#theme_dark');
-    let whiteTheme = document.querySelector('#theme_white');
-    let diagramArea = document.querySelector('#diagram');
-    var theme_data = 'neutral';
-    if(darkTheme.checked) {
-      diagramArea.style.background = '#2e2e2e';
-      theme_data = 'dark';
-    } else if (whiteTheme.checked) {
-      diagramArea.style.background = 'white';
-      theme_data = 'neutral';
-    } else {
-      diagramArea.style.background = 'white';
-      theme_data = 'forest';
-    }
-
-    if (theme_data != curr_theme) {
-      localStorage.setItem('theme', theme_data);
-      location.reload();
-      return false;
-    }
   }
 
   function downloadData() {

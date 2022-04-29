@@ -13,7 +13,10 @@ const defaultData = {
     ],
 };
 var storageName = 'data-state';
-const app = Vue.createApp({
+var app = null;
+
+function vueLoad() {
+    app = Vue.createApp({
     data() {
         let data = null;
         let persistence = localStorage.getItem(storageName);
@@ -168,3 +171,5 @@ const app = Vue.createApp({
         }
     },
 }).mount('#app');
+appLoad();
+}

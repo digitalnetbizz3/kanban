@@ -1,4 +1,4 @@
-const CACHE_NAME = 'State_V1.04';
+const CACHE_NAME = 'State_V1.05';
 
 const urlsToCache = [
     'index.html',
@@ -6,23 +6,18 @@ const urlsToCache = [
     'js/state_handling.js',
     '../js/dom-to-image.min.js',
     '../js/vue.global.js',
-    '../js/chooser.js',
-    'css/dialog.css',
-    'css/layout.css',
-    'css/load.css',
-    '../assets/menu.svg',
-    '../assets/close.svg',
-    '../assets/delete.svg',
-    '../assets/edit.svg',
-    '../assets/logo.svg',
-    '../assets/settings.svg',
+    '../js/common.js',
     '../assets/logo.png',
     '../assets/kanban.png',
     '../assets/sequence.png',
     '../assets/flowchart.png',
     '../assets/statetransition.png',
     'https://cdnjs.cloudflare.com/ajax/libs/mermaid/8.13.10/mermaid.min.js',
-    'https://fonts.gstatic.com/s/opensans/v28/memSYaGs126MiZpBA-UvWbX2vVnXBbObj2OVZyOOSr4dVJWUgsjZ0B4gaVQUwaEQbjA.woff'
+    'https://fonts.gstatic.com/s/opensans/v28/memSYaGs126MiZpBA-UvWbX2vVnXBbObj2OVZyOOSr4dVJWUgsjZ0B4gaVQUwaEQbjA.woff',
+    'https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css',
+    'https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css',
+    'https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js'
+
 ];
 
 self.addEventListener('install', installer  => {
