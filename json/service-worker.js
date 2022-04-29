@@ -1,25 +1,22 @@
-const CACHE_NAME = 'State_V1.06';
+const CACHE_NAME = 'JSON_APP_CONTENT_V1.00';
 
 const urlsToCache = [
     'index.html',
-    'js/state_vue_app.js',
-    'js/state_handling.js',
-    '../js/dom-to-image.min.js',
-    '../js/vue.global.js',
-    '../js/common.js',
+    'js/common.js',
+    'js/json_handling.js',
     '../assets/logo.png',
     '../assets/kanban.png',
     '../assets/sequence.png',
     '../assets/flowchart.png',
+    '../assets/json.png',
     '../assets/statetransition.png',
-    '../assets/json.png',    
-    'https://cdnjs.cloudflare.com/ajax/libs/mermaid/8.13.10/mermaid.min.js',
     'https://fonts.gstatic.com/s/opensans/v28/memSYaGs126MiZpBA-UvWbX2vVnXBbObj2OVZyOOSr4dVJWUgsjZ0B4gaVQUwaEQbjA.woff',
     'https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css',
     'https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css',
-    'https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js'
-
-];
+    'https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js',
+    'https://cdnjs.cloudflare.com/ajax/libs/jsoneditor/9.7.4/jsoneditor.css',
+    'https://cdnjs.cloudflare.com/ajax/libs/jsoneditor/9.7.4/jsoneditor.min.js'
+];                      
 
 self.addEventListener('install', installer  => {
     console.log('Installing');

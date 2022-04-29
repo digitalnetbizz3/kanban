@@ -1,4 +1,4 @@
-const CACHE_NAME = 'Flowchart_V1.17';
+const CACHE_NAME = 'Flowchart_V1.18';
 
 const urlsToCache = [
     'index.html',
@@ -12,6 +12,7 @@ const urlsToCache = [
     '../assets/sequence.png',
     '../assets/flowchart.png',
     '../assets/statetransition.png',
+    '../assets/json.png',        
     'https://cdnjs.cloudflare.com/ajax/libs/mermaid/8.13.10/mermaid.min.js',
     'https://fonts.gstatic.com/s/opensans/v28/memSYaGs126MiZpBA-UvWbX2vVnXBbObj2OVZyOOSr4dVJWUgsjZ0B4gaVQUwaEQbjA.woff',
     'https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css',
