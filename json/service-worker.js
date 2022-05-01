@@ -1,4 +1,4 @@
-const CACHE_NAME = 'JSON_APP_CONTENT_V1.00';
+const CACHE_NAME = 'JSON_APP_CONTENT_V1.01';
 
 const urlsToCache = [
     'index.html',
