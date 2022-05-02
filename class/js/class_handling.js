@@ -145,7 +145,7 @@
 
   function removeClass() {
     let classes = document.querySelector('#user_list')
-    if (classes.options.length == 0) {
+    if (classes.options.length == 1) {
       showToast('Must be at least 1 class')
       return
     }
