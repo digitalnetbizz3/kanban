@@ -183,8 +183,7 @@
 
   function copyKanbanData() {
     let jsonText = app.getLeanJSON();
-    let compressed = JSONCrush.crush(jsonText);
-    let urlToShare = "https://kan-ban.org/?share=" + encodeURIComponent(compressed);
+    let urlToShare = "https://kan-ban.org/?share=" + encodeURIComponent(jsonText);
     navigator.clipboard.writeText(urlToShare).then(
         function () {
           showToast("Sharable URL copy into clipboard, you can share URL with someone else and they will see your Kanban board.");
@@ -288,8 +287,7 @@
     const urlParams = new URLSearchParams(window.location.search);
     const shareData = urlParams.get('share');
     if (shareData != null) {
-      let crushedData = decodeURIComponent(shareData);
-      let decodedData = JSONCrush.uncrush(crushedData);
+      let decodedData = decodeURIComponent(shareData);
       try {
         JSON.parse(decodedData);
         storageName = 'data-kanban-shared';
