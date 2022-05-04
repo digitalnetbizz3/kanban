@@ -1,4 +1,4 @@
-const CACHE_NAME = 'SEQUENCE_APP_CONTENT_V1.25';
+const CACHE_NAME = 'SEQUENCE_APP_CONTENT_V1.26';
 
 const urlsToCache = [
     'index.html',
@@ -13,7 +13,16 @@ const urlsToCache = [
     '../assets/sequence.png',
     '../assets/flowchart.png',
     '../assets/statetransition.png',
-    '../assets/json.png',        
+    '../assets/json.png',    
+    '../assets/class.png',        
+    '../js/json-url/json-url.js',
+    '../js/json-url/json-url-lzstring.js',
+    '../js/json-url/json-url-lzw.js',
+    '../js/json-url/json-url-msgpack.js',
+    '../js/json-url/json-url-safe64.js',
+    '../js/json-url/json-url-single.js',
+    '../js/json-url/json-url-vendors~lzma.js',
+    '../js/json-url/json-url-vendors~msgpack.js',    
     'https://fonts.gstatic.com/s/opensans/v28/memSYaGs126MiZpBA-UvWbX2vVnXBbObj2OVZyOOSr4dVJWUgsjZ0B4gaVQUwaEQbjA.woff',
     'https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css',
     'https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css',

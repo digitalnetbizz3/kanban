@@ -4,15 +4,18 @@
     const urlParams = new URLSearchParams(window.location.search);
     const shareData = urlParams.get('share');
     if (shareData != null) {
-      let decodedData = decodeURIComponent(shareData);
-      try {
-        JSON.parse(decodedData);
-        storageName = 'data-sequence-shared';
-        localStorage.setItem(storageName, decodedData)
-        app.changeStorage();
-      } catch {
-        showToast('shared JSON is invalid')
-      }
+      const lib = JsonUrl('lzma');
+      lib.decompress(shareData).then(output => { 
+        try {
+          JSON.parse(output);
+          storageName = 'data-sequence-shared';
+          localStorage.setItem(storageName, output)
+          app.changeStorage();
+        } catch(e) {
+          console.log(e)
+          showToast('shared JSON is invalid')
+        }
+      })
     } else {
       if (window.location.href.indexOf('switch') < 0) {
         showChooser();  
@@ -271,12 +274,15 @@
 
   function copySequenceData() {
     let jsonText = app.getLeanJSON();
-    let urlToShare = "https://kan-ban.org/sequence/?share=" + encodeURIComponent(jsonText);
-    navigator.clipboard.writeText(urlToShare).then(
-        function () {
-          showToast("Shareable URL copied to the clipboard");
-        }
-    );
+    const lib = JsonUrl('lzma');
+    lib.compress(jsonText).then(output => { 
+      let urlToShare = "https://kan-ban.org/sequence/?share=" + output;
+      navigator.clipboard.writeText(urlToShare).then(
+          function () {
+            showToast("Sharable URL copy into clipboard, you can share URL with someone else and they will see your sequence diagram.");
+          }
+      );
+    });    
   }
 
   function showSettings() {
