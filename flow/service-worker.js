@@ -1,4 +1,4 @@
-const CACHE_NAME = 'Flowchart_V1.20';
+const CACHE_NAME = 'Flowchart_V1.21';
 
 const urlsToCache = [
     'index.html',
