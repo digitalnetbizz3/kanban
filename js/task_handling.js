@@ -296,9 +296,10 @@
         try {
           JSON.parse(output);
           storageName = 'data-kanban-shared';
-          localStorage.setItem(storageName, decodedData)
+          localStorage.setItem(storageName, output)
           app.changeStorage();
-        } catch {
+        } catch(e) {
+          console.log(e)
           showToast('shared JSON is invalid')
         }
       })
