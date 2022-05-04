@@ -204,10 +204,10 @@
                       </div>
                 </div>
                 <div id="category_section" class="col bg-light border p-0 me-2" style="max-width:250px;min-width:250px;"
-                    v-bind:category="category.name" class="list" v-for="category in categories" 
+                    v-bind:category="category.name" class="list" v-for="(category, index) in categories" 
                     @dragover.prevent @dragenter.prevent ondrop="onDrop(event)">
                     <div class="h6 text-light bg-primary m-1 p-1 ps-2 pb-3" v-bind:category="category.name" >{{category.name}}
-                        <button v-if="category.name == 'New'" onclick="taskDialog()" 
+                        <button v-if="index == 0" onclick="taskDialog()" 
                             class="btn btn-primary btn-sm float-end border" aria-label="Add Task">+</button>
                     </div>
                     <ul class="card border rounded m-1 list-group list-group-flush" style="min-height:130px;" v-for="task in filterTasks(category.name)"
@@ -333,6 +333,10 @@
         </div>
         <script src="js/kanban_vue_app.js"></script>
         <script src="js/dom-to-image.min.js"></script>
+        <script type="module">
+            'use strict';
+            import JSONCrush from 'js/JSONCrush.js';
+        </script>
         <!-- Global site tag (gtag.js) - Google Analytics --> 
         <script async src="https://www.googletagmanager.com/gtag/js?id=G-685JGY3J01"></script>
         <script>

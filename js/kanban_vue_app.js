@@ -68,6 +68,7 @@ const app = Vue.createApp({
             });
         },
         addTask(node) {
+            node.category = this.categories[0].name
             node.id = this.running++;
             this.tasks.push(node);
             this.persist();

@@ -92,7 +92,6 @@
         taskToEdit = null;
     } else {
         let node = {
-            category: 'New',
             name: taskInfo.value,
             priority: priority,
             assign: assign.value,
@@ -184,7 +183,8 @@
 
   function copyKanbanData() {
     let jsonText = app.getLeanJSON();
-    let urlToShare = "https://kan-ban.org/?share=" + encodeURIComponent(jsonText);
+    let compressed = JSONCrush.crush(jsonText);
+    let urlToShare = "https://kan-ban.org/?share=" + encodeURIComponent(compressed);
     navigator.clipboard.writeText(urlToShare).then(
         function () {
           showToast("Sharable URL copy into clipboard, you can share URL with someone else and they will see your Kanban board.");
@@ -226,8 +226,8 @@
   function removeCategory() {
     let category_list = document.querySelector("#category_list");
     let categoryToDelete = category_list.value;
-    if(categoryToDelete == 'New') {
-        showToast('Cannot remove New category');
+    if(category_list.options.length == 1) {
+        showToast('Must have at least 1 category');
         return;
     }
     app.removeCategory(categoryToDelete);
@@ -288,7 +288,8 @@
     const urlParams = new URLSearchParams(window.location.search);
     const shareData = urlParams.get('share');
     if (shareData != null) {
-      let decodedData = decodeURIComponent(shareData);
+      let crushedData = decodeURIComponent(shareData);
+      let decodedData = JSONCrush.uncrush(crushedData);
       try {
         JSON.parse(decodedData);
         storageName = 'data-kanban-shared';
