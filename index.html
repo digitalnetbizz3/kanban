@@ -60,7 +60,7 @@
         </div>
         </nav>
         <!-- container -->
-        <div class="container-fluid" style="overflow-x:auto;" id="kanban_board">
+        <div class="container-fluid" style="overflow-x:auto;">
             <div class="row justify-content-start flex-nowrap">
                 <div id="left-nav" class="col collapse bg-light vh-100" style="max-width:350px;min-width:350px;">
                     <div class="bg-primary pb-3">&nbsp;<button onclick="hideLoad()" 
@@ -203,27 +203,37 @@
                         </div>
                       </div>
                 </div>
-                <div id="category_section" class="col bg-light border p-0 me-2" style="max-width:250px;min-width:250px;"
-                    v-bind:category="category.name" class="list" v-for="(category, index) in categories" 
-                    @dragover.prevent @dragenter.prevent ondrop="onDrop(event)">
-                    <div class="h6 text-light bg-primary m-1 p-1 ps-2 pb-3" v-bind:category="category.name" >{{category.name}}
-                        <button v-if="index == 0" onclick="taskDialog()" 
-                            class="btn btn-primary btn-sm float-end border" aria-label="Add Task">+</button>
+                <div id="kanban_board" class="col">
+
+                    <div class="container-fluid">
+                        <div class="row justify-content-start flex-nowrap">
+                            <div id="category_section" class="col bg-light border p-0 me-2" style="max-width:250px;min-width:250px;"
+                            v-bind:category="category.name" class="list" v-for="(category, index) in categories" 
+                            @dragover.prevent @dragenter.prevent ondrop="onDrop(event)">
+                            <div class="h6 text-light bg-primary m-1 p-1 ps-2 pb-3" v-bind:category="category.name" >{{category.name}}
+                                <button v-if="index == 0" onclick="taskDialog()" 
+                                    class="btn btn-primary btn-sm float-end border" aria-label="Add Task">+</button>
+                            </div>
+                            <ul class="card border rounded m-1 list-group list-group-flush" style="min-height:130px;" v-for="task in filterTasks(category.name)"
+                                ondrop="onDrop(event)" v-bind:category="category.name"  v-bind:data-id="task.id" draggable="true" ondragstart="startDrag(event);">
+                                <li v-bind:category="category.name" v-bind:data-id="task.id" class="card-body list-group-item p-0 m-0" style="position:relative;" style="position:relative;" ondrop="onDrop(event)">
+                                    <div  v-bind:category="category.name" class="card-text m-1 me-3"><small>{{task.name}}</small></div>
+                                    <i class="bi bi-pencil" v-bind:data-id="task.id" style="opacity:0.5;position:absolute;left:220px;top:0px;" onclick="editNode(this.parentElement)"></i>
+                                    <i class="bi bi-trash" v-bind:data-id="task.id" style="opacity:0.5;position:absolute;left:220px;top:25px;" onclick="removeNode(this)"></i>
+                                </li>
+                                <span v-bind:category="category.name" class="card-footer">
+                                    <small v-bind:class="task.priority">{{task.priority}}</small>
+                                    <i class="bi bi-person-badge-fill ms-1" alt="user"></i>
+                                    <span><small style="font-size:8pt;">{{task.assign}}</small></span>
+                                    <span v-if="task.due != ''" class="float-end"><small style="font-size:8pt;"><b>due</b>:{{task.due}}</small></span>
+                                </span>
+                            </ul>
+                        </div>
+                        
                     </div>
-                    <ul class="card border rounded m-1 list-group list-group-flush" style="min-height:130px;" v-for="task in filterTasks(category.name)"
-                        ondrop="onDrop(event)" v-bind:category="category.name"  v-bind:data-id="task.id" draggable="true" ondragstart="startDrag(event);">
-                        <li v-bind:category="category.name" v-bind:data-id="task.id" class="card-body list-group-item p-0 m-0" style="position:relative;" style="position:relative;" ondrop="onDrop(event)">
-                            <div  v-bind:category="category.name" class="card-text m-1 me-3"><small>{{task.name}}</small></div>
-                            <i class="bi bi-pencil" v-bind:data-id="task.id" style="opacity:0.5;position:absolute;left:220px;top:0px;" onclick="editNode(this.parentElement)"></i>
-                            <i class="bi bi-trash" v-bind:data-id="task.id" style="opacity:0.5;position:absolute;left:220px;top:25px;" onclick="removeNode(this)"></i>
-                        </li>
-                        <span v-bind:category="category.name" class="card-footer">
-                            <small v-bind:class="task.priority">{{task.priority}}</small>
-                            <i class="bi bi-person-badge-fill ms-1" alt="user"></i>
-                            <span><small style="font-size:8pt;">{{task.assign}}</small></span>
-                            <span v-if="task.due != ''" class="float-end"><small style="font-size:8pt;"><b>due</b>:{{task.due}}</small></span>
-                        </span>
-                    </ul>
+
+                </div>
+
                 </div>
             </div>
 
