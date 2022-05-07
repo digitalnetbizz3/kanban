@@ -38,13 +38,6 @@
                 background-color: rgba(0,0,0,0.6); /* color */
                 display: none; /* making it hidden by default */
             }
-            .sequencemodal {
-                position: fixed; /* positioning in center of page */
-                top: 620px;
-                left: 5px;
-                width: 380px;
-                
-            }
 
             .load_root {
                 position:absolute;
@@ -61,16 +54,26 @@
         <div id="app">
             <nav-bar :menus="['a','b','c']"  @clicked="(item) => {foo(item)}"></nav-bar>
             <div class="container-fluid">
+
             </div>
+            
+            <div class="overlay" id="load">
+                <data-option label="sample diagram" 
+                             :stores="['data-sample1','data-sample2','data-sample3','data-sample-shared']"
+                             hasmarkdown="true"></data-option>
+            </div>
+
 
             <app-chooser></app-chooser>
             <toast-dialog></toast-dialog>
         </div> <!-- end of app div -->
 
         <script src="js/sample_vue_app.js"></script>
-        <script src="/components/nav_bar.js"></script>
-        <script src="/components/toast_dialog.js"></script>
-        <script src="/components/app_chooser.js"></script>
+        <script src="js/sample_handling.js"></script>
+        <script src="../components/nav_bar.js"></script>
+        <script src="../components/toast_dialog.js"></script>
+        <script src="../components/app_chooser.js"></script>
+        <script src="../components/data_option.js"></script>
         
     </body>
 </html>

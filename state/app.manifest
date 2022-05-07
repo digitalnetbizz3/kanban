@@ -1,8 +1,8 @@
 {
   "name": "kan-ban / org State transition",
   "short_name": "kan-ban / org State transition",
-  "background_color": "#397850",
-  "theme_color": "#397850",
+  "background_color": "#3333ff",
+  "theme_color": "#3333ff",
   "display": "standalone",
   "icons": [
     {

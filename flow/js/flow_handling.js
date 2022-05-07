@@ -1,7 +1,9 @@
+  var app = null
   var nodeToEdit = null;
   var selectedShape = null;
 
-  function appLoad() {
+  function appLoad(appInstance) {
+    app = appInstance
     const urlParams = new URLSearchParams(window.location.search);
     const shareData = urlParams.get('share');
     if (shareData != null) {
@@ -14,10 +16,14 @@
           app.changeStorage();
         } catch(e) {
           console.log(e)
-          showToast('shared JSON is invalid')
+          toast_dialog.show('shared JSON is invalid')
         }
       })
-    } 
+    } else {
+      if (window.location.href.indexOf('switch') < 0) {
+        showChooser();  
+      }  
+    }
 
     let storageLocation = document.querySelector("#storageOptions");
     storageLocation.value = storageName;
@@ -49,7 +55,7 @@
     let title = titleElement.value;
     
     if (title.trim() == 0) {
-      showToast('Shape must have title');
+      toast_dialog.show('Shape must have title');
       return;
     }
 
@@ -69,7 +75,7 @@
     let currSelectionId = shapeList.value;
 
     if (shapeList.options.length == 1) {
-      showToast('You need at least one shape in the diagram');
+      toast_dialog.show('You need at least one shape in the diagram');
       return;
     }
     app.removeShape(currSelectionId);
@@ -121,7 +127,7 @@
     let newShapeSelection = null;
     let newShapeTitle = titleElement.value;
     if (newShapeTitle.length == 0) {
-      showToast('Shape must have title');
+      toast_dialog.show('Shape must have title');
       return;
     }
     let radios = document.getElementsByName('entityType');
@@ -150,7 +156,7 @@
 
   function showLoad() {
     let load_dialog = document.querySelector("#load");
-    let kanban_data = document.querySelector("#flow_data");
+    let kanban_data = document.querySelector("#data_text");
     closeLeftPanel();
     load_dialog.style.display = 'block';
     kanban_data.value = app.getJSON();
@@ -177,35 +183,6 @@
     restorePanel.style.display = 'block';
   }  
 
-  function resetFlowData() {
-    app.reset();
-    updateDiagram();
-  }
-  
-  function updateFlowData() {
-    let sequence_data = document.querySelector("#flow_data");
-    try {
-        let update_json = JSON.parse(sequence_data.value);
-        app.update(update_json);
-        updateDiagram();
-    } catch(e) {
-      showToast('Invalid JSON data.' + e);
-    }
-  }
-
-  function copyFlowData() {
-    let jsonText = app.getLeanJSON();
-    const lib = JsonUrl('lzma');
-    lib.compress(jsonText).then(output => { 
-      let urlToShare = "https://kan-ban.org/flow/?share=" + output;
-      navigator.clipboard.writeText(urlToShare).then(
-          function () {
-            showToast("Sharable URL copy into clipboard, you can share URL with someone else and they will see your flow chart.");
-          }
-      );
-    });
-  }
-
   function showSettings() {
       let settings_dialog = document.querySelector("#settings");
       settings_dialog.style.display = 'block';
@@ -213,7 +190,7 @@
 
   function hideSettings() {
     let settings_dialog = document.querySelector("#settings");
-    settings_dialog.style.display = 'none';
+    settings_dialog.display = 'none';
   }
 
   var activeAdornerTarget = null;
@@ -362,7 +339,7 @@
       shape.title = titleElement.value;
       updateDiagram();
     } else {
-      showToast('Title must not be blank.');
+      toast_dialog.show('Title must not be blank.');
     }
   }
 
@@ -374,41 +351,6 @@
 
   function getIdFromSvgId(svgId) {
     return parseInt(svgId.split('-')[1]);
-  }
-
-  function downloadData() {
-    let jsonOption = document.querySelector('#download_json');
-    let mermaidOption = document.querySelector('#download_mermaid');
-    var dataUrl = null;
-    var fileName = null;
-
-    if(jsonOption.checked) {
-      fileName = 'my-flowchart.json';
-      let localData = localStorage.getItem(storageName);
-      dataUrl = "data:text/json;charset=utf-8," + encodeURIComponent(localData);
-    }
-    else if (mermaidOption.checked) {
-      fileName = 'my-flowchart.md';
-      let localData = app.getMarkDown();
-      dataUrl = "data:text/json;charset=utf-8," + encodeURIComponent(localData);
-    } else {
-      domtoimage
-        .toPng(document.getElementById('diagram'), { quality: 1 })
-        .then(function (url) {
-          var link = document.createElement("a");
-          link.download = "my-flowchart.png";
-          link.href = url;
-          link.click();
-        });
-      return;
-    }
-
-    if (dataUrl != null) {
-      var link = document.createElement("a");
-      link.download = fileName;
-      link.href = dataUrl;
-      link.click();  
-    }
   }
 
   function toggleLeftPanel() {
@@ -423,14 +365,4 @@
       restorePanel.style.display = 'none';
       leftPanel.style.display = 'table-cell';
     } 
-  }
-
-  function changeDataStorage() {
-    let storageLocation = document.querySelector("#storageOptions");
-    storageName = storageLocation.value;
-    app.changeStorage();
-    updateDiagram();
-
-    let flow_data = document.querySelector("#flow_data");
-    flow_data.value = app.getJSON();
   }

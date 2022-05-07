@@ -1,4 +1,4 @@
-const CACHE_NAME = 'SEQUENCE_APP_CONTENT_V1.27';
+const CACHE_NAME = 'SEQUENCE_APP_CONTENT_V1.28';
 
 const urlsToCache = [
     'index.html',
@@ -14,7 +14,11 @@ const urlsToCache = [
     '../assets/flowchart.png',
     '../assets/statetransition.png',
     '../assets/json.png',    
-    '../assets/class.png',        
+    '../assets/class.png', 
+    '../components/app_chooser.js',
+    '../components/data_option.js',
+    '../components/nav_bar.js',
+    '../components/toast_dialog.js',        
     '../js/json-url/json-url.js',
     '../js/json-url/json-url-lzstring.js',
     '../js/json-url/json-url-lzw.js',

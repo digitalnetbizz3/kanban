@@ -28,11 +28,9 @@
         </script>
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
-        <script src="../js/vue.global.js"></script>
-        <script src="js/state_vue_app.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+        <script src="../js/vue.global.js"></script>
         <script src="../js/common.js"></script>    
-        <script src="js/state_handling.js"></script>
         <style>
             @font-face {
                 font-family: 'Open Sans';
@@ -75,26 +73,8 @@
     </head>
     <body onload="vueLoad();">
         <div id="app">
-            <nav class="navbar navbar-expand-lg navbar-light bg-primary mb-2">
-                <div class="container-fluid">
-                    <span class="navbar-brand text-light">看板 / kan-ban / org</span>
-                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    </div>
-                    <div class="d-flex">
-                                  
-                    <li class="nav-item dropdown pe-5 ps-5" style="list-style-type: none;">
-                        <a class="nav-link dropdown-toggle text-light" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        Options
-                        </a>
-                        <ul class="dropdown-menu dropdown-menu-primary" aria-labelledby="navbarDropdown">
-                            <li><a class="dropdown-item" data-bs-toggle="modal" href="#chooseModal">Choose App</a></li>
-                            <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item" href="#" onclick="showLoad()">Data Options</a></li>
-                        </ul>
-                    </li>
-                    </div>
-                </div>
-            </nav>
+            <nav-bar :menus="['Data Options']" @clicked="(item) => {menu_clicked(item)}"></nav-bar>
+
             <div id="restore_panel" style="display:none;width:30px;">
                 <button class="btn bg-light" onclick="toggleLeftPanel();"><i class="bi bi-arrows-angle-expand"></i></button>
             </div>
@@ -104,7 +84,7 @@
                     <div id="left_panel" class="col" style="min-width:400px;max-width:400px;">
                         <div class="card" onclick="resetAdorner()">
                             <div class="card-header">
-                                Flowchart<button class="btn-close float-end " onclick="toggleLeftPanel();"/>
+                                State Transition<button class="btn-close float-end " onclick="toggleLeftPanel();"/>
                             </div>
                             <div class="card-body h6 m-1">
                                 <small>
@@ -154,127 +134,12 @@
 
                     </div>
                 </div>
-            </div>            
-
-            <!-- toast -->
-            <div id='toast' class="toast bottom-0 end-0" data-bs-delay="5000" style="position:absolute;z-index:99;" role="alert" aria-live="assertive" aria-atomic="true">
-                <div class="toast-header">
-                    <strong class="me-auto">Kanban</strong>
-                    <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
-                </div>
-                <div id="toast_msg" class="toast-body">
-                </div>
-            </div>
-
-            <!-- modal -->
-            <div id="chooseModal" class="modal fade">
-                <div class="modal-dialog modal-dialog-centered">
-                    <div class="modal-content" style="width:800px;">
-                        <div class="modal-header bg-primary">
-                            <div class="h4 modal-title text-light">Applications</div>
-                            <button type="button" class="btn-close text-light" data-bs-dismiss="modal"></button>
-                        </div>
-                        <div class="modal-body">
-                            <div class="row">
-                                <div class="col border rounded p-2 me-2">
-                                    <img src="../assets/kanban.png" alt="Kanban Board" style="margin-left:35px;cursor:hand;width:150px; height:150px;" onclick="handleChooser('kanban');"/>
-                                    <div class="h6" style="text-align:center;">Kan-ban board</div>
-                                </div>
-                                <div class="col border rounded p-2">
-                                    <img src="../assets/sequence.png" alt="Sequence Diagram" style="margin-left:35px;cursor:hand;width:150px; height:150px;"  onclick="handleChooser('sequence');"/>
-                                    <div class="h6" style="text-align:center;">Sequence Diagram</div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="modal-body">
-                            <div class="row">
-                                <div class="col border rounded p-2 me-2">
-                                    <img src="../assets/flowchart.png" alt="Kanban Board" style="margin-left:35px;cursor:hand;width:150px; height:150px;" onclick="handleChooser('flowchart');"/>
-                                    <div class="h6" style="text-align:center;">Flowchart Diagram</div>
-                                </div>
-                                <div class="col border rounded p-2">
-                                    <img src="../assets/statetransition.png" alt="Sequence Diagram" style="margin-left:35px;cursor:hand;width:150px; height:150px;"  onclick="handleChooser('state');"/>
-                                    <div class="h6" style="text-align:center;">State Transition</div>
-                                </div>
-                            </div>
-                        </div>      
-                        <div class="modal-body">
-                            <div class="row">
-                                <div class="col border rounded p-2 me-2">
-                                    <img src="../assets/class.png" alt="Class Diagram" style="margin-left:35px;cursor:hand;width:150px; height:150px;" onclick="handleChooser('class');"/>
-                                    <div class="h6" style="text-align:center;">Class Diagram</div>
-                                </div>                                
-                                <div class="col border rounded p-2 me-2">
-                                    <img src="../assets/json.png" alt="JSON Validator" style="margin-left:35px;cursor:hand;width:150px; height:150px;" onclick="handleChooser('json');"/>
-                                    <div class="h6" style="text-align:center;">JSON Validator</div>
-                                </div>
-                            </div>
-                        </div>                                      
-                        <div class="modal-footer h6">
-                            Choose an application from options above or click anywhere else to dismiss
-                        </div>
-                    </div>
-                </div>
-            </div>                        
+            </div>                               
                        
             <div class="overlay" id="load">
-                <div class="load_root">
-                    <div class="card">
-                        <div class="card-header">
-                            Data Option
-                            <button type="button" class="btn-close  float-end  text-light" onclick="hideLoad()"></button>
-                        </div>
-                        
-                        <div class="card-body h6 m-1">
-                        There are 5 slots which means you can work on 4 different state transition diagrams, 1 shared from URL and switching between them.
-                         <hr>
-                         <select id="storageOptions" onchange="changeDataStorage()" size="5" class="form-select">
-                            <option value="data-state">data-state</option>
-                            <option value="data-state-2">data-state-2</option>
-                            <option value="data-state-3">data-state-3</option>
-                            <option value="data-state-4">data-state-4</option>
-                            <option value="data-state-shared">data-state-shared</option>
-                        </select>
-                        <hr>
-                        Flowchart data for selected slot
-                        <textarea id="state_data" class="form-select" style="font-size:8pt;height:200px;resize: none;"></textarea>
-                        </div>
-                        <div class="card-footer">
-                            <button class="btn btn-primary mw-30" onclick="resetStateData()" 
-                                aria-label="Reset Diagram" title="Reset Diagram">
-                            Reset
-                            </button>   
-                            <button class="btn btn-primary mw-30 ms-1" onclick="updateStateData()" 
-                                aria-label="Update Diagram" title="Update Diagram">
-                            Update
-                            </button>   
-                            <button class="btn btn-primary mw-30 ms-1" onclick="copyStateData()" 
-                                aria-label="Share Diagram as URL" title="Share Diagram as URL">
-                            Share
-                            </button>                                           
-                        </div>
-                    </div>
-                    <div class="card">
-                        <div class="card-body h6 m-1">
-                            Pick a format to download and click 'Download' button.
-                            <hr>
-                            <div class="btn-group w-100" role="group" aria-label="download option">
-                                <input class="btn-check" type="radio" id="download_json" name="downloadType" value="download_json">
-                                <label class="btn btn-outline-secondary" for="download_json">JSON</label>
-                                <input class="btn-check" type="radio" id="download_mermaid" name="downloadType" value="download_json">
-                                <label class="btn btn-outline-secondary" for="download_mermaid">Mermaid Markdown</label>                                    
-                                <input class="btn-check" type="radio" name="downloadType" id="download_png" value="download_png" checked>
-                                <label class="btn btn-outline-secondary" for="download_png">PNG</label>
-                            </div>
-                        </div>
-                        <div class="card-footer">
-                            <button class="btn btn-primary w-100" onclick="downloadData()" 
-                                aria-label="Download" title="Download">
-                            Download
-                            </button>  
-                        </div>
-                    </div>
-                </div>
+                <data-option label="state transition diagram" 
+                    :stores="['data-state','data-state2','data-state3','data-state4','data-state-shared']"
+                    hasmarkdown="true" hasheader="true" vroot="state/" prefix="state"></data-option>
             </div>
 
             <div id="selection_adorner" style="border-width:2px;border-style:dashed;border-color:blue;">
@@ -336,7 +201,16 @@
 
                 </div>
             </div>
+            <app-chooser></app-chooser>
+            <toast-dialog></toast-dialog>
         </div> <!-- end of app div -->
+
+        <script src="js/state_vue_app.js"></script>
+        <script src="js/state_handling.js"></script>
+        <script src="../components/nav_bar.js"></script>
+        <script src="../components/toast_dialog.js"></script>
+        <script src="../components/app_chooser.js"></script>
+        <script src="../components/data_option.js"></script>        
 
         <script src="https://cdnjs.cloudflare.com/ajax/libs/mermaid/8.13.10/mermaid.min.js"></script>
         <script src="../js/dom-to-image.min.js"></script>

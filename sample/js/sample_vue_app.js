@@ -5,7 +5,7 @@ function vueLoad() {
         },
         methods: {
             foo(item) {
-                alert(item)
+                showLoad();
             }
         },
     })

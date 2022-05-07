@@ -1,6 +1,8 @@
-  var nodeToEdit = null;
-  
-  function appLoad() {
+  var nodeToEdit = null
+  var app = null
+
+  function appLoad(appInstance) {
+    app = appInstance
     const urlParams = new URLSearchParams(window.location.search);
     const shareData = urlParams.get('share');
     if (shareData != null) {
@@ -11,9 +13,10 @@
           storageName = 'data-sequence-shared';
           localStorage.setItem(storageName, output)
           app.changeStorage();
+          setTimeout(() => {updateDiagram()}, 500)
         } catch(e) {
           console.log(e)
-          showToast('shared JSON is invalid')
+          toast_dialog.show('shared JSON is invalid')
         }
       })
     } else {
@@ -88,7 +91,7 @@
     let noteText = document.querySelector("#note_text");
 
     if (noteText.value.length == 0) {
-      showToast("note field is mandatory.");
+      toast_dialog.show("note field is mandatory.");
       return;
     }
     if (isAdd) { // add
@@ -124,7 +127,7 @@
     let messageText = document.querySelector("#message_text");
 
     if (messageText.value.length == 0) {
-      showToast("message field is mandatory.");
+      toast_dialog.show("message field is mandatory.");
       return;
     }
     let arrow = app.filterArrows(arrowList.value)[0];
@@ -244,7 +247,7 @@
 
   function showLoad() {
     let load_dialog = document.querySelector("#load");
-    let kanban_data = document.querySelector("#sequence_data");
+    let kanban_data = document.querySelector("#data_text");
     closeLeftPanel();
     load_dialog.style.display = 'block';
     kanban_data.value = app.getJSON();
@@ -254,35 +257,6 @@
     let load_dialog = document.querySelector("#load");
     load_dialog.style.display = 'none';
     openLeftPanel();
-  }
-
-  function resetSequenceData() {
-    app.reset();
-    updateDiagram();
-  }
-  
-  function updateSequenceData() {
-    let sequence_data = document.querySelector("#sequence_data");
-    try {
-        let update_json = JSON.parse(sequence_data.value);
-        app.update(update_json);
-        updateDiagram();
-    } catch(e) {
-      showToast('Invalid JSON data.' + e);
-    }
-  }
-
-  function copySequenceData() {
-    let jsonText = app.getLeanJSON();
-    const lib = JsonUrl('lzma');
-    lib.compress(jsonText).then(output => { 
-      let urlToShare = "https://kan-ban.org/sequence/?share=" + output;
-      navigator.clipboard.writeText(urlToShare).then(
-          function () {
-            showToast("Sharable URL copy into clipboard, you can share URL with someone else and they will see your sequence diagram.");
-          }
-      );
-    });    
   }
 
   function showSettings() {
@@ -339,7 +313,6 @@
     if (idx == size - 1) {
       reorder_dn.disabled = true;
     }
-
     updateDiagram();
   }
 
@@ -349,7 +322,6 @@
       element.innerHTML = svgCode;
     };
     var graphDefinition = app.getMarkDown();
-    //alert(graphDefinition);
     var graph = mermaidAPI.render("mermaid", graphDefinition, insertSvg);
   }
 
@@ -378,7 +350,7 @@
     let user_list = document.querySelector("#user_list");
     let userToDelete = user_list.value;
     if(user_list.options.length == 1) {
-        showToast('You need at least one participant/actor for this app.');
+        toast_dialog.show('You need at least one participant/actor for this app.');
         return;
     }
     app.removeUser(userToDelete);
@@ -396,7 +368,7 @@
     
     if (new_user_name.value == user_context.name && 
         new_user_type_value == user_context.type) {
-          showToast("nothing changed.")
+          toast_dialog.show("nothing changed.")
         }
     else {
       user_context.name = new_user_name.value;
@@ -415,42 +387,6 @@
         app.addUser(userName, idx, isBefore);
     }
     new_user.value = '';
-  }
-
-  
-  function downloadData() {
-    let jsonOption = document.querySelector('#download_json');
-    let mermaidOption = document.querySelector('#download_mermaid');
-    var dataUrl = null;
-    var fileName = null;
-
-    if(jsonOption.checked) {
-      fileName = 'my-sequence.json';
-      let localData = localStorage.getItem(storageName);
-      dataUrl = "data:text/json;charset=utf-8," + encodeURIComponent(localData);
-    }
-    else if (mermaidOption.checked) {
-      fileName = 'my-sequence.md';
-      let localData = app.getMarkDown();
-      dataUrl = "data:text/json;charset=utf-8," + encodeURIComponent(localData);
-    } else {
-      domtoimage
-        .toPng(document.getElementById('diagram'), { quality: 1 })
-        .then(function (url) {
-          var link = document.createElement("a");
-          link.download = "my-sequence.png";
-          link.href = url;
-          link.click();
-        });
-      return;
-    }
-
-    if (dataUrl != null) {
-      var link = document.createElement("a");
-      link.download = fileName;
-      link.href = dataUrl;
-      link.click();  
-    }
   }
 
   function openLeftPanel() {
@@ -479,14 +415,4 @@
       restorePanel.style.display = 'none';
       leftPanel.style.display = 'table-cell';
     } 
-  }
-
-  function changeDataStorage() {
-    let storageLocation = document.querySelector("#storageOptions");
-    storageName = storageLocation.value;
-    app.changeStorage();
-    updateDiagram();
-
-    let sequence_data = document.querySelector("#sequence_data");
-    sequence_data.value = app.getJSON();
   }

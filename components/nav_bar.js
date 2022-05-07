@@ -3,7 +3,7 @@ class nav_bar {
   static name = 'nav-bar'
 
   static componentLoad() {
-    window._app.component(nav_bar.name, {
+    gapp.component(nav_bar.name, {
       props: ["menus"],
       template: `
       <nav class="navbar navbar-expand-lg navbar-light bg-primary mb-2">

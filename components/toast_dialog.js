@@ -4,7 +4,7 @@ class toast_dialog {
   static name = 'toast-dialog'
 
   static componentLoad() {
-    window._app.component(toast_dialog.name, {
+    gapp.component(toast_dialog.name, {
       template: `
       <div id='toast' class="toast bottom-0 end-0" data-bs-delay="5000" style="position:absolute;z-index:99;" role="alert" aria-live="assertive" aria-atomic="true">
           <div class="toast-header">

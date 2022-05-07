@@ -1,4 +1,4 @@
-const CACHE_NAME = 'CLASS_APP_CONTENT_V1.04';
+const CACHE_NAME = 'CLASS_APP_CONTENT_V1.05';
 
 const urlsToCache = [
     'index.html',
@@ -15,6 +15,10 @@ const urlsToCache = [
     '../assets/flowchart.png',
     '../assets/statetransition.png',
     '../assets/json.png',
+    '../components/app_chooser.js',
+    '../components/data_option.js',
+    '../components/nav_bar.js',
+    '../components/toast_dialog.js',    
     '../js/json-url/json-url.js',
     '../js/json-url/json-url-lzstring.js',
     '../js/json-url/json-url-lzw.js',

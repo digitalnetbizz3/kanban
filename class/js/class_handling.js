@@ -1,7 +1,9 @@
   var nodeToEdit = null;
+  var app = null;
   var selectedShape = null;  
 
-  function appLoad() {
+  function appLoad(appInstance) {
+    app = appInstance
     const urlParams = new URLSearchParams(window.location.search);
     const shareData = urlParams.get('share');
     if (shareData != null) {
@@ -13,8 +15,7 @@
           localStorage.setItem(storageName, output)
           app.changeStorage();
         } catch(e) {
-          console.log(e)
-          showToast('shared JSON is invalid')
+          toast_dialog.show('shared JSON is invalid')
         }
       })
     } else {
@@ -45,7 +46,7 @@
   
   function showLoad() {
     let load_dialog = document.querySelector("#load");
-    let kanban_data = document.querySelector("#class_data");
+    let kanban_data = document.querySelector("#data_text");
     closeLeftPanel();
     load_dialog.style.display = 'block';
     kanban_data.value = app.getJSON();
@@ -55,36 +56,6 @@
     let load_dialog = document.querySelector("#load");
     load_dialog.style.display = 'none';
     openLeftPanel();
-  }
-
-  function resetClassData() {
-    app.reset();
-    updateDiagram();
-  }
-  
-  function updateClassData() {
-    let class_data = document.querySelector("#class_data");
-    try {
-        let update_json = JSON.parse(class_data.value);
-        app.update(update_json);
-        updateDiagram();
-    } catch(e) {
-      showToast('Invalid JSON data.' + e);
-    }
-  }
-
-  function copyClassData() {
-    let jsonText = app.getLeanJSON();
-
-    const lib = JsonUrl('lzma');
-    lib.compress(jsonText).then(output => { 
-      let urlToShare = "https://kan-ban.org/class/?share=" + output;
-      navigator.clipboard.writeText(urlToShare).then(
-          function () {
-            showToast("Sharable URL copy into clipboard, you can share URL with someone else and they will see your class diagram.");
-          }
-      );
-    });
   }
 
   function showSettings() {
@@ -133,7 +104,7 @@
         updateDiagram();
       }, 100)
     } else {
-      showToast('Need to have add fields populated to add relationship')
+      toast_dialog.show('Need to have add fields populated to add relationship')
     }
   }
 
@@ -146,14 +117,14 @@
         updateDiagram();
       }, 100)
     } else {
-      showToast('Please select a relationship to delete')
+      toast_dialog.show('Please select a relationship to delete')
     }
   }
 
   function removeClass() {
     let classes = document.querySelector('#user_list')
     if (classes.options.length == 1) {
-      showToast('Must be at least 1 class')
+      toast_dialog.show('Must be at least 1 class')
       return
     }
     app.updateId(app.findClassByIndex(0).id)    
@@ -182,7 +153,7 @@
     let access_list = document.querySelector('#access_list')
 
     if (input.value.trim().length == 0) {
-      showToast('name cannot be empty');
+      toast_dialog.show('name cannot be empty');
       return;
     }
 
@@ -234,7 +205,6 @@
     let user_list = document.querySelector("#user_list")
     let class_title = document.querySelector("#class_title")
     let user_context = app.findClass(user_list.value)
-    //class_title.value = user_context.name
     app.updateId(user_context.id)
   }
 
@@ -307,7 +277,7 @@
       app.updateClassName(titleElement.value)
       updateDiagram();
     } else {
-      showToast('Title must not be blank.');
+      toast_dialog.show('Title must not be blank.');
     }
   }
 
@@ -315,7 +285,7 @@
     let classes = document.querySelector('#user_list')
     
     if (classes.length == 1) {
-      showToast('Must have at least 1 class in diagram')
+      toast_dialog.show('Must have at least 1 class in diagram')
       return;
     }
     let shape = app.findClassByName(selectedShape);
@@ -323,42 +293,6 @@
     app.removeClass(shape.id);
     updateDiagram();
     setTimeout(() => { classes.selectedIndex = 0;}, 100)
-  }
-
-
-  function downloadData() {
-    let jsonOption = document.querySelector('#download_json');
-    let mermaidOption = document.querySelector('#download_mermaid');
-    var dataUrl = null;
-    var fileName = null;
-
-    if(jsonOption.checked) {
-      fileName = 'my-class.json';
-      let localData = localStorage.getItem(storageName);
-      dataUrl = "data:text/json;charset=utf-8," + encodeURIComponent(localData);
-    }
-    else if (mermaidOption.checked) {
-      fileName = 'my-class.md';
-      let localData = app.getMarkDown();
-      dataUrl = "data:text/json;charset=utf-8," + encodeURIComponent(localData);
-    } else {
-      domtoimage
-        .toPng(document.getElementById('diagram'), { quality: 1 })
-        .then(function (url) {
-          var link = document.createElement("a");
-          link.download = "my-class.png";
-          link.href = url;
-          link.click();
-        });
-      return;
-    }
-
-    if (dataUrl != null) {
-      var link = document.createElement("a");
-      link.download = fileName;
-      link.href = dataUrl;
-      link.click();  
-    }
   }
 
   function openLeftPanel() {
@@ -387,14 +321,4 @@
       restorePanel.style.display = 'none';
       leftPanel.style.display = 'table-cell';
     } 
-  }
-
-  function changeDataStorage() {
-    let storageLocation = document.querySelector("#storageOptions");
-    storageName = storageLocation.value;
-    app.changeStorage();
-    updateDiagram();
-
-    let class_data = document.querySelector("#class_data");
-    class_data.value = app.getJSON();
   }

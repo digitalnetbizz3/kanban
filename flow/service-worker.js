@@ -1,4 +1,4 @@
-const CACHE_NAME = 'Flowchart_V1.21';
+const CACHE_NAME = 'Flowchart_V1.22';
 
 const urlsToCache = [
     'index.html',
@@ -13,7 +13,11 @@ const urlsToCache = [
     '../assets/flowchart.png',
     '../assets/statetransition.png',
     '../assets/json.png',        
-    '../assets/class.png',       
+    '../assets/class.png',
+    '../components/app_chooser.js',
+    '../components/data_option.js',
+    '../components/nav_bar.js',
+    '../components/toast_dialog.js',      
     '../js/json-url/json-url.js',
     '../js/json-url/json-url-lzstring.js',
     '../js/json-url/json-url-lzw.js',

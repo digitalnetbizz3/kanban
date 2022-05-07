@@ -40,10 +40,13 @@ const defaultData = {
     ],
 };
 var storageName = 'data-sequence';
-var app = null;
+var gapp = null;
 
 function vueLoad() {
-    app = Vue.createApp({
+    gapp = Vue.createApp({
+    mounted() {
+        appLoad(this)
+    },        
     data() {
         let data = null;
         let persistence = localStorage.getItem(storageName);
@@ -171,8 +174,23 @@ function vueLoad() {
             let updatedData = defaultData;
             localStorage.setItem(storageName, JSON.stringify(updatedData));
             Object.assign(this.$data, updatedData);
-        }
+        },
+        menu_clicked(item) {
+            showLoad()
+        },
     },
-}).mount('#app');
-appLoad();
+})
+loadComponents()
+gapp.mount('#app')
+}
+
+let componentStore = new Map()
+function registerComponent(component) {
+    componentStore.set(component.name, component.componentLoad)
+}
+
+function loadComponents() {
+    componentStore.forEach((value, key, map) => {
+        value()       
+    })
 }

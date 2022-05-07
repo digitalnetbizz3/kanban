@@ -1,4 +1,4 @@
-const CACHE_NAME = 'State_V1.09';
+const CACHE_NAME = 'State_V1.10';
 
 const urlsToCache = [
     'index.html',
@@ -14,6 +14,10 @@ const urlsToCache = [
     '../assets/statetransition.png',
     '../assets/json.png',
     '../assets/class.png',
+    '../components/app_chooser.js',
+    '../components/data_option.js',
+    '../components/nav_bar.js',
+    '../components/toast_dialog.js',        
     '../js/json-url/json-url.js',
     '../js/json-url/json-url-lzstring.js',
     '../js/json-url/json-url-lzw.js',

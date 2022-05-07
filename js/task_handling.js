@@ -14,6 +14,8 @@
     }
   }
 
+  function updateDiagram() {}
+
   function removeNode(el) {
     let id = el.getAttribute('data-id');
     if (id != null) {
@@ -56,7 +58,8 @@
     modalElement.style.left = x + 'px';
     let dialog = document.querySelector("#dialog");
     dialog.style.display = 'inline';
-    
+    let assign = document.querySelector("#assign");   
+    assign.selectedIndex = 0
     let taskInfo = document.querySelector("#newTaskInfo");
     taskInfo.focus();
   }
@@ -74,7 +77,6 @@
   function updateTask() {
     let taskInfo = document.querySelector("#newTaskInfo");
     let assign = document.querySelector("#assign");   
-    assign.selectedIndex = 0;
     var priority = 'P2';
     let radios = document.getElementsByName('priority');
     radios.forEach(el => {
@@ -90,8 +92,9 @@
         taskToEdit.priority = priority;
         taskToEdit.due = cal.value;
         taskToEdit = null;
+        app.persist()
     } else {
-        let node = {
+      let node = {
             name: taskInfo.value,
             priority: priority,
             assign: assign.value,
@@ -144,7 +147,7 @@
   }
 
   function showLoad(isConfig) {
-    let kanban_data = document.querySelector("#kanban_data");
+    let kanban_data = document.querySelector("#data_text");
     kanban_data.value = app.getJSON();
     
     let leftNav = bootstrap.Collapse.getOrCreateInstance(document.getElementById('left-nav'))
@@ -167,33 +170,6 @@
     nav.hide();
   }
 
-  function resetKanbanData() {
-    app.reset()
-  }
-  
-  function updateKanbanData() {
-    let kanban_data = document.querySelector("#kanban_data");
-    try {
-        let update_json = JSON.parse(kanban_data.value);
-        app.update(update_json);
-    } catch {
-        showToast('Invalid JSON data.');
-    }
-  }
-
-  function copyKanbanData() {
-    let jsonText = app.getLeanJSON();
-    const lib = JsonUrl('lzma');
-    lib.compress(jsonText).then(output => { 
-      let urlToShare = "https://kan-ban.org/?share=" + output;
-      navigator.clipboard.writeText(urlToShare).then(
-          function () {
-            showToast("Sharable URL copy into clipboard, you can share URL with someone else and they will see your Kanban board.");
-          }
-      );
-    });
-  }
-
   function showSettings() {
       let settings_dialog = document.querySelector("#settings");
       settings_dialog.style.display = 'block';
@@ -208,7 +184,7 @@
     let user_list = document.querySelector("#user_list");
     let userToDelete = user_list.value;
     if(user_list.options.length == 1) {
-        showToast('You need at least one user for this app.');
+        toast_dialog.show('You need at least one user for this app.');
         return;
     }
     app.removeUser(userToDelete);
@@ -229,7 +205,7 @@
     let category_list = document.querySelector("#category_list");
     let categoryToDelete = category_list.value;
     if(category_list.options.length == 1) {
-        showToast('Must have at least 1 category');
+        toast_dialog.show('Must have at least 1 category');
         return;
     }
     app.removeCategory(categoryToDelete);
@@ -246,47 +222,9 @@
     new_category.value = '';
   }
 
-  function downloadData() {
-    let jsonOption = document.querySelector('#download_json');
-    var dataUrl = null;
-    var fileName = null;
-
-    if(jsonOption.checked) {
-      fileName = 'my-kanban.json';
-      let localData = localStorage.getItem(storageName);
-      dataUrl = "data:text/json;charset=utf-8," + encodeURIComponent(localData);
-    }
-    else {
-      domtoimage
-        .toPng(document.getElementById('kanban_board'), { quality: 1 })
-        .then(function (url) {
-          var link = document.createElement("a");
-          link.download = "my-kanban.png";
-          link.href = url;
-          link.click();
-        });
-      return;
-    }
-
-    if (dataUrl != null) {
-      var link = document.createElement("a");
-      link.download = fileName;
-      link.href = dataUrl;
-      link.click();  
-    }
-  }
-
-  function changeDataStorage() {
-    
-    let storageLocation = document.querySelector("#storageOptions");
-    storageName = storageLocation.value;
-    app.changeStorage();
-    
-    let kanban_data = document.querySelector("#kanban_data");
-    kanban_data.value = app.getJSON();
-  }
-
-  function appLoad() {
+  var app = null
+  function appLoad(appInstance) {
+    app = appInstance
     const urlParams = new URLSearchParams(window.location.search);
     const shareData = urlParams.get('share');
     if (shareData != null) {
@@ -300,7 +238,7 @@
           app.changeStorage();
         } catch(e) {
           console.log(e)
-          showToast('shared JSON is invalid')
+          toast_dialog.show('shared JSON is invalid')
         }
       })
     } else {
