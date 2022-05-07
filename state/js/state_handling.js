@@ -25,26 +25,29 @@
       }  
     }
     
-    let storageLocation = document.querySelector("#storageOptions");
-    storageLocation.value = storageName;
-
-    // set radio option to current selection
-    let initialShape = app.shapes[0];
-    document.getElementById('shape_title').value = initialShape.title;
-
-    var ro = new ResizeObserver(entries => {
-      for (let entry of entries) {
-        if (activeAdornerTarget != null) {
-          let node = document.getElementById(activeAdornerTarget);
-          let rect = node.getBoundingClientRect();
-          positionAdorner(rect);
+    setTimeout(() => {
+      let storageLocation = document.querySelector("#storageOptions");
+      storageLocation.value = storageName;
+  
+      // set radio option to current selection
+      let initialShape = app.shapes[0];
+      document.getElementById('shape_title').value = initialShape.title;
+  
+      var ro = new ResizeObserver(entries => {
+        for (let entry of entries) {
+          if (activeAdornerTarget != null) {
+            let node = document.getElementById(activeAdornerTarget);
+            let rect = node.getBoundingClientRect();
+            positionAdorner(rect);
+          }
         }
-      }
-    });
-    // Observe one or multiple elements
-    ro.observe(document.getElementById('diagram'));
-
-    updateDiagram();
+      });
+      // Observe one or multiple elements
+      ro.observe(document.getElementById('diagram'));
+  
+      updateDiagram();
+    }, 500)
+    
   }
 
   function addShape() {

@@ -25,28 +25,28 @@
       }  
     }
 
-    let storageLocation = document.querySelector("#storageOptions");
-    storageLocation.value = storageName;
-    
-      // set radio option to current selection
-      let initialShape = app.shapes[0];
-      document.getElementById(initialShape.type).checked = true;
-      document.getElementById('shape_title').value = initialShape.title;
+      setTimeout(() => { 
+        // set radio option to current selection
+        let initialShape = app.shapes[0];
+        document.getElementById(initialShape.type).checked = true;
+        document.getElementById('shape_title').value = initialShape.title;
 
-      var ro = new ResizeObserver(entries => {
-        for (let entry of entries) {
-          if (activeAdornerTarget != null) {
-            let node = document.getElementById(activeAdornerTarget);
-            let rect = node.getBoundingClientRect();
-            positionAdorner(rect);
+        var ro = new ResizeObserver(entries => {
+          for (let entry of entries) {
+            if (activeAdornerTarget != null) {
+              let node = document.getElementById(activeAdornerTarget);
+              let rect = node.getBoundingClientRect();
+              positionAdorner(rect);
+            }
           }
-        }
-      });
-      // Observe one or multiple elements
-      ro.observe(document.getElementById('diagram'));
+        });
+        // Observe one or multiple elements
+        ro.observe(document.getElementById('diagram'));
 
-      updateDiagram();      
-    
+        let storageLocation = document.querySelector("#storageOptions");
+        storageLocation.value = storageName; 
+        updateDiagram() 
+      }, 500)    
   }
 
   function addShape() {

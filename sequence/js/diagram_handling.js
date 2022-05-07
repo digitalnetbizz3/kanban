@@ -24,17 +24,21 @@
         showChooser();  
       }  
     }
-    let storageLocation = document.querySelector("#storageOptions");
-    storageLocation.value = storageName;
 
-    let radios = document.getElementsByName('sequenceType');
-    radios.forEach(radio => {
-      radio.addEventListener('change', function() {
-        let currentSelection = radio.value;
-        toggleAddEditUI(currentSelection == 'note');
+    setTimeout(() => {
+      let storageLocation = document.querySelector("#storageOptions");
+      storageLocation.value = storageName;
+  
+      let radios = document.getElementsByName('sequenceType');
+      radios.forEach(radio => {
+        radio.addEventListener('change', function() {
+          let currentSelection = radio.value;
+          toggleAddEditUI(currentSelection == 'note');
+        });
       });
-    });
-    prepare_for_edit();
+      prepare_for_edit();
+  
+    }, 500)
   }
 
   function startDrag (evt) {
