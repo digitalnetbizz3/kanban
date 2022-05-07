@@ -23,11 +23,13 @@
         showChooser();  
       }  
     }
-    let storageLocation = document.querySelector("#storageOptions");
-    storageLocation.value = storageName;
 
     prepare_for_edit();
-    updateDiagram()
+    setTimeout(() => { 
+      let storageLocation = document.querySelector("#storageOptions");
+      storageLocation.value = storageName; 
+      updateDiagram() 
+    }, 500)    
   }
 
   function toggleAddEditUI(isNote) {
