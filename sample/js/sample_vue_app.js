@@ -1,5 +1,10 @@
+var gapp = null
+
 function vueLoad() {
-    window._app = Vue.createApp({
+    gapp = Vue.createApp({
+        mounted() {
+            appLoad(this)
+        },
         data() {
             return { "data": 1}
         },
@@ -11,8 +16,7 @@ function vueLoad() {
     })
     loadComponents()
 
-    window._app.mount('#app');
-    toast_dialog.show('hello world')
+    gapp.mount('#app');
 }
 
 let componentStore = new Map()
