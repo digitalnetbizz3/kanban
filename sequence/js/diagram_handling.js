@@ -51,7 +51,7 @@
   function onDrop(evt) {
       evt.preventDefault();
       let sourceId = evt.dataTransfer.getData('id');
-      let destId = findAttributeFromParent(evt.target, 'data-id'); //evt.target.getAttribute('data-id');
+      let destId = findAttributeFromParent(evt.target, 'data-id');
 
       if (destId != null && sourceId != null) {
         if (destId == sourceId) {
