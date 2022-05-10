@@ -1,4 +1,4 @@
-const CACHE_NAME = 'SEQUENCE_APP_CONTENT_V1.29';
+const CACHE_NAME = 'SEQUENCE_APP_CONTENT_V1.30';
 
 const urlsToCache = [
     'index.html',
@@ -15,6 +15,7 @@ const urlsToCache = [
     '../assets/statetransition.png',
     '../assets/json.png',    
     '../assets/class.png', 
+    '../assets/gantt.png',        
     '../components/app_chooser.js',
     '../components/data_option.js',
     '../components/nav_bar.js',

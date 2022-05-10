@@ -6,7 +6,7 @@ class app_chooser {
       gapp.component(app_chooser.name, {
         template: `
         <div id="chooseModal" class="modal fade">
-            <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-dialog modal-lg modal-dialog-centered">
                 <div class="modal-content" style="width:800px;">
                     <div class="modal-header bg-primary">
                         <div class="h4 modal-title text-light">Applications</div>
@@ -18,34 +18,42 @@ class app_chooser {
                                 <img src="https://kan-ban.org/assets/kanban.png" alt="Kanban Board" style="margin-left:35px;cursor:hand;width:150px; height:150px;" onclick="handleChooser('kanban');"/>
                                 <div class="h6" style="text-align:center;">Kan-ban board</div>
                             </div>
-                            <div class="col border rounded p-2">
+                            <div class="col border rounded p-2 me-2">
                                 <img src="https://kan-ban.org/assets/sequence.png" alt="Sequence Diagram" style="margin-left:35px;cursor:hand;width:150px; height:150px;"  onclick="handleChooser('sequence');"/>
                                 <div class="h6" style="text-align:center;">Sequence Diagram</div>
+                            </div>
+                            <div class="col border rounded p-2">
+                                <img src="https://kan-ban.org/assets/flowchart.png" alt="Kanban Board" style="margin-left:35px;cursor:hand;width:150px; height:150px;" onclick="handleChooser('flowchart');"/>
+                                <div class="h6" style="text-align:center;">Flowchart Diagram</div>
                             </div>
                         </div>
                     </div>
                     <div class="modal-body">
                         <div class="row">
                             <div class="col border rounded p-2 me-2">
-                                <img src="https://kan-ban.org/assets/flowchart.png" alt="Kanban Board" style="margin-left:35px;cursor:hand;width:150px; height:150px;" onclick="handleChooser('flowchart');"/>
-                                <div class="h6" style="text-align:center;">Flowchart Diagram</div>
-                            </div>
-                            <div class="col border rounded p-2">
                                 <img src="https://kan-ban.org/assets/statetransition.png" alt="Sequence Diagram" style="margin-left:35px;cursor:hand;width:150px; height:150px;" onclick="handleChooser('state');"/>
                                 <div class="h6" style="text-align:center;">State Transition</div>
                             </div>
-                        </div>
-                    </div>      
-                    <div class="modal-body">
-                        <div class="row">
                             <div class="col border rounded p-2 me-2">
                                 <img src="https://kan-ban.org/assets/class.png" alt="Class Diagram" style="margin-left:35px;cursor:hand;width:150px; height:150px;" onclick="handleChooser('class');"/>
                                 <div class="h6" style="text-align:center;">Class Diagram</div>
                             </div>                            
-                            <div class="col border rounded p-2 me-2">
-                                <img src="https://kan-ban.org/assets/json.png" alt="JSON Validator" style="margin-left:35px;cursor:hand;width:150px; height:150px;" onclick="handleChooser('json');"/>
-                                <div class="h6" style="text-align:center;">JSON Validator</div>
-                            </div>
+                            <div class="col border rounded p-2 ">
+                                <img src="https://kan-ban.org/assets/gantt.png" alt="Gantt Chart" style="margin-left:35px;cursor:hand;width:150px; height:150px;" onclick="handleChooser('gantt');"/>
+                                <div class="h6" style="text-align:center;">Gantt Chart</div>
+                            </div>                            
+                        </div>
+                    </div>      
+                    <div class="modal-body">
+                        <div class="row">
+                          <div class="col border rounded p-2 me-2">
+                            <img src="https://kan-ban.org/assets/json.png" alt="JSON Validator" style="margin-left:35px;cursor:hand;width:150px; height:150px;" onclick="handleChooser('json');"/>
+                            <div class="h6" style="text-align:center;">JSON Validator</div>
+                         </div> 
+                         <div class="col border rounded p-2 me-2">
+                      </div>  
+                      <div class="col border rounded p-2 me-2">
+                   </div>                                                  
                         </div>
                     </div>                                  
                     <div class="modal-footer h6">
@@ -83,7 +91,10 @@ class app_chooser {
           return
         case 'class':
             location.href = 'https://kan-ban.org/class/index.html?switch=1'
-            return                        
+            return        
+        case 'gantt':
+          location.href = 'https://kan-ban.org/gantt/index.html?switch=1'
+          return                               
         default:
           break
       }
@@ -103,7 +114,10 @@ class app_chooser {
           return
         case 'class':
           location.href = 'https://kan-ban.org/class/index.html?switch=1'
-          return                  
+          return       
+        case 'gantt':
+          location.href = 'https://kan-ban.org/gantt/index.html?switch=1'
+          return                             
         default:
           break
       }
@@ -123,7 +137,10 @@ class app_chooser {
           return
         case 'class':
           location.href = 'https://kan-ban.org/class/index.html?switch=1'
-          return                    
+          return      
+        case 'gantt':
+          location.href = 'https://kan-ban.org/gantt/index.html?switch=1'
+          return                                
         default:
           break
       }
@@ -144,6 +161,9 @@ class app_chooser {
       case 'class':
         location.href = 'https://kan-ban.org/class/index.html?switch=1'
         return       
+      case 'gantt':
+        location.href = 'https://kan-ban.org/gantt/index.html?switch=1'
+        return                
       default:
         break
       } 
@@ -163,7 +183,10 @@ class app_chooser {
         return
       case 'class':
         location.href = 'https://kan-ban.org/class/index.html?switch=1'
-        return        
+        return
+      case 'gantt':
+        location.href = 'https://kan-ban.org/gantt/index.html?switch=1'
+        return                        
       default:
         break
     }
@@ -184,7 +207,33 @@ class app_chooser {
         return
       case 'json':
         location.href = 'https://kan-ban.org/json/index.html?switch=1'
-        return               
+        return    
+      case 'gantt':
+        location.href = 'https://kan-ban.org/gantt/index.html?switch=1'
+        return                           
+      default:
+        break
+    }
+  }else if (storageName.startsWith('data-gantt')) { // Gantt app 
+    switch(chosen) {
+      case 'sequence':
+        location.href = 'https://kan-ban.org/sequence/index.html?switch=1'
+        return
+      case 'kanban':
+        location.href = 'https://kan-ban.org/index.html?switch=1'
+        return
+      case 'flowchart':
+        location.href = 'https://kan-ban.org/flow/index.html?switch=1'
+        return
+      case 'state':
+        location.href = 'https://kan-ban.org/state/index.html?switch=1'
+        return
+      case 'json':
+        location.href = 'https://kan-ban.org/json/index.html?switch=1'
+        return    
+      case 'class':
+        location.href = 'https://kan-ban.org/class/index.html?switch=1'
+        return                        
       default:
         break
     }

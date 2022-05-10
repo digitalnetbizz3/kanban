@@ -1,4 +1,4 @@
-const CACHE_NAME = 'JSON_APP_CONTENT_V1.05';
+const CACHE_NAME = 'JSON_APP_CONTENT_V1.06';
 
 const urlsToCache = [
     'index.html',
@@ -11,6 +11,7 @@ const urlsToCache = [
     '../assets/json.png',
     '../assets/statetransition.png',
     '../assets/class.png', 
+    '../assets/gantt.png',        
     '../js/json-url/json-url.js',
     '../js/json-url/json-url-lzstring.js',
     '../js/json-url/json-url-lzw.js',

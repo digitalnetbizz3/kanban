@@ -1,4 +1,4 @@
-const CACHE_NAME = 'State_V1.11';
+const CACHE_NAME = 'State_V1.12';
 
 const urlsToCache = [
     'index.html',
@@ -14,6 +14,7 @@ const urlsToCache = [
     '../assets/statetransition.png',
     '../assets/json.png',
     '../assets/class.png',
+    '../assets/gantt.png',        
     '../components/app_chooser.js',
     '../components/data_option.js',
     '../components/nav_bar.js',

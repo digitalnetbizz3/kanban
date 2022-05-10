@@ -1,4 +1,4 @@
-const CACHE_NAME = 'GANTT_APP_CONTENT_V1.00';
+const CACHE_NAME = 'GANTT_APP_CONTENT_V1.01';
 
 const urlsToCache = [
     'index.html',
@@ -15,6 +15,7 @@ const urlsToCache = [
     '../assets/flowchart.png',
     '../assets/statetransition.png',
     '../assets/json.png',
+    '../assets/gantt.png',        
     '../components/app_chooser.js',
     '../components/data_option.js',
     '../components/nav_bar.js',
