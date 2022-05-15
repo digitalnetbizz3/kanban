@@ -55,7 +55,7 @@ function vueLoad() {
                     let rules = this.filterRules(item.type);
                     if (rules.length == 1) {
                         let rule = rules[0];
-                        lineItem = item.id + rule.startNotation + item.title + rule.endNotation + '\n';
+                        lineItem = item.id + rule.startNotation + '"' + item.title + '"' + rule.endNotation + '\n';
                     }
                     markdown += lineItem;
                 });
