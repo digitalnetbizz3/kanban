@@ -14,6 +14,7 @@
           storageName = 'data-class-shared';
           localStorage.setItem(storageName, output)
           app.changeStorage();
+          closeLeftPanel();
         } catch(e) {
           toast_dialog.show('shared JSON is invalid')
         }

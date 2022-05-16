@@ -13,7 +13,8 @@
           JSON.parse(output);
           storageName = 'data-class-shared';
           localStorage.setItem(storageName, output)
-          app.changeStorage();
+          app.changeStorage()
+          closeLeftPanel()
         } catch(e) {
           console.log(e)
           toast_dialog.show('shared JSON is invalid')

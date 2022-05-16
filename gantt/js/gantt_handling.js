@@ -12,7 +12,8 @@ function appLoad(appInstance) {
         JSON.parse(output);
         storageName = 'data-gantt-shared';
         localStorage.setItem(storageName, output)
-        app.changeStorage();
+        app.changeStorage()
+        closeLeftPanel()
         setTimeout(() => {updateDiagram()}, 500)
       } catch(e) {
         console.log(e)

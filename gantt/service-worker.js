@@ -1,4 +1,4 @@
-const CACHE_NAME = 'GANTT_APP_CONTENT_V1.01';
+const CACHE_NAME = 'GANTT_APP_CONTENT_V1.02';
 
 const urlsToCache = [
     'index.html',
