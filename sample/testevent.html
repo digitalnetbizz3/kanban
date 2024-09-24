@@ -1,0 +1,21 @@
+<html>
+    <script>
+        const createEvent = (name, value, additionalParam) => JSON.stringify({name, value, ...additionalParam});
+
+        function closeWindow(){
+            window.Android.postMessage(createEvent('onClose',''));
+        }
+        function setTitle(str){
+            let event = createEvent('webAction','soFiSetTitle', {'pageTitle':'Set From Web'});
+            window.Android.postMessage(event);
+        }
+    </script>
+    <body>
+        Testing Event from Web Page within App
+        <br/>
+        <button onclick="closeWindow()">Close WebView</button>
+        <br/>
+        <button onclick="setTitle('hello')">Set Title to Foo Bar</button>
+        
+    </body>
+</html>
