@@ -1,13 +1,23 @@
 <html>
     <script>
         const createEvent = (name, value, additionalParam) => JSON.stringify({name, value, ...additionalParam});
-
-        function closeWindow(){
-            window.Android.postMessage(createEvent('onClose',''));
+        const getFlutterHandler = () => window.callbackHandler;
+        const getAndroidHandler = () => window.Android;
+        
+        function getHandler() {
+            let handler = getFlutterHandler();
+            if (!handler) {
+                handler = getAndroidHandler();
+            }
+            return handler;
         }
-        function setTitle(str){
+        
+        function closeWindow() {
+            getHandler().postMessage(createEvent('onClose',''));
+        }
+        function setTitle(str) {
             let event = createEvent('webAction','soFiSetTitle', {'pageTitle':'Set From Web'});
-            window.Android.postMessage(event);
+            getHandler().postMessage(event);
         }
     </script>
     <body>
